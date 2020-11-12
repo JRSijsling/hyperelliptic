@@ -32,6 +32,6 @@ Citing this code
 
 Please cite the following preprint if this code has been helpful in your research:
 
-Reynald Lercier and Christophe Ritzenthaler
+Reynald Lercier and Christophe Ritzenthaler,
 *Hyperelliptic curves and their invariants: Geometric, arithmetic and algorithmic aspects*
 [Journal of Algebra 372 (2012) 595–636](http://dx.doi.org/10.1016/j.jalgebra.2012.07.054)
