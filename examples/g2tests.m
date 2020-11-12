@@ -21,7 +21,7 @@
  *  Copyright 2007-2020 R. Lercier & C. Ritzenthaler
  */
 
-AttachSpec("magma/spec");
+AttachSpec("../magma/spec");
 
 // SetVerbose("G2Twists", 2);
 
