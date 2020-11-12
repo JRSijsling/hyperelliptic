@@ -23,7 +23,11 @@ Example that tests the routines in this package can be found in the directory `e
 
 Verbose comments are enabled by
 ```
-SetVerbose("Hyperell", n);
+SetVerbose("G2Twists", n);
+```
+or
+```
+SetVerbose("G3Twists", n);
 ```
 where `n` is either `1` or `2`. A higher value gives more comments.
 
@@ -33,5 +37,5 @@ Citing this code
 Please cite the following preprint if this code has been helpful in your research:
 
 Reynald Lercier and Christophe Ritzenthaler,
-*Hyperelliptic curves and their invariants: Geometric, arithmetic and algorithmic aspects*
+*Hyperelliptic curves and their invariants: Geometric, arithmetic and algorithmic aspects*,
 [Journal of Algebra 372 (2012) 595–636](http://dx.doi.org/10.1016/j.jalgebra.2012.07.054)
