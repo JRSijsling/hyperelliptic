@@ -292,9 +292,14 @@ function MyRandom(FF : BD := 7)
 end function;
 
 
-procedure GeometricRoots(f, ~LST : commonfield := false)
+procedure GeometricRoots(f, ~LST : geometric := true, commonfield := false)
 
     vprintf IsGL2Equiv, 2 : "Working on the polynomial %o\n", f;
+    if not geometric then
+        Rts := Roots(f);
+        for tup in Rts do Append(~LST, tup[1]); end for;
+        return;
+    end if;
 
     Q := CoefficientRing(f); 
     /* Single splitting field extension */
@@ -359,7 +364,7 @@ function CheckResult(MF, f, F, deg)
 end function;
 
 
-function IsGL2GeometricEquivalentAlphaEq0(_f, _F, d : commonfield := false)
+function IsGL2GeometricEquivalentAlphaEq0(_f, _F, d : geometric := true, commonfield := false)
 
     Q := BaseRing(Parent(_f)); Q1 := Q.1;
     Z := PolynomialRing(Q).1;
@@ -406,7 +411,7 @@ function IsGL2GeometricEquivalentAlphaEq0(_f, _F, d : commonfield := false)
 	return false, [* *], 1;
     end if;
 
-    GF := [* *]; GeometricRoots(PG, ~GF : commonfield := commonfield);
+    GF := [* *]; GeometricRoots(PG, ~GF : geometric := geometric, commonfield := commonfield);
 
     ret := false; LST := [* *];
     for bet in GF do
@@ -474,7 +479,7 @@ function IsGL2GeometricEquivalentAlphaEq0(_f, _F, d : commonfield := false)
 end function;
 
 
-function IsGL2GeometricEquivalentHeart(_f, _F, deg : commonfield := false)
+function IsGL2GeometricEquivalentHeart(_f, _F, deg : geometric := true, commonfield := false)
 
     Q := BaseRing(Parent(_f)); Q1 := Q.1;
     Z := Parent(_f).1;
@@ -582,7 +587,7 @@ vprintf IsGL2Equiv, 1 : "EQ2 is of degree %o\n", Degree(EQ2);
 	return false, [* *], 1;
     end if;
 
-    GF := [* *]; GeometricRoots(PG, ~GF : commonfield := commonfield);
+    GF := [* *]; GeometricRoots(PG, ~GF : geometric := geometric, commonfield := commonfield);
 
     LST := [* *];
     for m21 in GF do
@@ -661,7 +666,7 @@ vprintf IsGL2Equiv, 1 : "EQ2 is of degree %o\n", Degree(EQ2);
 	    &*[ MonomialCoefficient(g1, X^(deg-degs[j])*Y^degs[j])^U[j]: j in [1..#degs]];
 
 	vprintf IsGL2Equiv, 1 : "R = %o\n", R;
-	RR := [* *]; GeometricRoots(Z^g - R, ~RR : commonfield := commonfield);
+	RR := [* *]; GeometricRoots(Z^g - R, ~RR : geometric := geometric, commonfield := commonfield);
 
 	vprintf IsGL2Equiv, 1 : "F2 = %o\n", F2;
 	vprintf IsGL2Equiv, 1 : "g1 = %o\n", g1;
@@ -734,7 +739,7 @@ vprintf IsGL2Equiv, 1 : "EQ2 is of degree %o\n", Degree(EQ2);
 end function;
 
 
-function IsGL2GeometricEquivalentMain(_f, _F, deg : commonfield := false)
+function IsGL2GeometricEquivalentMain(_f, _F, deg : geometric := true, commonfield := false)
 
     PX := Parent(_f); Q := BaseRing(PX);
 
@@ -744,7 +749,7 @@ function IsGL2GeometricEquivalentMain(_f, _F, deg : commonfield := false)
     vprintf IsGL2Equiv, 1 : " F = %o\n", _F;
 
     /* Special case: alpha equals zero */
-    ret0, MF0, Q10 := IsGL2GeometricEquivalentAlphaEq0(_f, _F, deg : commonfield := commonfield);
+    ret0, MF0, Q10 := IsGL2GeometricEquivalentAlphaEq0(_f, _F, deg : geometric := geometric, commonfield := commonfield);
     if ret0 and #MF0 eq 0 then
 	return ret0, MF0, [* *];
     end if;
@@ -753,7 +758,7 @@ function IsGL2GeometricEquivalentMain(_f, _F, deg : commonfield := false)
     vprintf IsGL2Equiv, 1 : "ret = %o, MF = %o\n", ret0, MF0;
 
     /* Generic case */
-    retp, MFp, Q1p := IsGL2GeometricEquivalentHeart(_f, _F, deg : commonfield := commonfield);
+    retp, MFp, Q1p := IsGL2GeometricEquivalentHeart(_f, _F, deg : geometric := geometric, commonfield := commonfield);
     if retp and #MFp eq 0 then
         return retp, MFp, [* *];
     end if;
@@ -766,7 +771,7 @@ function IsGL2GeometricEquivalentMain(_f, _F, deg : commonfield := false)
 end function;
 
 
-function CheckNormalizeToCommonBase(ret, MFL, Q1L, _f, _F, deg : commonfield := false);
+function CheckNormalizeToCommonBase(ret, MFL, Q1L, _f, _F, deg : geometric := true, commonfield := false);
 
 Q := BaseRing(Parent(_f));
 /* Throw away irrelevant entries */
@@ -797,6 +802,11 @@ for MF in MFL do
     Append(~MFL0, MF0);
 end for;
 MFL := MFL0;
+
+if not geometric then
+    ret := #MFL ne 0; assert ret;
+    return ret, MFL;
+end if;
 
 /* Make the individual fields small */
 if commonfield then
@@ -887,7 +897,7 @@ return ret, MF;
 end function;
 
 
-function IsGL2GeometricEquivalentCandidates(_f, _F, deg : covariant := true, commonfield := false)
+function IsGL2GeometricEquivalentCandidates(_f, _F, deg : geometric := false, covariant := true, commonfield := false)
 
 Q := BaseRing(Parent(_f));
 
@@ -905,7 +915,7 @@ if covariant then
         if Degree(Cf) ge 3 and Discriminant(Cf) ne 0 and
             Degree(CF) ge 3 and Discriminant(CF) ne 0 then
 
-            ret, MFL, Q1L := $$(Cf, CF, 4 : covariant := covariant, commonfield := commonfield);
+            ret, MFL, Q1L := $$(Cf, CF, 4 : geometric := geometric, covariant := covariant, commonfield := commonfield);
             if not (ret eq true and #MFL eq 0) then
                 return ret, MFL, Q1L;
             end if;
@@ -934,7 +944,7 @@ while ret eq true and #MFL eq 0 and nbtry lt 20 do
     if Degree(f) ne deg or Degree(F) ne deg then continue; end if;
     MLi := ML^(-1);
 
-    ret, MFL, Q1L := IsGL2GeometricEquivalentMain(f, F, deg : commonfield := commonfield);
+    ret, MFL, Q1L := IsGL2GeometricEquivalentMain(f, F, deg : geometric := geometric, commonfield := commonfield);
     /* Throw away irrelevant entries */
     ks := [ k : k in [1..#MFL] | #MFL[k] ne 0 ];
     MFL := [* MFL[k] : k in ks *]; Q1L := [* Q1L[k] : k in ks *];
@@ -982,12 +992,13 @@ intrinsic IsGL2GeometricEquivalent(_f::RngUPolElt, _F::RngUPolElt, deg::RngIntEl
 {Returns a boolean and sequences [a,b,c,d].}
 
 /* Is this fast? Replace? */
-if not geometric then
-    return IsGL2Equivalent(_f, _F, deg);
-end if;
+//if not geometric then
+//    return IsGL2Equivalent(_f, _F, deg);
+//end if;
 
 /* Refer and normalize back */
-ret, MFL, Q1L := IsGL2GeometricEquivalentCandidates(_f, _F, deg : covariant := covariant, commonfield := commonfield);
+if not geometric then commonfield := false; end if;
+ret, MFL, Q1L := IsGL2GeometricEquivalentCandidates(_f, _F, deg : geometric := geometric, covariant := covariant, commonfield := commonfield);
 return CheckNormalizeToCommonBase(ret, MFL, Q1L, _f, _F, deg : commonfield := commonfield);
 
 end intrinsic;
