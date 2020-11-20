@@ -9,6 +9,19 @@ F := Rationals();
 F := NumberField(x^2+x+1);
 _<x> := PolynomialRing(F);
 
+f := x^6 + x^5 + 2*x^3 + 5*x^2 + x + 1; g := f; deg := 6;
+f := x^5 + x; g := f; deg := 6;
+f := 4*x^6 + 1; g := f; deg := 6;
+
+_, IsoLst := IsGL2GeometricEquivalent(f, g, deg : commonfield := false);
+_, IsoLst := IsGL2GeometricEquivalent(f, g, deg : commonfield := false, covariant := false);
+print "Covariant:";
+time _, IsoLst := IsGL2GeometricEquivalent(f, g, deg : commonfield := true);
+print "Direct:";
+time _, IsoLst := IsGL2GeometricEquivalent(f, g, deg : commonfield := true, covariant := false);
+print #IsoLst;
+print Universe(IsoLst[1]);
+
 deg := 50; B := 100; D := [-B..B];
 while true do
     repeat
@@ -18,24 +31,12 @@ while true do
         T := Matrix(F, 2, 2, [ Random(D) : i in [1..4] ]);
     until Determinant(T) ne 0;
     g := f^T;
+    X := HyperellipticCurve(f); Y := HyperellipticCurve(g);
     print "Covariant:";
-    time _, IsoLst := IsGL2GeometricEquivalent(f, g, deg : geometric := false);
+    time _, IsoLst := IsIsomorphicHyperelliptic(X, Y : geometric := false);
     print "Direct:";
-    time _, IsoLst := IsGL2GeometricEquivalent(f, g, deg : geometric := false, covariant := false);
-    print Universe(IsoLst[1]);
-end while;
-
-f := x^5 + x; g := f;
-f := 4*x^6 + 1; g := f;
-f := x^6 + x^5 + 2*x^3 + 5*x^2 + x + 1; g := f;
-
-while true do
-    _, IsoLst := IsGL2GeometricEquivalent(f, f, deg : commonfield := false);
-    _, IsoLst := IsGL2GeometricEquivalent(f, f, deg : commonfield := false, covariant := false);
-    print "Covariant:";
-    time _, IsoLst := IsGL2GeometricEquivalent(f, f, deg : commonfield := true);
-    print "Direct:";
-    time _, IsoLst := IsGL2GeometricEquivalent(f, f, deg : commonfield := true, covariant := false);
-    print #IsoLst;
-    print Universe(IsoLst[1]);
+    time _, IsoLst := IsIsomorphicHyperelliptic(X, Y : geometric := false, covariant := false);
+    print T;
+    print IsoLst[1];
+    print BaseRing(IsoLst[1]);
 end while;

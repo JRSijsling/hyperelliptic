@@ -989,7 +989,7 @@ end function;
 
 
 intrinsic IsGL2GeometricEquivalent(_f::RngUPolElt, _F::RngUPolElt, deg::RngIntElt: geometric := true, covariant := true, commonfield := false) -> BoolElt, SeqEnum
-{Returns a boolean and sequences [a,b,c,d].}
+{Returns a boolean and the full set of isomorphisms.}
 
 /* Is this fast? Replace? */
 //if not geometric then
@@ -1000,5 +1000,32 @@ intrinsic IsGL2GeometricEquivalent(_f::RngUPolElt, _F::RngUPolElt, deg::RngIntEl
 if not geometric then commonfield := false; end if;
 ret, MFL, Q1L := IsGL2GeometricEquivalentCandidates(_f, _F, deg : geometric := geometric, covariant := covariant, commonfield := commonfield);
 return CheckNormalizeToCommonBase(ret, MFL, Q1L, _f, _F, deg : commonfield := commonfield);
+
+end intrinsic;
+
+
+intrinsic IsIsomorphicHyperelliptic(X1::CrvHyp, X2::CrvHyp : geometric := false, covariant := true, commonfield := false) ->  BoolElt, SeqEnum
+{Returns a boolean and the full set of isomorphisms.}
+
+assert BaseRing(X1) eq BaseRing(X2);
+K := BaseRing(X1); assert Characteristic(K) ne 2;
+f1, h1 := HyperellipticPolynomials(X1);
+f2, h2 := HyperellipticPolynomials(X2);
+g1 := 4*f1 + h1^2; g2 := 4*f2 + h2^2;
+d1 := 2*((Degree(g1) + 1) div 2); d2 := 2*((Degree(g2) + 1) div 2);
+if not d1 eq d2 then
+    if commonfield then
+        return false, [ ];
+    else
+        return false, [* *];
+    end if;
+end if;
+
+test, Ls := IsGL2GeometricEquivalent(g1, g2, d1 : geometric := geometric, covariant := covariant, commonfield := commonfield);
+if commonfield then
+    return test, [ Transpose(Matrix(2, 2, L)) : L in Ls ];
+else
+    return test, [* Transpose(Matrix(2, 2, L)) : L in Ls *];
+end if;
 
 end intrinsic;
