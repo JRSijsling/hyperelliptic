@@ -20,10 +20,10 @@
  *  along with this program; if not, write to the Free Software
  *  Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA  02110-1301  USA
  *
- *  Copyright 2013, R. Basson & R. Lercier & C. Ritzenthaler
+ *  Copyright 2013, R. Basson & R. Lercier & C. Ritzenthaler & J. Sijsling & J. Sijsling
  */
 
-import "sl2invtools.m"    : PowerRepresentativesInFiniteFields, ShiodaInvariantsAppend;
+import "../toolbox/sl2invtools.m"    : PowerRepresentativesInFiniteFields, ShiodaInvariantsAppend;
 
 function ShiodaInvariantsChar3(f : normalize:= true)
 

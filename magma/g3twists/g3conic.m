@@ -21,7 +21,7 @@
  *  along with this program; if not, write to the Free Software
  *  Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA  02110-1301  USA
  *
- *  Copyright 2011, R. Lercier & C. Ritzenthaler
+ *  Copyright 2011, R. Lercier & C. Ritzenthaler & J. Sijsling & J. Sijsling
  */
 
 import "conic_123.m" : Genus3ConicAndQuartic123;
@@ -49,94 +49,7 @@ import "conic_uv.m" : Genus3ConicAndQuarticUV;
 
 import "reduction.m" : ReduceMestreConicAndQuartic;
 
-
-function FindPointOnConic(L : RationalPoint := true, RandomLine := true, Legendre := false, B := 100)
-    /* B is the maximal height of the integral coefficients of the intersecting line. */
-
-    K := BaseRing(Parent(L));
-    P := ProjectiveSpace(K, 2); x := P.1; y := P.2; z := P.3;
-    C := Conic(P, L);
-
-    /* Can we find a rational point on this conic ? */
-    if (Type(K) eq FldFin) or (RationalPoint
-	and ((Type(K) in {FldRat, FldFin, RngInt}) or
-	     (Type(K) eq FldAlg and (
-	            Degree(K) eq 1 or IsSimple(K))) or
-	     (Type(K) eq FldFunRat and (
-		    Type(BaseField(K)) eq FldRat or
-		    ISA(Type(BaseField(K)),FldNum) or
-		    (IsFinite(BaseField(K)) and Characteristic(BaseField(K)) ne 2 ))) or
-
-	     (ISA(Type(K), FldFunG) and Characteristic(K) ne 2)))
-	then
-	HasRatPoint, Pt := HasRationalPoint(C);
-	if HasRatPoint then
-	    vprintf G3Twists, 1 : "Conic has a rational point\n";
-	    return Parametrization(C, Place(Pt), Curve(ProjectiveSpace(K, 1)));
-	end if;
-	vprintf G3Twists, 1 : "Conic has no rational point\n";
-    end if;
-
-    /* Since we have no rational point on it, let us construct a quadratic extension that contains one */
-    if Legendre then
-        LC, LMmap := LegendreModel(C); LL := DefiningPolynomial(LC);
-    else
-        LC := C; LL := DefiningPolynomial(LC);
-    end if;
-
-    if RandomLine then
-        D := [-B..B];
-        repeat
-            c1 := Random(D);
-            c2 := Random(D);
-            c3 := Random(D);
-        until c2 ne 0;
-        R<t> := PolynomialRing(K);
-        h := hom<Parent(LL) -> R | [R.1, -(c1/c2)*R.1 - 1, 1]>;
-        S := ExtensionField < K, t | h(LL) >;
-        Pt := [ S | S.1, (-c1/c2)*S.1 - 1, 1];
-    else
-        a := K ! MonomialCoefficient(LL, x^2); b := K ! MonomialCoefficient(LL, x*z); c := K ! MonomialCoefficient(LL, z^2);
-        S := ExtensionField < K, x | a*x^2 + b*x + c >;
-        Pt := [ S | S.1, 0, 1];
-    end if;
-
-    CS := Conic(ProjectiveSpace(S, 2), L);
-    if Legendre then
-        Pt := [ Evaluate(p, Pt) : p in DefiningPolynomials(Inverse(LMmap)) ];
-    end if;
-    return Parametrization( CS, Place(CS!Pt), Curve(ProjectiveSpace(S, 1)) );
-end function;
-
-function MinimizeLinearEquationOverRationals(LE)
-    u := Parent(LE).1; v := Parent(LE).2;
-
-    an := Numerator(MonomialCoefficient(LE, u));
-    ad := Denominator(MonomialCoefficient(LE, u));
-
-    bn := Numerator(MonomialCoefficient(LE, v));
-    bd := Denominator(MonomialCoefficient(LE, v));
-
-    ct := GCD([an*bd, bn*ad, ad*bd]);
-
-    a := (an*bd) div ct;
-    b := (bn*ad) div ct;
-    c := (ad*bd) div ct;
-
-    _, U, V := ExtendedGreatestCommonDivisor(a, b);
-
-    return U*c, V*c;
-end function;
-
-/* Temporary copy: */
-function TransformForm(f, T : co := true, contra := false)
-    R := Parent(f);
-    vars := Matrix([ [ mon ] : mon in MonomialsOfDegree(R, 1) ]);
-    if (not co) or contra then
-        return Evaluate(f, Eltseq(ChangeRing(Transpose(T)^(-1), R) * vars));
-    end if;
-    return Evaluate(f, Eltseq(ChangeRing(T, R) * vars));
-end function;
+import "../toolbox/diophantine.m" : ConicParametrization, MinimizeLinearEquationOverRationals;
 
 function Genus3ConicAndQuartic(JI : models := true, RationalModel := true, Deterministic := false)
 
@@ -156,18 +69,18 @@ function Genus3ConicAndQuartic(JI : models := true, RationalModel := true, Deter
 
 	    /* Let us find a conic with small discriminant */
 
-	    vprintf G3Twists, 2 :  "Let us minimize the discriminant of the conic to be used, i.e %o\n\n", R;
+	    vprintf Hyperelliptic, 2 :  "Let us minimize the discriminant of the conic to be used, i.e %o\n\n", R;
 
 	    U, V := MinimizeLinearEquationOverRationals(R);
 
-	    vprintf G3Twists, 2 :  "We set :";
-	    vprintf G3Twists, 2 :  "  u = %o\n", U;
-	    vprintf G3Twists, 2 :  "  v = %o\n", V;
+	    vprintf Hyperelliptic, 2 :  "We set :";
+	    vprintf Hyperelliptic, 2 :  "  u = %o\n", U;
+	    vprintf Hyperelliptic, 2 :  "  v = %o\n", V;
 
 	    R, C, Q := Genus3ConicAndQuarticUV([FF | U, V], JI : models := models);
 
-	    vprintf G3Twists, 2 :  "So that :";
-	    vprintf G3Twists, 2 :  "  R = %o\n", R;
+	    vprintf Hyperelliptic, 2 :  "So that :";
+	    vprintf Hyperelliptic, 2 :  "  R = %o\n", R;
 
 	    /* Let us first remove the content of C and Q */
 	    ct := LCM([Denominator(c) : c in Coefficients(C)]) /
@@ -177,55 +90,21 @@ function Genus3ConicAndQuartic(JI : models := true, RationalModel := true, Deter
 		GCD([Numerator(c) : c in Coefficients(Q)]);
 	    Q *:= ct;
 
-            //vprintf G3Twists, 2 :
+            //vprintf Hyperelliptic, 2 :
             //    "Factorization of conic discriminant before reduction: %o\n",
             //    Factorization(Integers() ! Discriminant(Conic(ProjectiveSpace(Parent(C)), C)));
 
-            vprintf G3Twists, 2 : "Minimal model step...\n";
+            vprintf Hyperelliptic, 2 : "Minimal model step...\n";
 	    Cphi, phi := MinimalModel(Conic(ProjectiveSpace(Parent(C)), C));
 	    C := DefiningPolynomial(Cphi);
 	    Q := Evaluate(Q, DefiningPolynomials(phi));
 	    ct := GCD([Denominator(c) : c in Coefficients(Q)]) /
 		  GCD([Numerator(c) : c in Coefficients(Q)]);
 	    Q *:= ct;
-	    vprintf G3Twists, 2 :  "Conic %o\n", C;
-	    vprintf G3Twists, 2 :  "Quartic %o\n", Q;
+	    vprintf Hyperelliptic, 2 :  "Conic %o\n", C;
+	    vprintf Hyperelliptic, 2 :  "Quartic %o\n", Q;
 
-            /* This does not seem to be useful in practice: */
-            if false then
-                /* For some reason the following factorization is necessary first: */
-                vprintf G3Twists, 2 : "Reduced Legendre step...\n";
-                Fac := Factorization(Integers() ! Discriminant(Conic(ProjectiveSpace(Parent(C)), C)));
-                Cphi, phi := ReducedLegendreModel(Conic(ProjectiveSpace(Parent(C)), C));
-                C := DefiningPolynomial(Cphi);
-                Q := Evaluate(Q, DefiningPolynomials(Inverse(phi)));
-                ct := GCD([Denominator(c) : c in Coefficients(Q)]) /
-                      GCD([Numerator(c) : c in Coefficients(Q)]);
-                Q *:= ct;
-                vprintf G3Twists, 2 :  "Conic %o\n", C;
-                vprintf G3Twists, 2 :  "Quartic %o\n", Q;
-
-                vprintf G3Twists, 2 : "Further minimal model step...";
-                Cphi, phi := MinimalModel(Conic(ProjectiveSpace(Parent(C)), C));
-                C := DefiningPolynomial(Cphi);
-                Q := Evaluate(Q, DefiningPolynomials(phi));
-                ct := GCD([Denominator(c) : c in Coefficients(Q)]) /
-                      GCD([Numerator(c) : c in Coefficients(Q)]);
-                Q *:= ct;
-                vprintf G3Twists, 2 :  "Conic %o\n", C;
-                vprintf G3Twists, 2 :  "Quartic %o\n", Q;
-
-                vprintf G3Twists, 2 : "Quartic reduction...";
-                Q, T := MinimizeReducePlaneQuartic(Q);
-                C := TransformForm(C, T);
-                ct := GCD([Denominator(c) : c in Coefficients(C)]) /
-                      GCD([Numerator(c) : c in Coefficients(C)]);
-                C *:= ct;
-                vprintf G3Twists, 2 :  "Conic %o\n", C;
-                vprintf G3Twists, 2 :  "Quartic %o\n", Q;
-            end if;
-
-	    vprintf G3Twists, 2 :  "Cluster reduction...\n";
+	    vprintf Hyperelliptic, 2 :  "Cluster reduction...\n";
             _, T := ReduceMestreConicAndQuartic(C, Q);
 
 	    C := Evaluate(C, T);
@@ -238,9 +117,9 @@ function Genus3ConicAndQuartic(JI : models := true, RationalModel := true, Deter
             gcd_num := GCD([ Numerator(coeff) : coeff in Coefficients(Q) ]);
             Q *:= (gcd_den/gcd_num);
 
-            vprintf G3Twists, 1 :  "Conic after reduction steps: %o\n", C;
-            vprintf G3Twists, 1 :  "Quartic after reduction steps: %o\n", Q;
-            vprintf G3Twists, 2 :
+            vprintf Hyperelliptic, 1 :  "Conic after reduction steps: %o\n", C;
+            vprintf Hyperelliptic, 1 :  "Quartic after reduction steps: %o\n", Q;
+            vprintf Hyperelliptic, 2 :
                 "Factorization of conic discriminant after reduction: %o\n",
                 Factorization(Integers() ! Discriminant(Conic(ProjectiveSpace(Parent(C)), C)));
 	else
@@ -277,7 +156,7 @@ function Genus3ConicAndQuartic(JI : models := true, RationalModel := true, Deter
     /* Computing conic and quartic */
     if models then
 
-	phi := FindPointOnConic(C : RationalPoint := RationalModel, RandomLine := not Deterministic);
+	phi := ConicParametrization(C : RationalPoint := RationalModel, RandomLine := not Deterministic);
 
 	f := Evaluate(Q, DefiningPolynomials(phi));
 
@@ -313,7 +192,7 @@ function Genus3ConicAndQuarticForC4(JI : models := true)
 
     /* No non-degenrate conic found, return immediatly (should not happen) */
     if R eq 0 then
-	vprintf G3Twists, 1 : "ARGH, no non-degenerate conic found in a C4 case (this should not happen) \n";
+	vprintf Hyperelliptic, 1 : "ARGH, no non-degenerate conic found in a C4 case (this should not happen) \n";
 	return false;
     end if;
 
@@ -326,13 +205,13 @@ function Genus3ConicAndQuarticForC4(JI : models := true)
            return immediatly (this should not happen) */
 	Cc, Cm := CoefficientsAndMonomials(C);
 	if (Seqset(Cm) meet {x1^2, x2^2, x3^2, x1*x3}) ne Seqset(Cm) then
-	    vprintf G3Twists, 1 : "ARGH, no sparse conic found in a C4 case (this should not happen)\n";
+	    vprintf Hyperelliptic, 1 : "ARGH, no sparse conic found in a C4 case (this should not happen)\n";
 	    return false;
 	end if;
 
 	Qc, Qm := CoefficientsAndMonomials(Q);
 	if (Seqset(Qm) meet {x2*x1^3, x2*x3^3, x2^3*x1, x2*x1^2*x3, x2^3*x3, x2*x1*x3^2}) ne Seqset(Qm) then
-	    vprintf G3Twists, 1 : "ARGH, no sparse quartic found in a C4 case (this should not happen)\n";
+	    vprintf Hyperelliptic, 1 : "ARGH, no sparse quartic found in a C4 case (this should not happen)\n";
 	    return false;
 	end if;
 
@@ -368,7 +247,7 @@ function Genus3ConicAndQuarticForC4(JI : models := true)
 
 	F := [Eltseq(c) : c in Eltseq(Evaluate(f, a*Parent(f).1))];
 	if Seqset([F[1+i, 1] : i in [0..Degree(f)] | #F[1+i] ne 0]) ne {0} then
-	    vprintf G3Twists, 1 : "ARGH, no rational model found in a C4 case (this should not happen)\n";
+	    vprintf Hyperelliptic, 1 : "ARGH, no rational model found in a C4 case (this should not happen)\n";
 	end if;
 
 	FFx := PolynomialRing(FF); x := FFx.1;

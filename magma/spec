@@ -1,11 +1,16 @@
 {
+  hyperelliptic.m
   isgl2equiv.m
+  toolbox
+  {
+    +toolbox.spec
+  }
   g2twists
   {
-    +spec
+    +g2twists.spec
   }
   g3twists
   {
-    +spec
+    +g3twists.spec
   }
 }

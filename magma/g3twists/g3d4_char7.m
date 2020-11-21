@@ -25,7 +25,17 @@
  */
 
 
-import "conic.m"       : FindPointOnConic;
+/* Find an affine point (x,y,1) on the projective conic L. */
+function FindPointOnConic(L)
+    K := BaseRing(Parent(L));
+    UP := PolynomialRing(K : Global := false); u := UP.1;
+    repeat
+        x1 := Random(K); x3 := K!1;
+        LL := Evaluate(L, [UP | x1,u,x3]);
+        t, x2 := HasRoot(LL);
+    until t;
+    return x1,x2;
+end function;
 
 
 /* Case D2
@@ -33,7 +43,7 @@ import "conic.m"       : FindPointOnConic;
 */
 function G3Char7Models_D2(JI : geometric := false)
 
-    vprintf G3Twists, 2 : "\n[G3Twists] D2 : JI = %o\n", JI;
+    vprintf Hyperelliptic, 2 : "\n[Hyperelliptic] D2 : JI = %o\n", JI;
 
     J2, J3, J4, J5, J6, J7, J8, J9, J10, J11, J13, J14, J15:= Explode(JI);
     FF:= Universe(JI); x:= PolynomialRing(FF).1;
@@ -92,7 +102,7 @@ function G3Char7Models_D2(JI : geometric := false)
 	error "[models_char7] D6, D7 case trapped in G3Models_D2 by error at JI = ", JI;
     end if;
 
-    vprintf G3Twists, 2 : "[G3Twists] D2 : *** I1 = %o, I2a = %o, I2b = %o, I3f = %o\n", I1, I2a, I2b, I3;
+    vprintf Hyperelliptic, 2 : "[Hyperelliptic] D2 : *** I1 = %o, I2a = %o, I2b = %o, I3f = %o\n", I1, I2a, I2b, I3;
 
     /* Some easy cases */
     if I2b eq 0 then
@@ -105,7 +115,7 @@ function G3Char7Models_D2(JI : geometric := false)
 
 	f:= A8*x^8 + A6*x^6 + A4*x^4 + A2*x^2 + A0;
 
-	vprintf G3Twists, 2 : "[G3Twists] D2 : *** f = %o\n", f;
+	vprintf Hyperelliptic, 2 : "[Hyperelliptic] D2 : *** f = %o\n", f;
 	if geometric then return [f]; end if;
 	return HyperellipticPolynomialTwists(f, 8);
     end if;
@@ -120,9 +130,9 @@ function G3Char7Models_D2(JI : geometric := false)
 
 	f:= A8*x^8 + A6*x^6 + A4*x^4 + A2*x^2 + A0;
 
-	vprintf G3Twists, 2 : "[G3Twists] D2 : *** f = %o\n", f;
+	vprintf Hyperelliptic, 2 : "[Hyperelliptic] D2 : *** f = %o\n", f;
 	if geometric then return [f]; end if;
-	return "[G3Twists] currently, no twists computation done in singular case";
+	return "[Hyperelliptic] currently, no twists computation done in singular case";
     end if;
 
     /* General case */
@@ -153,7 +163,7 @@ function G3Char7Models_D2(JI : geometric := false)
 
 	f:= A8*x^8 + A6*x^6 + A4*x^4 + A2*x^2 + A0;
 
-	vprintf G3Twists, 2 : "[G3Twists] D2 : *** f = %o\n", f;
+	vprintf Hyperelliptic, 2 : "[Hyperelliptic] D2 : *** f = %o\n", f;
 	if geometric then return [f]; end if;
 	return HyperellipticPolynomialTwists(f, 8);
 
@@ -191,9 +201,8 @@ function G3Char7Models_D2(JI : geometric := false)
        K!phi(a0)*X^8+K!phi(a1)*X^7+K!phi(a2)*X^6+K!phi(a3)*X^5+K!phi(a4)*X^4+
        d*K!phi(a3)*X^3+d^2*K!phi(a2)*X^2+d^3*K!phi(a1)*X+d^4*K!phi(a0);
 
-    vprintf G3Twists, 2 : "[G3Twists] D2 : *** f = %o\n", f;
+    vprintf Hyperelliptic, 2 : "[Hyperelliptic] D2 : *** f = %o\n", f;
     if geometric then return [f]; end if;
     return HyperellipticPolynomialTwists(f, 8);
 
 end function;
-

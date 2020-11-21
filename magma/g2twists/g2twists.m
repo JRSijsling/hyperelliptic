@@ -1,4 +1,4 @@
-freeze;
+// freeze
 
 /***
  *  Twists of Genus 2 Curves.
@@ -20,7 +20,7 @@ freeze;
  *  along with this program; if not, write to the Free Software
  *  Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA  02110-1301  USA
  *
- *  Copyright 2007-2020 R. Lercier & C. Ritzenthaler
+ *  Copyright 2007-2020 R. Lercier & C. Ritzenthaler & J. Sijsling
  */
 
 /***
@@ -107,9 +107,9 @@ freeze;
  *
  ********************************************************************/
 
-import "g2conic.m"          : Genus2ConicAndCubic, FindPointOnConic;
+import "g2conic.m"          : Genus2ConicAndCubic;
 
-declare verbose G2Twists, 2;
+import "../toolbox/diophantine.m" : ConicParametrization;
 
  /***
   *
@@ -410,7 +410,7 @@ function ClebschMestreConicAndCubic(JI : RationalModel := false)
 		J4^3*J2^3+4*J4*J2^7+J2^9)*J6^2+(3*J4^2*J2^8+4*J4^3*J2^6+4*J4^4*J2^4)*J6+J2^15+
 		3*J4*J2^13+3*J4^2*J2^11+J4^4*J2^7+2*J4^3*J2^9)*x3^3;
         end if;
-        phi := FindPointOnConic(L : RationalPoint := RationalModel);
+        phi := ConicParametrization(L : RationalPoint := RationalModel);
 
         f := Evaluate(M, DefiningPolynomials(phi));
 

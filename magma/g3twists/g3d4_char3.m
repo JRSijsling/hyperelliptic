@@ -24,15 +24,24 @@
  *  Copyright 2013, R. Basson, R. Lercier, C. Ritzenthaler & J. Sijsling
  */
 
-
- import "conic.m"       : FindPointOnConic;
+/* Find an affine point (x,y,1) on the projective conic L. */
+function FindPointOnConic(L)
+    K := BaseRing(Parent(L));
+    UP := PolynomialRing(K : Global := false); u := UP.1;
+    repeat
+        x1 := Random(K); x3 := K!1;
+        LL := Evaluate(L, [UP | x1,u,x3]);
+        t, x2 := HasRoot(LL);
+    until t;
+    return x1,x2;
+end function;
 
  /* Case D2
    y^2 = a8 * x^8 + a6 * x^6 + a4 * x^4 + a2 * x^2 + a0;
 */
 function G3Char3Models_D2(JI : geometric:= false)
 
-vprintf G3Twists, 2 : "\n[G3Twists] D2 : JI = %o\n", JI;
+vprintf Hyperelliptic, 2 : "\n[Hyperelliptic] D2 : JI = %o\n", JI;
 
     J2, J3, J4, J5, J6, J7, J8, J9, J10, J12:= Explode(JI);
     FF:= Universe(JI); x:= PolynomialRing(FF).1;
@@ -40,9 +49,9 @@ vprintf G3Twists, 2 : "\n[G3Twists] D2 : JI = %o\n", JI;
     /* Special singular case only J9 <> 0 */
     if J2 eq 0 and J3 eq 0 and J4 eq 0 and J5 eq 0 and J6 eq 0 and J7 eq 0 and J8 eq 0 and J10 eq 0 and J12 eq 0 then
 	f:= x^3*(x-1)^3*(x+1)^2;
-	vprintf G3Twists, 2 : "[G3Twists] D2 : *** f = %o\n", f;
+	vprintf Hyperelliptic, 2 : "[Hyperelliptic] D2 : *** f = %o\n", f;
 	if geometric then return [f]; end if;
-	return "[G3Twists] currently, no twists computation done in singular case";
+	return "[Hyperelliptic] currently, no twists computation done in singular case";
     end if;
 
     /* Special singular case [ 0, 1, 0, 0, 1, 0, 0, J9, 0, 2 ] */
@@ -65,9 +74,9 @@ vprintf G3Twists, 2 : "\n[G3Twists] D2 : JI = %o\n", JI;
 
 	f:= a*x^8 + x^6 + x^4 + x^2;
 
-	vprintf G3Twists, 2 : "[G3Twists] D2 : *** f = %o\n", f;
+	vprintf Hyperelliptic, 2 : "[Hyperelliptic] D2 : *** f = %o\n", f;
 	if geometric then return [f]; end if;
-	return "[G3Twists] currently, no twists computation done in singular case";
+	return "[Hyperelliptic] currently, no twists computation done in singular case";
     end if;
 
     /* I1 (= a4) */
@@ -121,14 +130,14 @@ vprintf G3Twists, 2 : "\n[G3Twists] D2 : JI = %o\n", JI;
 
 	f:= A8*x^8 + A6*x^6 + A4*x^4 + A2*x^2 + A0;
 
-	vprintf G3Twists, 2 : "[G3Twists] D2 : *** f = %o\n", f;
+	vprintf Hyperelliptic, 2 : "[Hyperelliptic] D2 : *** f = %o\n", f;
 	if geometric then return [f]; end if;
-	return "[G3Twists] currently, no twists computation done in singular case";
+	return "[Hyperelliptic] currently, no twists computation done in singular case";
     else
-	error "[G3Twists] special singular case [ 0, 1, 0, 0, 1, 0, 0, J9, 0, 2 ]";
+	error "[Hyperelliptic] special singular case [ 0, 1, 0, 0, 1, 0, 0, J9, 0, 2 ]";
     end if;
 
-    vprintf G3Twists, 2 : "[G3Twists] D2 : *** I1 = %o, I2a = %o, I2b = %o, I3f = %o\n", I1, I2a, I2b, I3;
+    vprintf Hyperelliptic, 2 : "[Hyperelliptic] D2 : *** I1 = %o, I2a = %o, I2b = %o, I3f = %o\n", I1, I2a, I2b, I3;
 
     /* Some easy cases */
     if I2b eq 0 then
@@ -140,7 +149,7 @@ vprintf G3Twists, 2 : "\n[G3Twists] D2 : JI = %o\n", JI;
 
 	f:= A8*x^8 + A6*x^6 + A4*x^4 + A2*x^2 + A0;
 
-	vprintf G3Twists, 2 : "[G3Twists] D2 : *** f = %o\n", f;
+	vprintf Hyperelliptic, 2 : "[Hyperelliptic] D2 : *** f = %o\n", f;
 	if geometric then return [f]; end if;
 	return HyperellipticPolynomialTwists(f, 8);
     end if;
@@ -171,7 +180,7 @@ vprintf G3Twists, 2 : "\n[G3Twists] D2 : JI = %o\n", JI;
 
 	f:= A8*x^8 + A6*x^6 + A4*x^4 + A2*x^2 + A0;
 
-	vprintf G3Twists, 2 : "[G3Twists] D2 : *** f = %o\n", f;
+	vprintf Hyperelliptic, 2 : "[Hyperelliptic] D2 : *** f = %o\n", f;
 	if geometric then return [f]; end if;
 	return HyperellipticPolynomialTwists(f, 8);
 
@@ -209,7 +218,7 @@ vprintf G3Twists, 2 : "\n[G3Twists] D2 : JI = %o\n", JI;
        K!phi(a0)*X^8+K!phi(a1)*X^7+K!phi(a2)*X^6+K!phi(a3)*X^5+K!phi(a4)*X^4+
        d*K!phi(a3)*X^3+d^2*K!phi(a2)*X^2+d^3*K!phi(a1)*X+d^4*K!phi(a0);
 
-    vprintf G3Twists, 2 : "[G3Twists] D2 : *** f = %o\n", f;
+    vprintf Hyperelliptic, 2 : "[Hyperelliptic] D2 : *** f = %o\n", f;
     if geometric then return [f]; end if;
     return HyperellipticPolynomialTwists(f, 8);
 

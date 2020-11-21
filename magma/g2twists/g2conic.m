@@ -21,7 +21,7 @@
  *  along with this program; if not, write to the Free Software
  *  Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA  02110-1301  USA
  *
- *  Copyright 2011-2020, R. Lercier & C. Ritzenthaler
+ *  Copyright 2011-2020, R. Lercier & C. Ritzenthaler & J. Sijsling
  */
 
 import "g2conic_123.m" : Genus2ConicAndCubic123;
@@ -29,65 +29,9 @@ import "g2conic_123.m" : Genus2ConicAndCubic123;
 import "g2conic_uv1245.m" : Genus2ConicAndCubicUV1245;
 import "g2conic_uv1246.m" : Genus2ConicAndCubicUV1246;
 
+import "../toolbox/diophantine.m" : LimitedFactorization, ConicParametrization, MinimizeLinearEquationOverRationals;
 
-function FindPointOnConic(L : RationalPoint := true, RandomLine := true, Legendre := false, B := 100)
-    /* B is the maximal height of the integral coefficients of the intersecting line. */
 
-    K := BaseRing(Parent(L));
-    P := ProjectiveSpace(K, 2); x := P.1; y := P.2; z := P.3;
-    C := Conic(P, L);
-
-    /* Can we find a rational point on this conic ? */
-    if (Type(K) eq FldFin) or (RationalPoint
-	and ((Type(K) in {FldRat, FldFin, RngInt}) or
-	     (Type(K) eq FldAlg and (
-	            Degree(K) eq 1 or IsSimple(K))) or
-	     (Type(K) eq FldFunRat and (
-		    Type(BaseField(K)) eq FldRat or
-		    ISA(Type(BaseField(K)),FldNum) or
-		    (IsFinite(BaseField(K)) and Characteristic(BaseField(K)) ne 2 ))) or
-
-	     (ISA(Type(K), FldFunG) and Characteristic(K) ne 2)))
-	then
-	HasRatPoint, Pt := HasRationalPoint(C);
-	if HasRatPoint then
-            vprintf G2Twists, 1 : "Conic has a rational point\n";
-	    return Parametrization(C, Place(Pt), Curve(ProjectiveSpace(K, 1)));
-	end if;
-	vprintf G2Twists, 1 : "Conic has no rational point\n";
-    end if;
-
-    /* Since we have no rational point on it, let us construct a quadratic extension that contains one */
-    if Legendre then
-        LC, LMmap := LegendreModel(C); LL := DefiningPolynomial(LC);
-    else
-        LC := C; LL := DefiningPolynomial(LC);
-    end if;
-
-    if RandomLine then
-        D := [-B..B];
-        repeat
-            c1 := Random(D);
-            c2 := Random(D);
-            c3 := Random(D);
-        until c2 ne 0;
-        R<t> := PolynomialRing(K);
-        h := hom<Parent(LL) -> R | [R.1, -(c1/c2)*R.1 - 1, 1]>;
-        S := ExtensionField < K, t | h(LL) >;
-        Pt := [ S | S.1, (-c1/c2)*S.1 - 1, 1];
-    else
-        a := K ! MonomialCoefficient(LL, x^2); b := K ! MonomialCoefficient(LL, x*z); c := K ! MonomialCoefficient(LL, z^2);
-        S := ExtensionField < K, x | a*x^2 + b*x + c >;
-        Pt := [ S | S.1, 0, 1];
-    end if;
-
-    CS := Conic(ProjectiveSpace(S, 2), L);
-    if Legendre then
-        Pt := [ Evaluate(p, Pt) : p in DefiningPolynomials(Inverse(LMmap)) ];
-    end if;
-    return Parametrization( CS, Place(CS!Pt), Curve(ProjectiveSpace(S, 1)) );
-
-end function;
 
 /* The affine case */
 function GbToPoints(gb, tail)
@@ -166,38 +110,7 @@ function ReduceMestreConicAndCubic(f, Q)
     return Evaluate(f,subs),subs;
 end function;
 
-function MinimizeLinearEquationOverRationals(LE)
 
-    u := Parent(LE).1; v := Parent(LE).2;
-
-    an := Numerator(MonomialCoefficient(LE, u));
-    ad := Denominator(MonomialCoefficient(LE, u));
-
-    bn := Numerator(MonomialCoefficient(LE, v));
-    bd := Denominator(MonomialCoefficient(LE, v));
-
-    ct := GCD([an*bd, bn*ad, ad*bd]);
-
-    a := (an*bd) div ct;
-    b := (bn*ad) div ct;
-    c := (ad*bd) div ct;
-
-    _, U, V := ExtendedGreatestCommonDivisor(a, b);
-
-    return U*c, V*c;
-
-end function;
-
-
-
-function LimitedFactorization(N : ECMLimit := 20000, MPQSLimit := 60, Proof := false)
-
-    if #Intseq(N, 10) le MPQSLimit then return Factorization(N); end if;
-
-    return Factorization(N :
-        ECMLimit := ECMLimit, MPQSLimit := MPQSLimit, Proof := Proof);
-
-end function;
 
 function WPSMinimizeQQ(W, I);
 
@@ -247,7 +160,7 @@ function Genus2ConicAndCubic(JI : models := true, RationalModel := true, Determi
                 J2  *:= -1; J6  *:= -1; J8  *:= -1; J10 *:= -1; J15_2 *:= -1;
             end if;
 
-            vprintf G2Twists, 2 :  "J15_2 := %o;\n", J15_2;
+            vprintf Hyperelliptic, 2 :  "J15_2 := %o;\n", J15_2;
 
             /* Let us make J15_ 2 be a square (if not too hard) */
             F, Q := TrialDivision(Numerator(J15_2), 10^6 : Proof := false);
@@ -262,7 +175,7 @@ function Genus2ConicAndCubic(JI : models := true, RationalModel := true, Determi
                 end if;
             end if;
 
-            vprintf G2Twists, 2 :  "J15_2 := %o * %o;\n", F, Q;
+            vprintf Hyperelliptic, 2 :  "J15_2 := %o * %o;\n", F, Q;
 
             if ret then
                 for fct in F do
@@ -279,7 +192,7 @@ function Genus2ConicAndCubic(JI : models := true, RationalModel := true, Determi
         end if;
 
         if ret then
-            vprintf G2Twists, 2 :  "[J2, J4, J6, J8, J10, J15] = %o\n\n", JI;
+            vprintf Hyperelliptic, 2 :  "[J2, J4, J6, J8, J10, J15] = %o\n\n", JI;
 
             Genus2ConicAndCubicUVFct := Genus2ConicAndCubicUV1245;
             R, _, _ := Genus2ConicAndCubicUVFct([u, v], JI : models := false);
@@ -294,18 +207,18 @@ function Genus2ConicAndCubic(JI : models := true, RationalModel := true, Determi
         /* Let us find a conic with small discriminant */
 	if R ne 0 and Degree(R,u)*Degree(R,v) ne 0 then
 
-	    vprintf G2Twists, 2 :  "Let us minimize the discriminant of the conic to be used, i.e %o\n\n", R;
+	    vprintf Hyperelliptic, 2 :  "Let us minimize the discriminant of the conic to be used, i.e %o\n\n", R;
 
 	    U, V := MinimizeLinearEquationOverRationals(R);
 
-	    vprintf G2Twists, 2 :  "We set :";
-	    vprintf G2Twists, 2 :  "  u = %o\n", U;
-	    vprintf G2Twists, 2 :  "  v = %o\n", V;
+	    vprintf Hyperelliptic, 2 :  "We set :";
+	    vprintf Hyperelliptic, 2 :  "  u = %o\n", U;
+	    vprintf Hyperelliptic, 2 :  "  v = %o\n", V;
 
 	    R, C, M := Genus2ConicAndCubicUVFct([FF | U, V], JI : models := models);
 
-	    vprintf G2Twists, 2 :  "So that :";
-	    vprintf G2Twists, 2 :  "  R = %o\n", R;
+	    vprintf Hyperelliptic, 2 :  "So that :";
+	    vprintf Hyperelliptic, 2 :  "  R = %o\n", R;
 
 	    /* Let us first remove the content of C and M */
 	    ct := LCM([Denominator(c) : c in Coefficients(C)]) /
@@ -315,23 +228,23 @@ function Genus2ConicAndCubic(JI : models := true, RationalModel := true, Determi
 		GCD([Numerator(c) : c in Coefficients(M)]);
 	    M *:= ct;
 
-            vprintf G2Twists, 2 :
+            vprintf Hyperelliptic, 2 :
                "Factorization of conic discriminant before reduction: %o\n",
                 Factorization(Integers() ! Discriminant(Conic(ProjectiveSpace(Parent(C)), C)));
 
-            vprintf G2Twists, 2 : "Minimal model step...\n";
+            vprintf Hyperelliptic, 2 : "Minimal model step...\n";
 	    Cphi, phi := MinimalModel(Conic(ProjectiveSpace(Parent(C)), C));
 	    C := DefiningPolynomial(Cphi);
 	    M := Evaluate(M, DefiningPolynomials(phi));
 	    ct := GCD([Denominator(c) : c in Coefficients(M)]) /
 		  GCD([Numerator(c) : c in Coefficients(M)]);
 	    M *:= ct;
-	    vprintf G2Twists, 2 :  "Conic %o\n", C;
-	    vprintf G2Twists, 2 :  "Cubic %o\n", M;
+	    vprintf Hyperelliptic, 2 :  "Conic %o\n", C;
+	    vprintf Hyperelliptic, 2 :  "Cubic %o\n", M;
 
 	else
 	    R := FF!0;
-	    vprintf G2Twists, 2 :  "None parametric conic works ! Let us do it as usual...\n\n", R;
+	    vprintf Hyperelliptic, 2 :  "None parametric conic works ! Let us do it as usual...\n\n", R;
 	end if;
     end if;
 
@@ -343,13 +256,13 @@ function Genus2ConicAndCubic(JI : models := true, RationalModel := true, Determi
     /* Computing conic and cubic */
     if models then
 
-	phi := FindPointOnConic(C : RationalPoint := RationalModel, RandomLine := not Deterministic);
+	phi := ConicParametrization(C : RationalPoint := RationalModel, RandomLine := not Deterministic);
 
 	f := Evaluate(M, DefiningPolynomials(phi));
 
         g := UnivariatePolynomial(Evaluate(f, Parent(f).2, 1));
 
-        vprintf G2Twists, 1 :  "Hyperelliptic polynomial: %o\n", g;
+        vprintf Hyperelliptic, 1 :  "Hyperelliptic polynomial: %o\n", g;
 	return g;
 
     end if;

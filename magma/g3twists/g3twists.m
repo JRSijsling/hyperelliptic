@@ -138,10 +138,10 @@
  *
  ********************************************************************/
 
-import "sl2invtools.m"    : Transvectant, PowerRepresentativesInFiniteFields, ShiodaInvariantsAppend;
+import "../toolbox/sl2invtools.m"    : Transvectant, PowerRepresentativesInFiniteFields, ShiodaInvariantsAppend;
 import "g3d4.m"           : G3ModelsInCharFF_D4;
-import "conic.m"          : Genus3ConicAndQuartic, Genus3ConicAndQuarticForC4;
-import "hilbert90.m"      : MConj, MNorm, MActOnC, Glasby;
+import "g3conic.m"              : Genus3ConicAndQuartic, Genus3ConicAndQuarticForC4;
+import "../toolbox/hilbert90.m" : MActOnC, Glasby;
 import "g3twists_char2.m" : ShiodaInvariantsChar2, ShiodaAlgebraicInvariantsChar2;
 import "g3twists_char3.m" : ShiodaInvariantsChar3, ShiodaAlgebraicInvariantsChar3;
 import "g3twists_char5.m" : ShiodaInvariantsChar5;
@@ -149,8 +149,6 @@ import "g3twists_char7.m" : ShiodaInvariantsChar7, ShiodaAlgebraicInvariantsChar
 import "models_char2.m"   : G3Char2Models;
 import "models_char3.m"   : G3Char3Models;
 import "models_char7.m"   : G3Char7Models;
-
-declare verbose G3Twists, 3;
 
  /***
   *
@@ -546,7 +544,7 @@ intrinsic ShiodaAlgebraicInvariants(FreeJI::SeqEnum : ratsolve := true) -> SeqEn
 
     /* Not yet implemented */
     if p in {5} then
-	error "[G3Twists] currently, no computation done in fields of char. 5, sorry";
+	error "[Hyperelliptic] currently, no computation done in fields of char. 5, sorry";
 	return [];
     end if;
 
@@ -750,7 +748,7 @@ function G3ModelsInCharFF_G16_11(JI : geometric := false)
     elif J5 ne 0 then
 	a4 := 7/3*(6*J4*J2+30*J3^2-J2^3)/J5;
     else
-	error "[G3Twists] G48_48 case trapped in G3ModelsInCharFF_G16_11 by error at JI = ", JI;
+	error "[Hyperelliptic] G48_48 case trapped in G3ModelsInCharFF_G16_11 by error at JI = ", JI;
     end if;
 
     a0 := -1/140*a4^2+1/2*J2;
@@ -781,7 +779,7 @@ function G3ModelsInCharFF_D12(JI : geometric := false)
     elif J5 ne 0 then
 	a4 := 7/108*(96*J4*J2+30*J3^2-J2^3)/J5;
     else
-	error "[G3Twists] : G48_48 group trapped in G3ModelsInCharFF_D12()";
+	error "[Hyperelliptic] : G48_48 group trapped in G3ModelsInCharFF_D12()";
     end if;
 
     a1 := 2/35*a4^2-4*J2;
@@ -814,7 +812,7 @@ function G3ModelsInCharFF_C2xC4(JI : geometric := false)
 	if J6-2/3087*J2^3 eq 0 then
 	    if geometric then return [x*(x-1)*(x+1)*(x^2+1)^2]; end if;
 
-	    error "[G3Twists] currently, no twists computation done in G3ModelsInCharFF_C2xC4, sorry";
+	    error "[Hyperelliptic] currently, no twists computation done in G3ModelsInCharFF_C2xC4, sorry";
 	    return [];
 	end if;
 
@@ -922,7 +920,7 @@ function G3ModelsInCharFF_G8_5(JI : geometric := false)
 
 	if geometric then return [f2]; end if;
 
-	error "[G3Twists] currently, no twists computation done over an infinite field, sorry";
+	error "[Hyperelliptic] currently, no twists computation done over an infinite field, sorry";
 	return [];
     end if;
 
@@ -942,7 +940,7 @@ function G3ModelsInCharFF_G8_5(JI : geometric := false)
     if not IsFinite(FF) then
 	if geometric then return [a0*x^8 + a2*x^6 + a4*x^4 + a2*x^2 + a0]; end if;
 
-	error "[G3Twists] currently, no twists computation done over an infinite field, sorry";
+	error "[Hyperelliptic] currently, no twists computation done over an infinite field, sorry";
 	return [];
     end if;
     */
@@ -969,7 +967,7 @@ function G3ModelsInCharFF_G8_5(JI : geometric := false)
 
     ret, MLc := IsGL2Equivalent(f, fc, 8);
     error if ret eq false,
-	"[G3Twists] No galois geometric automorphism found in G3ModelsInCharFF_G8_5";
+	"[Hyperelliptic] No galois geometric automorphism found in G3ModelsInCharFF_G8_5";
     M := Matrix(2, 2, MLc[1])^(-1);
     */
 
@@ -983,12 +981,12 @@ function G3ModelsInCharFF_G8_5(JI : geometric := false)
 	if Degree(fd/fc) eq 0 then M := Mt^(-1); break; end if;
     end for;
     error if M eq 0,
-	"[G3Twists] No galois geometric automorphism found in G3ModelsInCharFF_G8_5 at JI =", JI;
+	"[Hyperelliptic] No galois geometric automorphism found in G3ModelsInCharFF_G8_5 at JI =", JI;
 
     /* Then A s.t M = (A^sigma)^(-1) * A */
     A := Glasby(M, sigma, FF);
     error if A eq 0,
-	"[G3Twists] No rational model found in G3ModelsInCharFF_G8_5 at JI =", JI;
+	"[Hyperelliptic] No rational model found in G3ModelsInCharFF_G8_5 at JI =", JI;
 
     /* And ftilde */
     ftilde  := MActOnC(f, 8, A^(-1)); ftilde /:= Coefficient(ftilde, Degree(ftilde));
@@ -1007,7 +1005,7 @@ function G3Models(JI: geometric := false, models := true, RationalModel := true,
 
     /* Not yet implemented */
     if p in {5} then
-	error "[G3Twists] currently, no computation done in fields of char. 5, sorry";
+	error "[Hyperelliptic] currently, no computation done in fields of char. 5, sorry";
 	return [], <>;
     end if;
 
@@ -1033,7 +1031,6 @@ function G3Models(JI: geometric := false, models := true, RationalModel := true,
 
     J2, J3, J4, J5, J6, J7, J8, J9, J10 := Explode(JI);
 
-
     /* Point at infinity*/
     if J2 eq 0 and J3 eq 0 and
 	J4 eq 0 and J5 eq 0 and
@@ -1044,7 +1041,7 @@ function G3Models(JI: geometric := false, models := true, RationalModel := true,
 	aut := SmallGroup(1,1);/* FixMe: <1,1> is not the good choice here */
 	if models then twists := [PolynomialRing(FF).1^8]; end if;
 	if geometric or not models then return twists, aut; end if;
-	error "[G3Twists] no possible twist computations for singular forms, sorry";
+	error "[Hyperelliptic] no possible twist computations for singular forms, sorry";
 	return [], <>;
     end if;
 
@@ -1057,7 +1054,7 @@ function G3Models(JI: geometric := false, models := true, RationalModel := true,
     /* C2 x S4 : y^2 = x^8 + 14*x^4 + 1  */
     if J2^3-30*J3^2 eq 0 and J4 eq 0 and J5 eq 0 and J6 eq 0
 	and J7 eq 0 and J8 eq 0 and J9 eq 0 and J10 eq 0 then
-	vprintf G3Twists, 1 : "Automorphism group C2 x S4, curve y^2 = x^8 + 14*x^4 + 1\n";
+	vprintf Hyperelliptic, 1 : "Automorphism group C2 x S4, curve y^2 = x^8 + 14*x^4 + 1\n";
 	aut := SmallGroup(48, 48);
 	if models then twists := G3ModelsInCharFF_G48_48(JI : geometric := geometric); end if;
 	return twists, aut;
@@ -1066,7 +1063,7 @@ function G3Models(JI: geometric := false, models := true, RationalModel := true,
     /* V8 : y^2 = x^8 - 1  */
     if J3 eq 0 and J2^2-6*J4 eq 0  and J5 eq 0 and J2^3+36*J6 eq 0 and
 	J7 eq 0 and J2^4+420*J8 eq 0 and J9 eq 0 and 2520*J10 - J2^5 eq 0 then
-	vprintf G3Twists, 1 : "Automorphism group V8, curve y^2 =  x^8 - 1\n";
+	vprintf Hyperelliptic, 1 : "Automorphism group V8, curve y^2 =  x^8 - 1\n";
 	aut := SmallGroup(32, 9);
 	if models then twists := G3ModelsInCharFF_G32_9(JI : geometric := geometric); end if;
 	return twists, aut;
@@ -1075,7 +1072,7 @@ function G3Models(JI: geometric := false, models := true, RationalModel := true,
     /* U6 : y^2 = x (x^6 - 1) */
     if J3 eq 0 and J2^2-96*J4 eq 0  and J5 eq 0 and J2^3+2304*J6 eq 0 and
 	J7 eq 0 and J2^4-17920*J8 eq 0  and J9 eq 0 and 430080*J10+J2^5 eq 0 then
-	vprintf G3Twists, 1 : "Automorphism group U6, curve y^2 = x (x^6 - 1)\n";
+	vprintf Hyperelliptic, 1 : "Automorphism group U6, curve y^2 = x (x^6 - 1)\n";
 	aut := SmallGroup(24, 5);
 	if models then twists := G3ModelsInCharFF_G24_5(JI : geometric := geometric); end if;
 	return twists, aut;
@@ -1084,7 +1081,7 @@ function G3Models(JI: geometric := false, models := true, RationalModel := true,
     /* C14 : y^2 = x^7 - 1 */
     if J2 eq 0 and J3 eq 0 and J4 eq 0 and J5 eq 0 and J6 eq 0 and
 	J8 eq 0 and J9 eq 0 and J10 eq 0 then
-	vprintf G3Twists, 1 : "Automorphism group C14, curve y^2 = x^7 - 1\n";
+	vprintf Hyperelliptic, 1 : "Automorphism group C14, curve y^2 = x^7 - 1\n";
 	aut := CyclicGroup(14); /* SmallGroup(14, 2) */
 	if models then twists := G3ModelsInCharFF_C14(JI : geometric :=	geometric); end if;
 	return twists, aut;
@@ -1104,7 +1101,7 @@ function G3Models(JI: geometric := false, models := true, RationalModel := true,
 	J9 - 1/9*J5*J2^2 + 5/6*J4*J3*J2 + 10/3*J3^3 - 1/9*J3*J2^3 eq 0 and
 	J10 - 1/42*J4^2*J2 - 1/21*J4*J3^2 + 1/630*J4*J2^3 eq 0
 	then
-	vprintf G3Twists, 1 : "Automorphism group C2xD8, curve y^2 = x^8 + a*x^4 + 1\n";
+	vprintf Hyperelliptic, 1 : "Automorphism group C2xD8, curve y^2 = x^8 + a*x^4 + 1\n";
 	aut := SmallGroup(16, 11);
 	if models then twists := G3ModelsInCharFF_G16_11(JI : geometric := geometric); end if;
 	return twists, aut;
@@ -1122,7 +1119,7 @@ function G3Models(JI: geometric := false, models := true, RationalModel := true,
 	J10 - 5/252*J4^2*J2 - 13/1008*J4*J3^2 + 13/30240*J4*J2^3 eq 0 and
 	J9 - 1/144*J5*J2^2 - 5/144*J4*J3*J2 - 5/576*J3^3 + 1/3456*J3*J2^3 eq 0
 	then
-	vprintf G3Twists, 1 : "Automorphism group D12, curve y^2 * (x^6 + a*x^3 + 1)\n";
+	vprintf Hyperelliptic, 1 : "Automorphism group D12, curve y^2 * (x^6 + a*x^3 + 1)\n";
 	aut := SmallGroup(12, 4);
 	if models then twists := G3ModelsInCharFF_D12(JI : geometric := geometric); end if;
 	return twists, aut;
@@ -1137,7 +1134,7 @@ function G3Models(JI: geometric := false, models := true, RationalModel := true,
 	J9 eq 0 and
 	J10 + 173/630*J6*J4 + 7/6480*J6*J2^2 + 173/3600*J4^2*J2 - 89/32400*J4*J2^3 + 1/36450*J2^5 eq 0
 	then
-	vprintf G3Twists, 1 : "Automorphism group C2xC4, curve y^2 = x * (x^2 - 1) * (x^4 + a * x^2 + 1)\n";
+	vprintf Hyperelliptic, 1 : "Automorphism group C2xC4, curve y^2 = x * (x^2 - 1) * (x^4 + a * x^2 + 1)\n";
 	aut := DirectProduct(CyclicGroup(2), CyclicGroup(4));	/* SmallGroup(8, 2) */
 	if models then twists := G3ModelsInCharFF_C2xC4(JI : geometric := geometric); end if;
 	return twists, aut;
@@ -1177,7 +1174,7 @@ function G3Models(JI: geometric := false, models := true, RationalModel := true,
 	-1336500*J5*J4^2*J3*J2^2-5427000*J5*J4*J3^3*J2+180900*J5*J4*J3*J2^4-437400*J5^2*J4^2*J2+2916000*J4*J5^2*J3^2+212625*J4*J5^2*J2^3-656100*J5^3*J3*J2+753300*J2^2*J5^2*J3^2+2494800*J5*J4^3*J3-186300*J4^3*J3^2*J2+151200*J4^2*J3^2*J2^3+351000*J4*J3^4*J2^2-23400*J4*J3^2*J2^5+201600*J3^3*J5*J2^3-25110*J2^5*J5^2-3024000*J3^5*J5+2592000*J3^4*J4^2+108000*J3^6*J2-10800*J3^4*J2^4+360*J3^2*J2^7+97200*J5^4-3360*J3*J2^6*J5-259200*J4^4*J2^2+66960*J4^3*J2^4-7920*J4^2*J2^6+390*J4*J2^8+381024*J4^5-4*J2^10 eq 0
 
 	then
-	vprintf G3Twists, 1 : "Automorphism group C2xC2xC2, curve y^2 = a0*x^8 + a2*x^6 + a4*x^4 + a2*x^2 + a0\n";
+	vprintf Hyperelliptic, 1 : "Automorphism group C2xC2xC2, curve y^2 = a0*x^8 + a2*x^6 + a4*x^4 + a2*x^2 + a0\n";
 	aut := SmallGroup(8, 5);
 	if models then twists := G3ModelsInCharFF_G8_5(JI : geometric := geometric); end if;
 	return twists, aut;
@@ -1198,11 +1195,11 @@ function G3Models(JI: geometric := false, models := true, RationalModel := true,
 	J10*J6 - 1/8*J10*J4*J2 + 1/576*J10*J2^3 + 45/64*J8^2 +     3/32*J8*J6*J2 - 39/112*J8*J4^2 + 11/210*J6^2*J4 +     19/1008*J6*J4^2*J2 - 13/30240*J6*J4*J2^3 - 27/3920*J4^4 -     1/1152*J4^3*J2^2 + 1/51840*J4^2*J2^4 eq 0
 
 	then
-	vprintf G3Twists, 1 : "Automorphism group C4, curve y^2 = x*(x^2-1)*(x^4+a*x^2+b)\n";
+	vprintf Hyperelliptic, 1 : "Automorphism group C4, curve y^2 = x*(x^2-1)*(x^4+a*x^2+b)\n";
 	aut := SmallGroup(4, 1);
 	if models then
 	    f := Genus3ConicAndQuarticForC4(JI : models := models);
-	    error if Type(f) eq BoolElt, "[G3Twists] None C4-model found at JI =", JI;
+	    error if Type(f) eq BoolElt, "[Hyperelliptic] None C4-model found at JI =", JI;
 	    twists := [f];
 	end if;
 	if geometric or not models then return twists, aut; end if;
@@ -2003,18 +2000,18 @@ function G3Models(JI: geometric := false, models := true, RationalModel := true,
 	328/945*J4^2*J6*J10 + 5/9*J3*J5*J6*J10 + 7/120*J2^2*J3*J7*J10 +
 	421/630*J3*J4*J7*J10 + J7^2*J10 eq 0
 	then
-	vprintf G3Twists, 1 : "Automorphism group D4, curve y^2 = (x^2-1)*(x^6+a*x^4+b*x^2+c)\n";
+	vprintf Hyperelliptic, 1 : "Automorphism group D4, curve y^2 = (x^2-1)*(x^6+a*x^4+b*x^2+c)\n";
 	aut := SmallGroup(4, 2);
 	if models then twists := G3ModelsInCharFF_D4(JI: geometric := geometric, RationalModel := RationalModel); end if;
 	return twists, aut;
     end if;
 
     /*** General case ***/
-    vprintf G3Twists, 1 : "Automorphism group C2 \n";
+    vprintf Hyperelliptic, 1 : "Automorphism group C2 \n";
     aut := CyclicGroup(2);
     f := Genus3ConicAndQuartic(JI : models := models, RationalModel := RationalModel, Deterministic := Deterministic);
     if models then
-	error if Type(f) eq BoolElt, "[G3Twists] None C2-model found !\n(do J8, J9 and J10 satisfy Shioda algebraic relations ?)";
+	error if Type(f) eq BoolElt, "[Hyperelliptic] None C2-model found !\n(do J8, J9 and J10 satisfy Shioda algebraic relations ?)";
 	twists := [f];
     end if;
 
@@ -2032,7 +2029,7 @@ intrinsic DiscriminantFromShiodaInvariants(JI::SeqEnum) -> BoolElt
 
     /* Not yet implemented */
     if p in {5} then
-	error "[G3Twists] currently, no computation done in fields of char. 5, sorry";
+	error "[Hyperelliptic] currently, no computation done in fields of char. 5, sorry";
 	return 0;
     end if;
 
@@ -2136,7 +2133,7 @@ intrinsic HyperellipticCurveFromShiodaInvariants(JI::SeqEnum: RationalModel := t
 
     /* Not yet implemented */
     if p in {5} then
-	error "[G3Twists] currently, no computation done in fields of char. 5, sorry";
+	error "[Hyperelliptic] currently, no computation done in fields of char. 5, sorry";
 	return [], <>;
     end if;
 
@@ -2147,7 +2144,7 @@ intrinsic HyperellipticCurveFromShiodaInvariants(JI::SeqEnum: RationalModel := t
 	if DiscriminantFromShiodaInvariants(JI) eq 0 then return [], <>; end if;
 
 	twists, aut := G3Models(JI : geometric := true, RationalModel := RationalModel, Deterministic := Deterministic);
-	error if Type(twists[1]) eq BoolElt, "G3Twists error: none hyperelliptic curve found at JI = ", JI;
+	error if Type(twists[1]) eq BoolElt, "Hyperelliptic error: none hyperelliptic curve found at JI = ", JI;
 
 	return HyperellipticCurve(twists[1]), aut;
 
@@ -2157,7 +2154,7 @@ intrinsic HyperellipticCurveFromShiodaInvariants(JI::SeqEnum: RationalModel := t
 	if DiscriminantFromShiodaInvariants(JI) eq 0 then return [], <>; end if;
 
 	twists, aut := G3Models(JI : geometric := true, RationalModel := RationalModel, Deterministic := Deterministic);
-	error if Type(twists[1]) eq BoolElt, "G3Twists error: none hyperelliptic curve found at JI = ", JI;
+	error if Type(twists[1]) eq BoolElt, "Hyperelliptic error: none hyperelliptic curve found at JI = ", JI;
 
 	return HyperellipticCurve(twists[1]), aut;
 
@@ -2167,7 +2164,7 @@ intrinsic HyperellipticCurveFromShiodaInvariants(JI::SeqEnum: RationalModel := t
 	if DiscriminantFromShiodaInvariants(JI) eq 0 then return [], <>; end if;
 
 	twists, aut := G3Models(JI : geometric := true, RationalModel := RationalModel, Deterministic := Deterministic);
-	error if Type(twists[1]) eq BoolElt, "G3Twists error: none hyperelliptic curve found at JI = ", JI;
+	error if Type(twists[1]) eq BoolElt, "Hyperelliptic error: none hyperelliptic curve found at JI = ", JI;
 
 	return HyperellipticCurve(twists[1]), aut;
 
@@ -2182,10 +2179,25 @@ intrinsic HyperellipticCurveFromShiodaInvariants(JI::SeqEnum: RationalModel := t
     if DiscriminantFromShiodaInvariants(JI) eq 0 then return [], <>; end if;
 
     twists, aut := G3Models(JI : geometric := true, RationalModel := RationalModel, Deterministic := Deterministic);
-    error if Type(twists[1]) eq BoolElt, "G3Twists error: none hyperelliptic curve found at JI = ", JI;
+    error if Type(twists[1]) eq BoolElt, "Hyperelliptic error: none hyperelliptic curve found at JI = ", JI;
 
     return HyperellipticCurve(twists[1]), aut;
 end intrinsic;
+
+function HyperellipticPolynomialsFromShiodaInvariantsFct(JI : RationalModel := true, Deterministic := false)
+
+    FF := Universe(JI); p := Characteristic(FF);
+
+    /* Other rings (p = 0) */
+    if Universe(JI) cmpeq Integers() then
+        JI := ChangeUniverse(JI,Rationals());
+    end if;
+
+    twists, aut := G3Models(JI : geometric := true, RationalModel := RationalModel, Deterministic := Deterministic);
+
+    return twists, aut;
+end function;
+
 
 intrinsic HyperellipticPolynomialsFromShiodaInvariants(JI::SeqEnum : RationalModel := true, Deterministic := false) -> SeqEnum, GrpPerm
     {Compute from given Shioda invariants a list [f(x)], or [h(x),f(x)]
@@ -2194,48 +2206,51 @@ intrinsic HyperellipticPolynomialsFromShiodaInvariants(JI::SeqEnum : RationalMod
     This function returns the automorphism group of the curve y^2 = f(x),
     resp. y^2 + h(x) y = f(x), too.}
 
-    FF := Universe(JI);
-    p := Characteristic(FF);
+    FF := Universe(JI); p := Characteristic(FF);
 
-    /* Not yet implemented */
-    if p in {5} then
-	error "[G3Twists] currently, no computation done in fields of char. 5, sorry";
-	return [], <>;
-    end if;
+    require p ne 5 : "No computation done in fields of char. 5, sorry";
 
-    /* Rings of small characteristic */
     case p:
-
     when 2:
 	require #JI eq 10 or #JI eq 7 or #JI eq 6 or #JI eq 5 : "JI must be of size 5, 6, 7 or 10";
-
-	twists, aut := G3Models(JI : geometric := true, RationalModel := RationalModel, Deterministic := Deterministic);
-	return twists, aut;
-
     when 3:
-	require #JI eq 10 : "Argument must be a sequence of ten Shioda invariants (characteristic 3) : J2, ..., J10, J12.";
-
-	twists, aut := G3Models(JI : geometric := true, RationalModel := RationalModel, Deterministic := Deterministic);
-	return twists, aut;
-
+        require #JI eq 10 : "Argument must be a sequence of ten Shioda invariants (characteristic 3) : J2, ..., J10, J12.";
     when 7:
 	require #JI eq 13 : "Argument must be a sequence of thirteen Shioda invariants (characteristic 7) : J2, ..., J10, J11, J13, J14, J15.";
-
-	twists, aut := G3Models(JI : geometric := true, RationalModel := RationalModel, Deterministic := Deterministic);
-	return twists, aut;
-
+    else:    /* Other rings (p = 0 or p > 7) */
+        require #JI eq 9: "Argument must be a sequence of nine Shioda invariants J2, ..., J10.";
     end case;
 
+    return HyperellipticPolynomialsFromShiodaInvariantsFct(JI :
+        RationalModel := RationalModel, Deterministic := Deterministic);
 
-    /* Other rings (p = 0 or p > 7) */
-    require #JI eq 9: "Argument must be a sequence of nine Shioda invariants J2, ..., J10.";
-    if Universe(JI) cmpeq Integers() then
-        JI := ChangeUniverse(JI,Rationals());
-    end if;
+end intrinsic;
 
-    twists, aut := G3Models(JI : geometric := true, RationalModel := RationalModel, Deterministic := Deterministic);
+/* Temporary, to overload magma default function */
+intrinsic HyperellipticPolynomialsFromShiodaInvariants(JI::SeqEnum[FldFinElt]) -> SeqEnum[CrvHyp], GrpPerm
+{Compute from given Shioda invariants a list [f(x)], or [h(x),f(x)]
+    depending on the characteristic of the based field, with f(x) of degree 7
+    or 8.
+    This function returns the automorphism group of the curve y^2 = f(x),
+    resp. y^2 + h(x) y = f(x), too.}
 
-    return twists, aut;
+    FF := Universe(JI); p := Characteristic(FF);
+
+    require p ne 5 : "No computation done in fields of char. 5, sorry";
+
+    case p:
+    when 2:
+	require #JI eq 10 or #JI eq 7 or #JI eq 6 or #JI eq 5 : "JI must be of size 5, 6, 7 or 10";
+    when 3:
+        require #JI eq 10 : "Argument must be a sequence of ten Shioda invariants (characteristic 3) : J2, ..., J10, J12.";
+    when 7:
+        require #JI eq 13 : "Argument must be a sequence of thirteen Shioda invariants (characteristic 7) : J2, ..., J10, J11, J13, J14, J15.";
+    else:    /* Other rings (p = 0 or p > 7) */
+        require #JI eq 9: "Argument must be a sequence of nine Shioda invariants J2, ..., J10.";
+    end case;
+
+    return HyperellipticPolynomialsFromShiodaInvariantsFct(JI);
+
 end intrinsic;
 
 intrinsic HyperellipticPolynomialFromShiodaInvariants(JI::SeqEnum : RationalModel := true, Deterministic := false) -> RngUPolElt, GrpPerm
@@ -2263,7 +2278,7 @@ end intrinsic;
 intrinsic TwistedHyperellipticPolynomialsFromShiodaInvariants(JI::SeqEnum[FldFinElt] : RationalModel := true, Deterministic := false) -> SeqEnum[CrvHyp], GrpPerm
     {Compute twisted  hyperelliptic polynomials and their automorphism groups from
     Shioda invariants.}
-
+"In TwistedHyperellipticPolynomialsFromShiodaInvariants...";
     FF := Universe(JI);
     p := Characteristic(FF);
 
@@ -2271,7 +2286,7 @@ intrinsic TwistedHyperellipticPolynomialsFromShiodaInvariants(JI::SeqEnum[FldFin
 
     /* Not yet implemented */
     if p eq 5 then
-	error "[G3Twists] currently, no computation done in fields of char. 5, sorry";
+	error "[Hyperelliptic] currently, no computation done in fields of char. 5, sorry";
 	return [], <>;
     end if;
 
@@ -2347,7 +2362,7 @@ intrinsic GeometricAutomorphismGroupFromShiodaInvariants(JI::SeqEnum) -> GrpPerm
 
     /* Not yet implemented */
     if p eq 5 then
-	error "[G3Twists] currently, no computation done in fields of char. 5, sorry";
+	error "[Hyperelliptic] currently, no computation done in fields of char. 5, sorry";
 	return [], <>;
     end if;
 
@@ -2390,7 +2405,7 @@ intrinsic GeometricAutomorphismGroupFromGenus3HyperellipticPolynomials(fh::SeqEn
 
     /* Not yet implemented */
     if p eq 5 then
-	error "[G3Twists] currently, no computation done in fields of char. 5, sorry";
+	error "[Hyperelliptic] currently, no computation done in fields of char. 5, sorry";
 	return [], <>;
     end if;
 
@@ -2411,7 +2426,7 @@ intrinsic GeometricAutomorphismGroupFromGenus3HyperellipticPolynomials(f::RngUPo
 
     /* Not yet implemented */
     if p in {5} then
-	error "[G3Twists] currently, no computation done in fields of char. 5, sorry";
+	error "[Hyperelliptic] currently, no computation done in fields of char. 5, sorry";
 	return [], <>;
     end if;
 
@@ -2430,7 +2445,7 @@ intrinsic GeometricAutomorphismGroupFromGenus3HyperellipticCurve(H::CrvHyp) -> G
 
     /* Not yet implemented */
     if p eq 5 then
-	error "[G3Twists] currently, no computation done in fields of char. 5, sorry";
+	error "[Hyperelliptic] currently, no computation done in fields of char. 5, sorry";
 	return <>;
     end if;
 
@@ -2449,7 +2464,7 @@ intrinsic GeometricAutomorphismGroupClassificationForGenus3HyperellipticCurve(FF
 
     /* Not yet implemented */
     if p in {5} then
-	error "[G3Twists] currently, no computation done in fields of char. 5, sorry";
+	error "[Hyperelliptic] currently, no computation done in fields of char. 5, sorry";
 	return [], <>;
     end if;
 

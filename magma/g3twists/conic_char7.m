@@ -21,7 +21,7 @@
  *  along with this program; if not, write to the Free Software
  *  Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA  02110-1301  USA
  *
- *  Copyright 2014, R. Basson & R. Lercier & C. Ritzenthaler
+ *  Copyright 2014, R. Basson & R. Lercier & C. Ritzenthaler & J. Sijsling
  */
 
 
@@ -73,7 +73,7 @@ function Genus3Char7ConicAndQuarticForC4(JI : models := true)
 
     /* No non-degenrate conic found, return immediatly (should not happen) */
     if R eq 0 then
-	vprintf G3Twists, 1 : "ARGH, none non-degenerate conic found in a C4 case (this should not happen) \n";
+	vprintf Hyperelliptic, 1 : "ARGH, none non-degenerate conic found in a C4 case (this should not happen) \n";
 	return false;
     end if;
 
@@ -85,13 +85,13 @@ function Genus3Char7ConicAndQuarticForC4(JI : models := true)
            return immediatly (this should not happen) */
 	Cc, Cm := CoefficientsAndMonomials(C);
 	if (Seqset(Cm) meet {x1^2, x2^2, x3^2, x1*x3}) ne Seqset(Cm) then
-	    vprintf G3Twists, 1 : "ARGH, none sparse conic found in a C4 case (this should not happen)\n";
+	    vprintf Hyperelliptic, 1 : "ARGH, none sparse conic found in a C4 case (this should not happen)\n";
 	    return false;
 	end if;
 
 	Qc, Qm := CoefficientsAndMonomials(Q);
 	if (Seqset(Qm) meet {x2*x1^3, x2*x3^3, x2^3*x1, x2*x1^2*x3, x2^3*x3, x2*x1*x3^2}) ne Seqset(Qm) then
-	    vprintf G3Twists, 1 : "ARGH, none sparse quartic found in a C4 case (this should not happen)\n";
+	    vprintf Hyperelliptic, 1 : "ARGH, none sparse quartic found in a C4 case (this should not happen)\n";
 	    return false;
 	end if;
 
@@ -125,7 +125,7 @@ function Genus3Char7ConicAndQuarticForC4(JI : models := true)
 
 	F := [Eltseq(c) : c in Eltseq(Evaluate(f, a*Parent(f).1))];
 	if Seqset([F[1+i, 1] : i in [0..Degree(f)] | #F[1+i] ne 0]) ne {0} then
-	    vprintf G3Twists, 1 : "ARGH, none rational model found in a C4 case (this should not happen)\n";
+	    vprintf Hyperelliptic, 1 : "ARGH, none rational model found in a C4 case (this should not happen)\n";
 	end if;
 
 	FFx := PolynomialRing(FF); x := FFx.1;
@@ -272,7 +272,7 @@ function Genus3Char7ConicAndQuartic(JI : models:= true)
 	QF:= Parent(eta);
 
 	if QF ne FF then
-	    vprintf G3Twists, 1 : "Conic has no rational point\n";
+	    vprintf Hyperelliptic, 1 : "Conic has no rational point\n";
 	end if;
 	P3:= PolynomialRing(QF, 3); x1:= P3.1; x2:= P3.2; x3:= P3.3;
 

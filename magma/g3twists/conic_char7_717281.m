@@ -20,7 +20,7 @@
  *  along with this program; if not, write to the Free Software
  *  Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA  02110-1301  USA
  *
- *  Copyright 2014, R. Basson & R. Lercier & C. Ritzenthaler
+ *  Copyright 2014, R. Basson & R. Lercier & C. Ritzenthaler & J. Sijsling
  */
 
 
@@ -55,11 +55,11 @@
 	 2*J3*J5*J14 + 5*J2^2*J3*J15 + 2*J2*J5*J15 + 3*J7*J15;
 
      if R eq 0 then
-	 vprintf G3Twists, 1 : "R717281 = 0\n";
+	 vprintf Hyperelliptic, 1 : "R717281 = 0\n";
 	 return R, R, R;
      end if;
 
-     vprintf G3Twists, 1 : "R717281 <> 0\n";
+     vprintf Hyperelliptic, 1 : "R717281 <> 0\n";
      if not models then return R, R, R; end if;
 
      /* Conique [ 71, 72, 81 ] */

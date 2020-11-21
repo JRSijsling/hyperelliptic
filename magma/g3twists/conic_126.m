@@ -20,7 +20,7 @@
  *  along with this program; if not, write to the Free Software
  *  Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA  02110-1301  USA
  *
- *  Copyright 2011, R. Lercier & C. Ritzenthaler
+ *  Copyright 2011, R. Lercier & C. Ritzenthaler & J. Sijsling
  */
 
  function Genus3ConicAndQuartic126(JI : models := true)
@@ -36,11 +36,11 @@
 	 13/759375*J2^5*J9 + 13/1458000*J2^4*J3*J4^2 - 1871/18225000*J2^4*J4*J7 + 1871/18225000*J2^4*J5*J6 - 13/4252500*J2^3*J3*J4*J6 + 13/45000*J2^3*J3*J10 + 1867/48600000*J2^3*J4^2*J5 - 623/8100000*J2^3*J4*J9 - 901/675000*J2^3*J6*J7 - 26/50625*J2^2*J3^2*J9 - 13/32400*J2^2*J3*J4^3 - 1879/2835000*J2^2*J4^2*J7 - 5609/2835000*J2^2*J4*J5*J6 - 13/1875*J2^2*J5*J10 + 52/3375*J2^2*J6*J9 + 26/1875*J2^2*J7*J8 - 13/48600*J2*J3^3*J4^2 + 1871/607500*J2*J3^2*J4*J7 - 1871/607500*J2*J3^2*J5*J6 - 13/141750*J2*J3*J4^2*J6 - 13/375*J2*J3*J4*J10 + 533/30000*J2*J3*J5*J9 + 13/300*J2*J3*J6*J8 - 533/30000*J2*J3*J7^2 + 253187/75600000*J2*J4^3*J5 - 3151/3150000*J2*J4^2*J9 + 1871/90000*J2*J4*J5*J8 + 9299/4050000*J2*J4*J6*J7 - 46997/16200000*J2*J5*J6^2 - 1871/15000*J2*J8*J9 + 13/141750*J3^3*J4*J6 - 13/1500*J3^3*J10 + 3983/1620000*J3^2*J4^2*J5 + 233/270000*J3^2*J4*J9 - 37/11250*J3^2*J6*J7 - 15649/9800000*J3*J4^4 - 13/5250*J3*J4^2*J8 + 79/30000*J3*J4*J5*J7 + 26081/2700000*J3*J4*J6^2 - 79/45000*J3*J5^2*J6 - 79/15000*J3*J7*J9 + 117/1000*J3*J8^2 - 5623/700000*J4^3*J7 + 50597/4725000*J4^2*J5*J6 - 1/3750*J4*J5*J10 + 20611/393750*J4*J6*J9 - 9367/30000*J4*J7*J8 - 1873/20000*J5^2*J9 - 617/30000*J5*J6*J8 + 1873/20000*J5*J7^2 - 347/6000*J6^2*J7 + J9*J10;
 
      if R eq 0 then
-	 vprintf G3Twists, 1 : "R126 = 0\n";
+	 vprintf Hyperelliptic, 1 : "R126 = 0\n";
 	 return R, R, R;
      end if;
 
-     vprintf G3Twists, 1 : "R126 <> 0\n";
+     vprintf Hyperelliptic, 1 : "R126 <> 0\n";
      if not models then return R, R, R; end if;
 
      C :=

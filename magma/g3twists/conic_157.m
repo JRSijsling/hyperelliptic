@@ -20,7 +20,7 @@
  *  along with this program; if not, write to the Free Software
  *  Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA  02110-1301  USA
  *
- *  Copyright 2011, R. Lercier & C. Ritzenthaler
+ *  Copyright 2011, R. Lercier & C. Ritzenthaler & J. Sijsling
  */
 
  function Genus3ConicAndQuartic157(JI : models := true)
@@ -126,11 +126,11 @@
 	 + 51/343000*J5*J8*J9 + 59/1234800*J6*J7*J9 + 17/70560*J6*J8^2;
 
      if R eq 0 then
-	 vprintf G3Twists, 1 : "R157 = 0\n";
+	 vprintf Hyperelliptic, 1 : "R157 = 0\n";
 	 return R, R, R;
      end if;
 
-     vprintf G3Twists, 1 : "R157 <> 0\n";
+     vprintf Hyperelliptic, 1 : "R157 <> 0\n";
      if not models then return R, R, R; end if;
 
      C :=

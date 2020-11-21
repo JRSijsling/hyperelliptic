@@ -20,10 +20,10 @@
  *  along with this program; if not, write to the Free Software
  *  Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA  02110-1301  USA
  *
- *  Copyright 2011-2012, R. Basson & R. Lercier & C. Ritzenthaler
+ *  Copyright 2011-2012, R. Basson & R. Lercier & C. Ritzenthaler & J. Sijsling & J. Sijsling
  */
 
-import "sl2invtools.m"    : PowerRepresentativesInFiniteFields, ShiodaInvariantsAppend;
+import "../toolbox/sl2invtools.m"    : PowerRepresentativesInFiniteFields, ShiodaInvariantsAppend;
 
 function Genus3WeierstrassToArtinSchreierModel_T1111(f, h)
 
@@ -779,13 +779,13 @@ function Genus3WeierstrassToArtinSchreierModel(f, h)
 
 	    /* h with a root of order 4 */
 	    if h1 eq 0 and h2 eq 0 and h3 eq 0 then
-		vprintf G3Twists, 1 : "Type (7)\n";
+		vprintf Hyperelliptic, 1 : "Type (7)\n";
 		F, H, _ :=  Genus3WeierstrassToArtinSchreierModel_T7(f, h);
 		return F, H;
 	    end if;
 
 	    /* h with a root of order 3 */
-	    vprintf G3Twists, 1 : "Type (1,5)\n";
+	    vprintf Hyperelliptic, 1 : "Type (1,5)\n";
 	    F, H, _ := Genus3WeierstrassToArtinSchreierModel_T15(f, h);
 	    return F, H;
 
@@ -793,20 +793,20 @@ function Genus3WeierstrassToArtinSchreierModel(f, h)
 
 	/* h with two roots of order 2 */
 	if h1 eq 0 and h3 eq 0 then
-	    vprintf G3Twists, 1 : "Type (3,3)\n";
+	    vprintf Hyperelliptic, 1 : "Type (3,3)\n";
 	    F, H, _ :=  Genus3WeierstrassToArtinSchreierModel_T33(f, h);
 	    return F, H;
 	end if;
 
 	/* h with a single root of order 2 */
-	vprintf G3Twists, 1 : "Type (1,1,3)\n";
+	vprintf Hyperelliptic, 1 : "Type (1,1,3)\n";
 	F, H, _ :=  Genus3WeierstrassToArtinSchreierModel_T113(f, h);
 	return F, H;
 
     end if;
 
     /* Generic case, all roots are of order 1 */
-    vprintf G3Twists, 1 : "Type (1,1,1,1)\n";
+    vprintf Hyperelliptic, 1 : "Type (1,1,1,1)\n";
     F, H, _ := Genus3WeierstrassToArtinSchreierModel_T1111(f, h);
     return F, H;
 
@@ -829,14 +829,14 @@ function ShiodaInvariantsChar2(f, h : normalize := false)
 
 	    /* h with a root of order 4 */
 	    if h1 eq 0 and h2 eq 0 and h3 eq 0 then
-		vprintf G3Twists, 1 : "Type (7)\n";
+		vprintf Hyperelliptic, 1 : "Type (7)\n";
 		_, _, abcde := Genus3WeierstrassToArtinSchreierModel_T7(f, h);
 		return ShiodaInvariantsChar2_T7(abcde : normalize := normalize);
 
 	    end if;
 
 	    /* h with a root of order 3 */
-	    vprintf G3Twists, 1 : "Type (1,5)\n";
+	    vprintf Hyperelliptic, 1 : "Type (1,5)\n";
 	    _, _, abcde := Genus3WeierstrassToArtinSchreierModel_T15(f, h);
 	    return ShiodaInvariantsChar2_T15(abcde : normalize := normalize);
 
@@ -844,20 +844,20 @@ function ShiodaInvariantsChar2(f, h : normalize := false)
 
 	/* h with two roots of order 2 */
 	if h1 eq 0 and h3 eq 0 then
-	    vprintf G3Twists, 1 : "Type (3,3)\n";
+	    vprintf Hyperelliptic, 1 : "Type (3,3)\n";
 	    _, _, abcde :=  Genus3WeierstrassToArtinSchreierModel_T33(f, h);
 	    return ShiodaInvariantsChar2_T33(abcde : normalize := normalize);
 	end if;
 
 	/* h with a single root of order 2 */
-	vprintf G3Twists, 1 : "Type (1,1,3)\n";
+	vprintf Hyperelliptic, 1 : "Type (1,1,3)\n";
 	_, _, abcde :=  Genus3WeierstrassToArtinSchreierModel_T113(f, h);
 	return ShiodaInvariantsChar2_T113(abcde : normalize := normalize);
 
     end if;
 
     /* Generic case, all roots are of order 1 */
-    vprintf G3Twists, 1 : "Type (1,1,1,1)\n";
+    vprintf Hyperelliptic, 1 : "Type (1,1,1,1)\n";
     _, _, abcde := Genus3WeierstrassToArtinSchreierModel_T1111(f, h);
     return ShiodaInvariantsChar2_T1111(abcde : normalize := normalize);
 

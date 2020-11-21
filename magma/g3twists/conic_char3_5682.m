@@ -20,7 +20,7 @@
  *  along with this program; if not, write to the Free Software
  *  Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA  02110-1301  USA
  *
- *  Copyright 2013, R. Basson & R. Lercier & C. Ritzenthaler
+ *  Copyright 2013, R. Basson & R. Lercier & C. Ritzenthaler & J. Sijsling
  */
 
 
@@ -40,11 +40,11 @@ function Genus3Char3ConicAndQuartic5682(JI : models := true)
 	J4*J6*J9 + 2*J2^2*J5*J10 + J4*J5*J10 + 2*J2^2*J3*J12 + J3*J4*J12 + J2*J5*J12 + J7*J12;
 
     if R eq 0 then
-	vprintf G3Twists, 1 : "R5682 = 0\n";
+	vprintf Hyperelliptic, 1 : "R5682 = 0\n";
 	return R, R, R;
     end if;
 
-    vprintf G3Twists, 1 : "R5682 <> 0\n";
+    vprintf Hyperelliptic, 1 : "R5682 <> 0\n";
     if not models then return R, R, R; end if;
 
     /* Conique [ 5, 6, 82 ] */

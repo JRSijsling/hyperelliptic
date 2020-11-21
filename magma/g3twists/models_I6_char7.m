@@ -21,7 +21,7 @@
  *  along with this program; if not, write to the Free Software
  *  Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA  02110-1301  USA
  *
- *  Copyright 2014, R. Basson & R. Lercier & C. Ritzenthaler
+ *  Copyright 2014, R. Basson & R. Lercier & C. Ritzenthaler & J. Sijsling
  */
 
 
@@ -46,7 +46,7 @@
 		 error "[models_char7] C2xPGL case trapped in I6 by error at JI = ", JI;
 
 	     elif J6 eq 0 and J10 ne 0 then
-		 vprintf G3Twists, 1 : "J2 = J3 = 0, J4 = J5 = 0, J6 = 0, J10 <> 0\n";
+		 vprintf Hyperelliptic, 1 : "J2 = J3 = 0, J4 = J5 = 0, J6 = 0, J10 <> 0\n";
 
 		 a0:= 0;
 		 a6:= J15/J10;
@@ -54,7 +54,7 @@
 		 a8:= 3*a1^2*a6^5*J14/J10^2;
 
 	     else // J6 <> 0
-		 vprintf G3Twists, 1 : "J2 = J3 = 0, J4 = J5 = 0, J6, J10 <> 0\n";
+		 vprintf Hyperelliptic, 1 : "J2 = J3 = 0, J4 = J5 = 0, J6, J10 <> 0\n";
 		 a6:= 1;
 		 a0:=3*J9/(a6^2*J6);
 
@@ -83,19 +83,19 @@
 	     /* Model a2 = a6 = a4 = a3 = 0  */
 
 	     if J4 eq 0 then
-	     	 vprintf G3Twists, 1 : "J2 = J3 = 0, J4 = 0, J5 <> 0\n";
+	     	 vprintf Hyperelliptic, 1 : "J2 = J3 = 0, J4 = 0, J5 <> 0\n";
 		 a0:= J5;
 		 a1:= 0;
 		 a7:= 2*J8/J5^2;
 		 a8:= 2*J7/J5^2;
 	     elif J5 eq 0 then
-	     	 vprintf G3Twists, 1 : "J2 = J3 = 0, J4 <> 0, J5 = 0\n";
+	     	 vprintf Hyperelliptic, 1 : "J2 = J3 = 0, J4 <> 0, J5 = 0\n";
 		 a0:= 0;
 		 a1:= 2*J4;
 		 a7:= 4*J6/J4^2;
 		 a8:= 6*J13/J4^4;
 	     else
-	     	 vprintf G3Twists, 1 : "J2 = J3 = 0, J4 <> 0, J5 <> 0\n";
+	     	 vprintf Hyperelliptic, 1 : "J2 = J3 = 0, J4 <> 0, J5 <> 0\n";
 		 a0:= J5;
 		 a1:= 2*J4;
 		 a7:= 2*J6^2/J5^2/J4 + 5*J4^2/J5^2 + 2*J8/J5^2;
@@ -117,7 +117,7 @@
 	 Ia0a2:= 6*J3^3 + J2^2*J5 + 2*J3*J6 + 3*J2*J7;
 
 	 if Ia2a6 eq 0 and Ia0a2 eq 0 then
-	     vprintf G3Twists, 1 : "D7 = Ia0a2 = Ia2a6 = 0\n";
+	     vprintf Hyperelliptic, 1 : "D7 = Ia0a2 = Ia2a6 = 0\n";
 	     /* a8*x^8 + a7*x^7 + a4*x^4 + a1*x */
 
 	     a4:= 6*J3/J2;
@@ -134,7 +134,7 @@
 	     Ia1a7:= (4*J2*J6 + 6*J3*J5 + 6*J4^2)/J3^2;
 
 	     if Ia1a7 eq 0 then
-		 vprintf G3Twists, 1 : "Ia0a2 <> 0, Ia1a7 = 0\n";
+		 vprintf Hyperelliptic, 1 : "Ia0a2 <> 0, Ia1a7 = 0\n";
 		 /* a8*x^8 + a7*x^7 + a4*x^4 + a0 */
 
 		 a4:= 6*J3/J2;
@@ -147,7 +147,7 @@
 
 	     else //a1a7 <> 0
 		 /* a8*x^8 + a7*x^7 + a4*x^4 + a1*x + a0 */
-		 vprintf G3Twists, 1 : "Ia0a2 <> 0, Ia1a7 <> 0\n";
+		 vprintf Hyperelliptic, 1 : "Ia0a2 <> 0, Ia1a7 <> 0\n";
 
 		 a4:= 6*J3/J2;
 
@@ -212,7 +212,7 @@
 
 
 	 elif Ia2a6 ne 0 and Ia0a2 eq 0 then
-	     vprintf G3Twists, 1 : "Ia2a6 <> 0\n";
+	     vprintf Hyperelliptic, 1 : "Ia2a6 <> 0\n";
 	     /* a8*x^8 + a7*x^7 + a6*x^6 + a4*x^4 + a1*x */
 
 	     a4:= 6*J3/J2;
@@ -288,5 +288,3 @@
      end if; //D7 = 0
 
  end function;
-
-

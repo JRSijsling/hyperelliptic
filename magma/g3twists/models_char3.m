@@ -21,13 +21,13 @@
  *  along with this program; if not, write to the Free Software
  *  Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA  02110-1301  USA
  *
- *  Copyright 2013, R. Basson & R. Lercier & C. Ritzenthaler
+ *  Copyright 2013, R. Basson & R. Lercier & C. Ritzenthaler & J. Sijsling
  */
 
 
 import "g3d4_char3.m"            : G3Char3Models_D2;
 import "conic_char3.m"           : Genus3Char3ConicAndQuartic, Genus3Char3ConicAndQuarticForC4;
-import "hilbert90.m"             : MConj, MNorm, MActOnC, Glasby;
+import "../toolbox/hilbert90.m"  : MActOnC, Glasby;
 
 
 /*************** Some useful quartics ***************/
@@ -313,7 +313,7 @@ function G3Char3Models(JI: geometric:= true, models:= true, descent:= true)
        J6 eq 0 and J7 eq 0 and
        J8 eq 0 and J9 eq 0 and
        J10 eq 0 and J12 eq 0 then
-	vprintf G3Twists, 1 : "Automorphism group VIII, curve y^2 = x^8\n";
+	vprintf Hyperelliptic, 1 : "Automorphism group VIII, curve y^2 = x^8\n";
 	aut:= SmallGroup(1,1);/* FixMe: <1,1> is not the good choice here */
 	if models then twists:= [(PolynomialRing(FF).1)^8]; end if;
 	if geometric or not models then return twists, aut; end if;
@@ -328,7 +328,7 @@ function G3Char3Models(JI: geometric:= true, models:= true, descent:= true)
      /* V8 : y^2 = x^8 - 1  */
      if J3 eq 0 and J4 eq 0 and J5 eq 0 and J6 eq 0 and J7 eq 0
 	and J8-J2^4 eq 0 and J9 eq 0 and J10-J2^5 eq 0 and 2*J12-J2^6 eq 0 then
-	 vprintf G3Twists, 1 : "Automorphism group V8, curve y^2 =  x^8 - 1\n";
+	 vprintf Hyperelliptic, 1 : "Automorphism group V8, curve y^2 =  x^8 - 1\n";
 	 aut:= SmallGroup(32, 9);
 	 if models then twists:= G3Char3Models_G32_9(JI : geometric:= geometric); end if;
 	 return twists, aut;
@@ -338,7 +338,7 @@ function G3Char3Models(JI: geometric:= true, models:= true, descent:= true)
      /* C14 : y^2 = x^7 - 1 */
      if J2 eq 0 and J3 eq 0 and J4 eq 0 and J5 eq 0 and J6 eq 0
 	and J8 eq 0 and J9 eq 0 and J10 eq 0 and J12 eq 0 then
-	 vprintf G3Twists, 1 : "Automorphism group C14, curve y^2 = x^7 - 1\n";
+	 vprintf Hyperelliptic, 1 : "Automorphism group C14, curve y^2 = x^7 - 1\n";
 	 aut:= CyclicGroup(14); /* SmallGroup(14, 2) */
 	 if models then twists:= G3Char3Models_C14(JI : geometric:= geometric); end if;
 	 return twists, aut;
@@ -358,7 +358,7 @@ function G3Char3Models(JI: geometric:= true, models:= true, descent:= true)
 	J7 + J5*J2 eq 0 and
 	J6 + 2*J3^2 + 2*J4*J2 eq 0
 	then
-	 vprintf G3Twists, 1 : "Automorphism group C2xD4, curve y^2 = x^8 + a*x^4 + 1\n";
+	 vprintf Hyperelliptic, 1 : "Automorphism group C2xD4, curve y^2 = x^8 + a*x^4 + 1\n";
 	 aut:= SmallGroup(16, 11);
 	 if models then twists:= G3Char3Models_C2xD4(JI : geometric:= geometric); end if;
 	 return twists, aut;
@@ -371,7 +371,7 @@ function G3Char3Models(JI: geometric:= true, models:= true, descent:= true)
 	J10 + J4^2*J2 + 2*J6*J2^2 + 2*J2^5 eq 0 and
 	J8 + 2*J4^2 + J4*J2^2 + 2*J2^4 eq 0
 	then
-	 vprintf G3Twists, 1 : "Automorphism group C2xC4, curve y^2 = x * (x^2 - 1) * (x^4 + a * x^2 + 1)\n";
+	 vprintf Hyperelliptic, 1 : "Automorphism group C2xC4, curve y^2 = x * (x^2 - 1) * (x^4 + a * x^2 + 1)\n";
 	 aut:= DirectProduct(CyclicGroup(2), CyclicGroup(4));	/* SmallGroup(8, 2) */
 	 if models then twists:= G3Char3Models_C2xC4(JI : geometric:= geometric); end if;
 	 return twists, aut;
@@ -394,7 +394,7 @@ function G3Char3Models(JI: geometric:= true, models:= true, descent:= true)
 	 J9 + J5*J4 + J7*J2 + J4*J3*J2 + 2*J5*J2^2 + 2*J3*J2^3 eq 0 and
 	 J8 + J5*J3 + J4*J2^2 + 2*J2^4 eq 0
 	 then
-	 vprintf G3Twists, 1 : "Automorphism group C2xC2xC2, curve y^2 = a8*x^8 + a6*x^6 + a4*x^4 + a6*x^2 + a8\n";
+	 vprintf Hyperelliptic, 1 : "Automorphism group C2xC2xC2, curve y^2 = a8*x^8 + a6*x^6 + a4*x^4 + a6*x^2 + a8\n";
 	 aut:= SmallGroup(8, 5);
 	 if models then twists:= G3Char3Models_C2x3(JI : geometric:= geometric, descent:= descent); end if;
 	 return twists, aut;
@@ -421,11 +421,11 @@ function G3Char3Models(JI: geometric:= true, models:= true, descent:= true)
         J8*J2^4 + 2*J4^2*J2^4 + J6*J2^5 + 2*J4*J2^6 eq 0 and
 	J6^2 + J8*J4 + J10*J2 + J8*J2^2 + J4^2*J2^2 + J2^6 eq 0
 	then
-	 vprintf G3Twists, 1 : "Automorphism group C4, curve y^2 = x*(x^2-1)*(x^4+a*x^2+b)\n";
+	 vprintf Hyperelliptic, 1 : "Automorphism group C4, curve y^2 = x*(x^2-1)*(x^4+a*x^2+b)\n";
 	 aut:= SmallGroup(4, 1);
 	 if models then
 	     f:= Genus3Char3ConicAndQuarticForC4(JI : models:= models);
-	     error if Type(f) eq BoolElt, "[G3Twists] None C4-model found at JI =", JI;
+	     error if Type(f) eq BoolElt, "[Hyperelliptic] None C4-model found at JI =", JI;
 	     twists:= [f];
 	 end if;
 	 if geometric or not models then return twists, aut; end if;
@@ -943,7 +943,7 @@ function G3Char3Models(JI: geometric:= true, models:= true, descent:= true)
 	 J6^2 + 2*J7*J5 + J8*J4 + J5*J4*J3 + J6*J3^2 + J3^4 + J10*J2 + 2*J5^2*J2 + 2*J7*J3*J2 + J8*J2^2 + J4^2*J2^2 +
 	 J5*J3*J2^2 + 2*J3^2*J2^3 + J2^6 eq 0
 	then
-	 vprintf G3Twists, 1 : "Automorphism group D2, curve y^2 = (x^2-1)*(x^6+a*x^4+b*x^2+c)\n";
+	 vprintf Hyperelliptic, 1 : "Automorphism group D2, curve y^2 = (x^2-1)*(x^6+a*x^4+b*x^2+c)\n";
 	 aut:= SmallGroup(4, 2);
 	 if models then twists:= G3Char3Models_D2(JI: geometric:= geometric); end if;
 	 return twists, aut;
@@ -951,18 +951,14 @@ function G3Char3Models(JI: geometric:= true, models:= true, descent:= true)
 
 
      /*** General case ***/
-     vprintf G3Twists, 1 : "Automorphism group C2 \n";
+     vprintf Hyperelliptic, 1 : "Automorphism group C2 \n";
      aut:= CyclicGroup(2);
      f:= Genus3Char3ConicAndQuartic(JI : models:= models);
      if models then
-	 error if Type(f) eq BoolElt, "[G3Twists] None C2-model found !\n(do invariants satisfy algebraic relations ?)";
+	 error if Type(f) eq BoolElt, "[Hyperelliptic] None C2-model found !\n(do invariants satisfy algebraic relations ?)";
 	 twists:= [f];
      end if;
      if geometric or not models then return twists, aut; end if;
      return [f, PrimitiveElement(FF)*f], aut;
 
  end function;
-
-
-
-

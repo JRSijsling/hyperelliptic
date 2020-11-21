@@ -21,10 +21,8 @@
  *  along with this program; if not, write to the Free Software
  *  Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA  02110-1301  USA
  *
- *  Copyright 2011, R. Lercier & C. Ritzenthaler
+ *  Copyright 2011, R. Lercier & C. Ritzenthaler & J. Sijsling & J. Sijsling
  */
-
-import "conic.m"       : FindPointOnConic;
 
 /* Case D4
 
@@ -32,7 +30,7 @@ import "conic.m"       : FindPointOnConic;
 */
 function G3ModelsInCharFF_D4(JI : geometric := false, RationalModel := true)
 
-    vprintf G3Twists, 2 : "\n[G3Twists] D4: JI = %o\n", JI;
+    vprintf Hyperelliptic, 2 : "\n[Hyperelliptic] D4: JI = %o\n", JI;
 
     J2, J3, J4, J5, J6, J7, J8, J9, J10 := Explode(JI);
     FF := Universe(JI); x := PolynomialRing(FF).1;
@@ -60,7 +58,7 @@ function G3ModelsInCharFF_D4(JI : geometric := false, RationalModel := true)
     /* I3 */
     I3  := 5/21*I2a*I1+8/525*I1^3+392/9*J3-28/15*I1*J2;
 
-    vprintf G3Twists, 2 : "[G3Twists] D4: *** I1 = %o, I2a = %o, I2b = %o, I3f = %o\n", I1, I2a, I2b, I3;
+    vprintf Hyperelliptic, 2 : "[Hyperelliptic] D4: *** I1 = %o, I2a = %o, I2b = %o, I3f = %o\n", I1, I2a, I2b, I3;
 
     /* Some easy cases */
     if I2a eq 0 then
@@ -72,7 +70,7 @@ function G3ModelsInCharFF_D4(JI : geometric := false, RationalModel := true)
 
 	f := A8*x^8 + A6*x^6 + A4*x^4 + A2*x^2 + A0;
 
-	vprintf G3Twists, 2 : "[G3Twists] D4: *** f = %o\n", f;
+	vprintf Hyperelliptic, 2 : "[Hyperelliptic] D4: *** f = %o\n", f;
 	if geometric then return [f]; end if;
 	return HyperellipticPolynomialTwists(f, 8);
     end if;
@@ -87,7 +85,7 @@ function G3ModelsInCharFF_D4(JI : geometric := false, RationalModel := true)
 
 	f := A8*x^8 + A6*x^6 + A4*x^4 + A2*x^2 + A0;
 
-	vprintf G3Twists, 2 : "[G3Twists] D4: *** f = %o\n", f;
+	vprintf Hyperelliptic, 2 : "[Hyperelliptic] D4: *** f = %o\n", f;
 	if geometric then return [f]; end if;
 	return HyperellipticPolynomialTwists(f, 8);
 
@@ -122,7 +120,7 @@ function G3ModelsInCharFF_D4(JI : geometric := false, RationalModel := true)
 
 	f := A8*x^8 + A6*x^6 + A4*x^4 + A2*x^2 + A0;
 
-	vprintf G3Twists, 2 : "[G3Twists] D4: *** f = %o\n", f;
+	vprintf Hyperelliptic, 2 : "[Hyperelliptic] D4: *** f = %o\n", f;
 	if geometric then return [f]; end if;
 	return HyperellipticPolynomialTwists(f, 8);
 
@@ -158,7 +156,7 @@ function G3ModelsInCharFF_D4(JI : geometric := false, RationalModel := true)
 	K!phi(a0)*X^8+K!phi(a1)*X^7+K!phi(a2)*X^6+K!phi(a3)*X^5+K!phi(a4)*X^4+
 	d*K!phi(a3)*X^3+d^2*K!phi(a2)*X^2+d^3*K!phi(a1)*X+d^4*K!phi(a0);
 
-    vprintf G3Twists, 2 : "[G3Twists] D4: *** f = %o\n", f;
+    vprintf Hyperelliptic, 2 : "[Hyperelliptic] D4: *** f = %o\n", f;
     if geometric then return [f]; end if;
     return HyperellipticPolynomialTwists(f, 8);
 

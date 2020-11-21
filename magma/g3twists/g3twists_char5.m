@@ -20,10 +20,10 @@
  *  along with this program; if not, write to the Free Software
  *  Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA  02110-1301  USA
  *
- *  Copyright 2011-2012, R. Basson & R. Lercier & C. Ritzenthaler
+ *  Copyright 2011-2012, R. Basson & R. Lercier & C. Ritzenthaler & J. Sijsling & J. Sijsling
  */
 
-import "misc.m" : LiftRing, ChangeBaseRing;
+import "../toolbox/misc.m" : LiftRing, ChangeBaseRing;
 
 
 function ShiodaInvariantsChar5(f : normalize := false)

@@ -20,7 +20,7 @@
  *  along with this program; if not, write to the Free Software
  *  Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA  02110-1301  USA
  *
- *  Copyright 2011, R. Lercier & C. Ritzenthaler
+ *  Copyright 2011, R. Lercier & C. Ritzenthaler & J. Sijsling
  */
 
 function Genus3ConicAndQuartic129(JI : models := true)
@@ -86,11 +86,11 @@ function Genus3ConicAndQuartic129(JI : models := true)
 	J10^2;
 
     if R eq 0 then
-	vprintf G3Twists, 1 : "R129 = 0\n";
+	vprintf Hyperelliptic, 1 : "R129 = 0\n";
 	return R, R, R;
     end if;
 
-    vprintf G3Twists, 1 : "R129 <> 0\n";
+    vprintf Hyperelliptic, 1 : "R129 <> 0\n";
     if not models then return R, R, R; end if;
 
     C :=

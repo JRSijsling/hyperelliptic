@@ -57,9 +57,6 @@
      and 47 have been computed by the authors and are available on request.
  */
 
-/* Loading g3twists */
-AttachSpec("../magma/spec");
-
 /* Is p defined on the command line ? */
 if not assigned(p) then
   "Usage: \"magma p:=11 [reconstruct:=true] [reload:=true] hg3enum.m\""; quit;
@@ -517,7 +514,7 @@ C2C4 := [0, 0, 0]; C2p3 := [0, 0, 0];
 
 nbfree := 0; nball := 0; nbtrue := 0; nbcurve := 0; tm := Cputime();
 
-//SetVerbose("G3Twists", 3);
+//SetVerbose("Hyperelliptic", 2);
 repeat
 
     nbfree +:= 1;
@@ -541,9 +538,10 @@ repeat
 	    J := _J;
 	    singular := DiscriminantFromShiodaInvariants(J) eq 0;
 
+
 	    if singular or not twists then
-		if singular and Characteristic(FF) in {2, 3, 7} then continue; end if;
-		H, G := HyperellipticPolynomialsFromShiodaInvariants(J);
+                if singular and Characteristic(FF) in {2, 3, 7} then continue; end if;
+                H, G := HyperellipticPolynomialsFromShiodaInvariants(J);
 	    else
 		H, G := TwistedHyperellipticPolynomialsFromShiodaInvariants(J);
 	    end if;
