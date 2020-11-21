@@ -796,7 +796,7 @@ for MF in MFL do
     MF0 := [* *];
     for mf in MF do
         i0 := Minimum([ i : i in [1..#mf] | mf[i] ne 0 ]);
-        mf0 := [ c/i0 : c in mf ];
+        mf0 := [ c/mf[i0] : c in mf ];
         Append(~MF0, mf0);
     end for;
     Append(~MFL0, MF0);
