@@ -192,7 +192,7 @@ end function;
 
 function LimitedFactorization(N : ECMLimit := 20000, MPQSLimit := 60, Proof := false)
 
-    if #Intseq(N, 10) le MPQSLimit then return Factorizaion(N); end if;
+    if #Intseq(N, 10) le MPQSLimit then return Factorization(N); end if;
 
     return Factorization(N :
         ECMLimit := ECMLimit, MPQSLimit := MPQSLimit, Proof := Proof);
@@ -233,7 +233,9 @@ function Genus2ConicAndCubic(JI : models := true, RationalModel := true, Determi
         if #JI eq 6 then
             JI := WPSMinimizeQQ([2, 4, 6, 8, 10, 15], JI);
         else
-            /* Let us recover J15 */
+
+            /* Let us recover J15
+             ***/
             JI := WPSMinimizeQQ([1, 2, 3, 4, 5], JI);
             J2, J4, J6, J8, J10 := Explode(JI);
 
@@ -250,21 +252,18 @@ function Genus2ConicAndCubic(JI : models := true, RationalModel := true, Determi
             /* Let us make J15_ 2 be a square (if not too hard) */
             F, Q := TrialDivision(Numerator(J15_2), 10^6 : Proof := false);
             if #Q gt 0 then
-                ret, sqrQ := IsSquare(&*Q);
+                ret, _ := IsSquare(&*Q);
             end if;
 
             if ret eq false then
-                F, Q := LimitedFactorization(Numerator(J15_2));
-                if #Q gt 0 then
-                    ret, sqrQ := IsSquare(&*Q);
+                F, _, Q := LimitedFactorization(Numerator(J15_2));
+                if assigned(Q) then
+                    ret, _ := IsSquare(&*Q);
                 end if;
             end if;
 
             vprintf G2Twists, 2 :  "J15_2 := %o * %o;\n", F, Q;
 
-            if #Q gt 0 then
-                ret, sqrQ := IsSquare(&*Q);
-            end if;
             if ret then
                 for fct in F do
                     if fct[2] mod 2 eq 1 then
@@ -274,7 +273,9 @@ function Genus2ConicAndCubic(JI : models := true, RationalModel := true, Determi
                 end for;
                 ret, J15 := IsSquare(AbsoluteValue(J15_2));
             end if;
+
             if ret then JI := [J2, J4, J6, J8, J10, J15]; end if;
+
         end if;
 
         if ret then
