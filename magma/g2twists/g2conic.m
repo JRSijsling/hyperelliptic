@@ -188,46 +188,15 @@ function MinimizeLinearEquationOverRationals(LE)
 
 end function;
 
-function PartialFactorization(N : Proof := false, PollardRhoLimit := 10^6, ECMB1 := 10^5, ECMCurves := 20)
 
-    F, Q0 := TrialDivision(N, 10^6 : Proof := Proof);
 
-    Q1 := [];
-    for q in Q0 do
-        _F, Q := PollardRho(q, 1, 1, PollardRhoLimit : Proof := Proof);
-        F *:= _F; Q1 cat:= Q;
-    end for;
-    Q0 := Q1;
+function LimitedFactorization(N : ECMLimit := 20000, MPQSLimit := 60, Proof := false)
 
-    Q1 := [];
-    for q in Q0 do
-        n := q;
-        repeat
-            nc := 0; repeat nc +:= 1;
-                f := ECM(n, ECMB1);
-            until f ne 0 or nc ge ECMCurves;
-            if f ne 0 then
-                repeat
-                    if IsPrime(f : Proof := Proof) then
-                        F *:= SeqFact([ <f, 1> ]);
-                    else
-                        Q1 cat:= [ f ];
-                    end if;
-                    n := n div f;
-                until (n mod f) ne 0;
+    if #Intseq(N, 10) le MPQSLimit then return Factorization(N); end if;
 
-                if IsPrime(n : Proof := Proof) then
-                    F *:= SeqFact([ <n, 1> ]);
-                    n := 1;
-                end if;
-            end if;
-        until n eq 1 or f eq 0;
-        if n gt 1 then
-            Q1 cat:= [n];
-        end if;
-    end for;
+    return Factorization(N :
+        ECMLimit := ECMLimit, MPQSLimit := MPQSLimit, Proof := Proof);
 
-    return F, Q1;
 end function;
 
 function WPSMinimizeQQ(W, I);
@@ -238,7 +207,7 @@ function WPSMinimizeQQ(W, I);
 
     Inorm := [Integers() | lambda^(W[k]) * I[k] : k in [1..#I] ];
 
-    primes := [ fac[1] : fac in PartialFactorization(GCD(Inorm)) ];
+    primes := [ fac[1] : fac in LimitedFactorization(GCD(Inorm)) ];
 
     Imin := Inorm;
     for p in primes do
@@ -264,7 +233,9 @@ function Genus2ConicAndCubic(JI : models := true, RationalModel := true, Determi
         if #JI eq 6 then
             JI := WPSMinimizeQQ([2, 4, 6, 8, 10, 15], JI);
         else
-            /* Let us recover J15 */
+
+            /* Let us recover J15
+             ***/
             JI := WPSMinimizeQQ([1, 2, 3, 4, 5], JI);
             J2, J4, J6, J8, J10 := Explode(JI);
 
@@ -281,21 +252,18 @@ function Genus2ConicAndCubic(JI : models := true, RationalModel := true, Determi
             /* Let us make J15_ 2 be a square (if not too hard) */
             F, Q := TrialDivision(Numerator(J15_2), 10^6 : Proof := false);
             if #Q gt 0 then
-                ret, sqrQ := IsSquare(&*Q);
+                ret, _ := IsSquare(&*Q);
             end if;
 
             if ret eq false then
-                F, Q := PartialFactorization(Numerator(J15_2));
-                if #Q gt 0 then
-                    ret, sqrQ := IsSquare(&*Q);
+                F, _, Q := LimitedFactorization(Numerator(J15_2));
+                if assigned(Q) then
+                    ret, _ := IsSquare(&*Q);
                 end if;
             end if;
 
             vprintf G2Twists, 2 :  "J15_2 := %o * %o;\n", F, Q;
 
-            if #Q gt 0 then
-                ret, sqrQ := IsSquare(&*Q);
-            end if;
             if ret then
                 for fct in F do
                     if fct[2] mod 2 eq 1 then
@@ -305,7 +273,9 @@ function Genus2ConicAndCubic(JI : models := true, RationalModel := true, Determi
                 end for;
                 ret, J15 := IsSquare(AbsoluteValue(J15_2));
             end if;
+
             if ret then JI := [J2, J4, J6, J8, J10, J15]; end if;
+
         end if;
 
         if ret then
