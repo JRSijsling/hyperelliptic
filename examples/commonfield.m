@@ -29,6 +29,7 @@ while true do
     until Degree(f) eq deg and Discriminant(f) ne 0;
     repeat
         T := Matrix(F, 2, 2, [ Random(D) : i in [1..4] ]);
+        //T := Matrix(F, 2, 2, [ 0 ] cat [ Random(D) : i in [1..3] ]);
     until Determinant(T) ne 0;
     g := f^T;
     X := HyperellipticCurve(f); Y := HyperellipticCurve(g);
