@@ -188,46 +188,15 @@ function MinimizeLinearEquationOverRationals(LE)
 
 end function;
 
-function PartialFactorization(N : Proof := false, PollardRhoLimit := 10^6, ECMB1 := 10^5, ECMCurves := 20)
 
-    F, Q0 := TrialDivision(N, 10^6 : Proof := Proof);
 
-    Q1 := [];
-    for q in Q0 do
-        _F, Q := PollardRho(q, 1, 1, PollardRhoLimit : Proof := Proof);
-        F *:= _F; Q1 cat:= Q;
-    end for;
-    Q0 := Q1;
+function LimitedFactorization(N : ECMLimit := 20000, MPQSLimit := 60, Proof := false)
 
-    Q1 := [];
-    for q in Q0 do
-        n := q;
-        repeat
-            nc := 0; repeat nc +:= 1;
-                f := ECM(n, ECMB1);
-            until f ne 0 or nc ge ECMCurves;
-            if f ne 0 then
-                repeat
-                    if IsPrime(f : Proof := Proof) then
-                        F *:= SeqFact([ <f, 1> ]);
-                    else
-                        Q1 cat:= [ f ];
-                    end if;
-                    n := n div f;
-                until (n mod f) ne 0;
+    if #Intseq(N, 10) le MPQSLimit then return Factorizaion(N); end if;
 
-                if IsPrime(n : Proof := Proof) then
-                    F *:= SeqFact([ <n, 1> ]);
-                    n := 1;
-                end if;
-            end if;
-        until n eq 1 or f eq 0;
-        if n gt 1 then
-            Q1 cat:= [n];
-        end if;
-    end for;
+    return Factorization(N :
+        ECMLimit := ECMLimit, MPQSLimit := MPQSLimit, Proof := Proof);
 
-    return F, Q1;
 end function;
 
 function WPSMinimizeQQ(W, I);
@@ -238,7 +207,7 @@ function WPSMinimizeQQ(W, I);
 
     Inorm := [Integers() | lambda^(W[k]) * I[k] : k in [1..#I] ];
 
-    primes := [ fac[1] : fac in PartialFactorization(GCD(Inorm)) ];
+    primes := [ fac[1] : fac in LimitedFactorization(GCD(Inorm)) ];
 
     Imin := Inorm;
     for p in primes do
@@ -285,7 +254,7 @@ function Genus2ConicAndCubic(JI : models := true, RationalModel := true, Determi
             end if;
 
             if ret eq false then
-                F, Q := PartialFactorization(Numerator(J15_2));
+                F, Q := LimitedFactorization(Numerator(J15_2));
                 if #Q gt 0 then
                     ret, sqrQ := IsSquare(&*Q);
                 end if;
