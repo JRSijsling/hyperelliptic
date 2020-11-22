@@ -21,8 +21,6 @@
  *  Copyright 2007-2020 R. Lercier & C. Ritzenthaler
  */
 
-AttachSpec("../magma/spec");
-
 // SetVerbose("Hyperelliptic", 2);
 
 /* Finite Field Enumeration
@@ -326,7 +324,7 @@ for k := 1 to 100 do
     if ret then
         // "H :", H;
         GI := G2Invariants(H);
-        _H := HyperellipticCurveFromIgusaInvariants(IgusaInvariantsWithR(H));
+        _H := HyperellipticCurveFromIgusaInvariants(IgusaInvariants(Pol : WithR := true));
         if G2Invariants(_H) ne GI then
             "\nARGHH, unconsistent invariants at H =", H;
             allok := false;
