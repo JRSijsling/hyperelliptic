@@ -23,7 +23,7 @@
 
 AttachSpec("../magma/spec");
 
-// SetVerbose("G2Twists", 2);
+// SetVerbose("Hyperelliptic", 2);
 
 /* Finite Field Enumeration
  ***************************/

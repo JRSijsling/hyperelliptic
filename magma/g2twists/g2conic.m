@@ -1,8 +1,7 @@
 //freeze;
 
 /***
- *  Mini Toolboox for reconstructing genus 2 hyperelliptic curves with the
- *  conic and cubic method.
+ *  Reconstructing genus 2 hyperelliptic curves with the conic and cubic method.
  *
  *  Distributed under the terms of the GNU Lesser General Public License (L-GPL)
  *                  http://www.gnu.org/licenses/
@@ -24,113 +23,13 @@
  *  Copyright 2011-2020, R. Lercier & C. Ritzenthaler & J. Sijsling
  */
 
-import "g2conic_123.m" : Genus2ConicAndCubic123;
+import "g2conic_123.m"    : Genus2ConicAndCubic123;
 
 import "g2conic_uv1245.m" : Genus2ConicAndCubicUV1245;
 import "g2conic_uv1246.m" : Genus2ConicAndCubicUV1246;
 
+import "../toolbox/sl2invtools.m" : WPSMinimizeQQ;
 import "../toolbox/diophantine.m" : LimitedFactorization, ConicParametrization, MinimizeLinearEquationOverRationals;
-
-
-
-/* The affine case */
-function GbToPoints(gb, tail)
-    local up, spez, i, j, rt, f, res;
-
-    if #gb eq 0 then return [tail]; end if;
-    up := gb[#gb]; /* This polynomial is univariate */
-    suc,up := IsUnivariate(gb[#gb], #gb);
-    assert suc;  /* ideal is triangular and zero-dimensional */
-    rt := Roots(up);
-    res := [];
-    for i := 1 to #rt do
-        spez := [Evaluate(gb[j], #gb, rt[i][1]) : j in [1..#gb-1]];
-        res := res cat $$(spez,[rt[i][1]] cat tail);
-    end for;
-    return res;
-end function;
-
-/*
-Routines due to Stoll et al. for minimizing point clusters
-apply in order to minimize the (conic, cubic) pair obtained in our algorithms.
-*/
-
-/* All points defined over nf will be returned */
-function PointsOfIdeal(id, nf)
-    local tri, erg, i, gb, up, r_nf;
-
-    erg := [];
-    if 1 in id then return erg; end if;
-
-    tri := TriangularDecomposition(Radical(id));
-    for i := 1 to #tri do
-        gb := GroebnerBasis(tri[i]);
-        r_nf := PolynomialRing(nf,Rank(Parent(gb[1])));
-        erg := erg cat GbToPoints([r_nf!f : f in gb], []);
-    end for;
-    return erg;
-end function;
-
-function ReduceMestreConicAndCubic(f, Q)
-    local hes,id,i,j,pl, CC, q, mt, subs, res, prec, mul;
-
-    if false and Max([AbsoluteValue(a) : a in Coefficients(f)]) eq 1 then
-        return f,[Parent(f).i : i in [1..3]];
-    end if;
-
-    mul := 3;
-    prec := Round(100 + 4 * Log(1+Max([AbsoluteValue(i) : i in Coefficients(f)])));
-    repeat
-        mul := mul^2;
-        CC := ComplexField(prec);
-
-        id := ideal<PolynomialRing(RationalField(),3) | Q, f, Parent(f).1 - 1 >;
-        pl := PointsOfIdeal(id,CC);
-
-        /* Next two are usually not needed: */
-        id := ideal<PolynomialRing(RationalField(),3) | Q, f, Parent(f).1, Parent(f).2-1 >;
-        pl := pl cat PointsOfIdeal(id,CC);
-
-        id := ideal<PolynomialRing(RationalField(),3) | Q, f, Parent(f).1, Parent(f).2, Parent(f).3-1 >;
-        pl := pl cat PointsOfIdeal(id,CC);
-
-        pts := [Vector([ChangePrecision(pl[i][j], prec div 2) : j in [1..3]]) : i in [1..#pl]];
-        ptsnew,_,Trr := ReduceCluster(pts : eps := 10^(-prec div 20));
-
-        subs := [&+[Parent(f).i * Trr[i,j] : i in [1..3]] : j in [1..3]];
-        res :=  Evaluate(f,subs);
-
-        prec := prec * 2;
-    until Max([AbsoluteValue(a) : a in Coefficients(res)]) le mul * Max([AbsoluteValue(a) : a in Coefficients(f)]);
-
-    if Max([AbsoluteValue(a) : a in Coefficients(res)]) ge Max([AbsoluteValue(a) : a in Coefficients(f)]) then
-        return f,[Parent(f).i : i in [1..3]];
-    end if;
-
-    return Evaluate(f,subs),subs;
-end function;
-
-
-
-function WPSMinimizeQQ(W, I);
-
-    dens := [ Integers() ! Denominator(i) : i in I ];
-
-    lambda := LCM(dens);
-
-    Inorm := [Integers() | lambda^(W[k]) * I[k] : k in [1..#I] ];
-
-    primes := [ fac[1] : fac in LimitedFactorization(GCD(Inorm)) ];
-
-    Imin := Inorm;
-    for p in primes do
-	while Seqset([Valuation(Imin[k], p) ge W[k] : k in [1..#Imin] ]) eq {true} do
-	    Imin := [ Imin[k] div p^W[k] : k in [1..#Imin] ];
-	end while;
-    end for;
-
-    return Imin;
-end function;
 
 function Genus2ConicAndCubic(JI : models := true, RationalModel := true, Deterministic := false)
 
@@ -256,7 +155,8 @@ function Genus2ConicAndCubic(JI : models := true, RationalModel := true, Determi
     /* Computing conic and cubic */
     if models then
 
-	phi := ConicParametrization(C : RationalPoint := RationalModel, RandomLine := not Deterministic);
+        phi := ConicParametrization(C :
+            RationalPoint := RationalModel, RandomLine := not Deterministic);
 
 	f := Evaluate(M, DefiningPolynomials(phi));
 

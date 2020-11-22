@@ -1,4 +1,4 @@
-freeze;
+//freeze;
 
 /***
  *  Addendum to the invariants of Genus 2 Curves.

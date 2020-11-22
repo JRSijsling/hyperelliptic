@@ -35,6 +35,8 @@
  *
  ********************************************************************/
 
+import "diophantine.m" : LimitedFactorization;
+
  /*
    Given two covariants F an G, coded as lists of the form [pol, degree, order],
    return their transvectant of level r
@@ -166,6 +168,27 @@ function XGCDUniqueMod(L, n)
 
     return g, [c mod n : c in CF];
 end function;
+
+function WPSMinimizeQQ(Wght, I);
+
+    dens := [ Integers() ! Denominator(i) : i in I ];
+
+    lambda := LCM(dens);
+
+    Inorm := [Integers() | lambda^(Wght[k]) * I[k] : k in [1..#I] ];
+
+    primes := [ fac[1] : fac in LimitedFactorization(GCD(Inorm)) ];
+
+    Imin := Inorm;
+    for p in primes do
+	while Seqset([Valuation(Imin[k], p) ge Wght[k] : k in [1..#Imin] ]) eq {true} do
+	    Imin := [ Imin[k] div p^Wght[k] : k in [1..#Imin] ];
+	end while;
+    end for;
+
+    return Imin;
+end function;
+
 
 intrinsic WPSEnumInit(FF::FldFin, Wght::SeqEnum) -> Rec
     {Initialize a structure for use with WPSEnumNext in order to enumerate

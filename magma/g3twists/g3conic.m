@@ -1,8 +1,7 @@
 //freeze;
 
 /***
- *  Mini Toolboox for reconstructing genus 3 hyperelliptic curves with the
- *  conic and quartic method.
+ *  Reconstructing genus 3 hyperelliptic curves with the conic and quartic method.
  *
  *  Distributed under the terms of the GNU Lesser General Public License (L-GPL)
  *                  http://www.gnu.org/licenses/
@@ -46,8 +45,6 @@ import "conic_1313.m" : Genus3ConicAndQuartic1313;
 import "conic_1612.m" : Genus3ConicAndQuartic1612;
 
 import "conic_uv.m" : Genus3ConicAndQuarticUV;
-
-import "reduction.m" : ReduceMestreConicAndQuartic;
 
 import "../toolbox/diophantine.m" : ConicParametrization, MinimizeLinearEquationOverRationals;
 
@@ -104,26 +101,9 @@ function Genus3ConicAndQuartic(JI : models := true, RationalModel := true, Deter
 	    vprintf Hyperelliptic, 2 :  "Conic %o\n", C;
 	    vprintf Hyperelliptic, 2 :  "Quartic %o\n", Q;
 
-	    vprintf Hyperelliptic, 2 :  "Cluster reduction...\n";
-            _, T := ReduceMestreConicAndQuartic(C, Q);
-
-	    C := Evaluate(C, T);
-            gcd_den := GCD([ Denominator(coeff) : coeff in Coefficients(C) ]);
-            gcd_num := GCD([ Numerator(coeff) : coeff in Coefficients(C) ]);
-            C *:= (gcd_den/gcd_num);
-
-            Q := Evaluate(Q, T);
-            gcd_den := GCD([ Denominator(coeff) : coeff in Coefficients(Q) ]);
-            gcd_num := GCD([ Numerator(coeff) : coeff in Coefficients(Q) ]);
-            Q *:= (gcd_den/gcd_num);
-
-            vprintf Hyperelliptic, 1 :  "Conic after reduction steps: %o\n", C;
-            vprintf Hyperelliptic, 1 :  "Quartic after reduction steps: %o\n", Q;
-            vprintf Hyperelliptic, 2 :
-                "Factorization of conic discriminant after reduction: %o\n",
-                Factorization(Integers() ! Discriminant(Conic(ProjectiveSpace(Parent(C)), C)));
 	else
 	    R := FF!0;
+            vprintf Hyperelliptic, 2 :  "None parametric conic works ! Let us do it as usual...\n\n", R;
 	end if;
     end if;
 
@@ -156,12 +136,15 @@ function Genus3ConicAndQuartic(JI : models := true, RationalModel := true, Deter
     /* Computing conic and quartic */
     if models then
 
-	phi := ConicParametrization(C : RationalPoint := RationalModel, RandomLine := not Deterministic);
+        phi := ConicParametrization(C :
+            RationalPoint := RationalModel, RandomLine := not Deterministic);
 
-	f := Evaluate(Q, DefiningPolynomials(phi));
+        f := Evaluate(Q, DefiningPolynomials(phi));
 
-	return UnivariatePolynomial(Evaluate(f, Parent(f).2, 1));
+        g := UnivariatePolynomial(Evaluate(f, Parent(f).2, 1));
 
+        vprintf Hyperelliptic, 1 :  "Hyperelliptic polynomial: %o\n", g;
+	return g;
 
     end if;
 
