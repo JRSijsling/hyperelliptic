@@ -1,5 +1,5 @@
 /***
- *  Hyperelliptic defines
+ *  Package defines
  *
  *  Distributed under the terms of the GNU Lesser General Public License (L-GPL)
  *                  http://www.gnu.org/licenses/
