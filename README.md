@@ -61,7 +61,6 @@ C, aut := HyperellipticCurveFromShiodaInvariants(JIs[1]);
 ShiodaInvariantsEqual(JI, ShiodaInvariants(C));
 ```
 
-
 Citing this code
 --
 
