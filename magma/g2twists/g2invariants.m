@@ -29,9 +29,6 @@
  * intrinsic IgusaToG2Invariants(JI::SeqEnum) -> SeqEnum
  * intrinsic G2ToIgusaInvariants(GI::SeqEnum) -> SeqEnum
  * intrinsic G2Invariants(H::CrvHyp) -> SeqEnum
- * intrinsic IgusaInvariantsWithR(f::RngUPolElt: Quick  := false) -> SeqEnum
- * intrinsic IgusaInvariantsWithR(f::RngUPolElt, h::RngUPolElt) -> SeqEnum
- * intrinsic IgusaInvariantsWithR(C::CrvHyp : Quick := false) -> SeqEnum
  *
  ********************************************************************/
 
@@ -933,7 +930,7 @@ function QuickIgusaClebschInvariants(f)
             - 3037500*A*B^2 - 6075000*B*C - 4556250*D];
 end function;
 
-function QuickJInvariants(f : WithR := false)
+function QuickJInvariants(f : extend := false)
     // Given a polynomial of degree at most 6, compute the
     // J-invariants J_2, J_4, J_6, J_8, J_10 of the polynomial
     // (as on p. 324 of Mestre).
@@ -946,7 +943,7 @@ function QuickJInvariants(f : WithR := false)
     J8  := (K!(1/4))*(J2*J6 - J4^2);
     J10 := (K!(1/4096))*v[4];
 
-    if WithR eq true then
+    if extend eq true then
         return [J2, J4, J6, J8, J10, IgusaClebschRInvariant(f)];
     end if;
 
@@ -954,7 +951,7 @@ function QuickJInvariants(f : WithR := false)
 
 end function;
 
-function QuickJInvariantsCurve(C : WithR := false)
+function QuickJInvariantsCurve(C : extend := false)
     //Compute the J-invariants J_2, J_4, J_6, J_8, J_10 of a genus 2 curve
     // over a field of characteristic not 2, 3, or 5.
     /*
@@ -964,11 +961,11 @@ function QuickJInvariantsCurve(C : WithR := false)
 	print "Characteristic of base field must not be 2, 3, or 5.";
     end if;
     */
-    return QuickJInvariants(h^2 + 4*f : WithR := WithR)
+    return QuickJInvariants(h^2 + 4*f : extend := extend)
         where f, h := HyperellipticPolynomials(C);
 end function;
 
-intrinsic IgusaInvariants(f::RngUPolElt, h::RngUPolElt: WithR := false, normalize := false) -> SeqEnum, SeqEnum
+intrinsic IgusaInvariants(f::RngUPolElt, h::RngUPolElt: extend := false, normalize := false) -> SeqEnum, SeqEnum
     {Compute the Igusa J-invariants of the curve y^2 + h*y - f = 0.
     The polynomial h must have degree at most 3, and the polynomial f
     must have degree at most 6.}
@@ -985,7 +982,7 @@ intrinsic IgusaInvariants(f::RngUPolElt, h::RngUPolElt: WithR := false, normaliz
 
     ScaledJs := ScaledIgusaInvariants(f,h);
     ScaledJs := [ExactQuotient(ScaledJs[i],16^i) : i in [1..5]];
-    if WithR then
+    if extend then
         ScaledJs cat:= [IgusaClebschRInvariant(h^2 + 4*f)];
     end if;
     if normalize eq false then return ScaledJs, [2,4,6,8,10,15][1..#ScaledJs]; end if;
@@ -993,7 +990,7 @@ intrinsic IgusaInvariants(f::RngUPolElt, h::RngUPolElt: WithR := false, normaliz
 
 end intrinsic;
 
-intrinsic IgusaInvariants(f::RngUPolElt: Quick  := false, WithR := false, normalize := false) -> SeqEnum, SeqEnum
+intrinsic IgusaInvariants(f::RngUPolElt: Quick  := false, extend := false, normalize := false) -> SeqEnum, SeqEnum
     {Compute the Igusa J-invariants of a polynomial of degree at most 6.
     The integer 2 must be a unit of the coefficient ring, and if Quick,
     the base field must not be of characteristic 2, 3, or 5.}
@@ -1005,15 +1002,15 @@ intrinsic IgusaInvariants(f::RngUPolElt: Quick  := false, WithR := false, normal
     if Quick then
         require IsUnit(R!30):
             "The integers 2, 3 and 5 must be units of the coefficient ring.";
-        Js := QuickJInvariants(f : WithR := WithR);
+        Js := QuickJInvariants(f : extend := extend);
         if normalize eq false then return Js, [2,4,6,8,10,15][1..#Js]; end if;
 	return WPSNormalize([2,4,6,8,10,15][1..#Js], Js), [2,4,6,8,10,15][1..#Js];
     end if;
-    return IgusaInvariants((R!1/4)*f, Parent(f)!0 : WithR := WithR, normalize:=normalize);
+    return IgusaInvariants((R!1/4)*f, Parent(f)!0 : extend := extend, normalize:=normalize);
 
 end intrinsic;
 
-intrinsic IgusaInvariants(C::CrvHyp : Quick := false, WithR := false, normalize := false) -> SeqEnum, SeqEnum
+intrinsic IgusaInvariants(C::CrvHyp : Quick := false, extend := false, normalize := false) -> SeqEnum, SeqEnum
     {Compute the Igusa J-invariants of a genus 2 curve over a field.
     If Quick, the base field must not be of characteristic 2, 3, or 5.}
 
@@ -1028,11 +1025,11 @@ intrinsic IgusaInvariants(C::CrvHyp : Quick := false, WithR := false, normalize 
     if Quick then
         require IsUnit(K!30):
             "The integers 2, 3 and 5 must be units of the coefficient ring.";
-        Js := QuickJInvariantsCurve(C : WithR := WithR);
+        Js := QuickJInvariantsCurve(C : extend := extend);
         if normalize eq false then return Js; end if;
 	return WPSNormalize([2,4,6,8,10,15][1..#Js], Js), [2,4,6,8,10,15][1..#Js];
     end if;
 
-    return IgusaInvariants(f,h : WithR := WithR, normalize:=normalize);
+    return IgusaInvariants(f,h : extend := extend, normalize:=normalize);
 
 end intrinsic;
