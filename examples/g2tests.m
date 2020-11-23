@@ -324,7 +324,7 @@ for k := 1 to 100 do
     if ret then
         // "H :", H;
         GI := G2Invariants(H);
-        _H := HyperellipticCurveFromIgusaInvariants(IgusaInvariants(Pol : WithR := true));
+        _H := HyperellipticCurveFromIgusaInvariants(IgusaInvariants(Pol : extend := true));
         if G2Invariants(_H) ne GI then
             "\nARGHH, unconsistent invariants at H =", H;
             allok := false;
