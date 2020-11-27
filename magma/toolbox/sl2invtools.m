@@ -26,6 +26,7 @@
  /***
  * Exported intrinsics.
  *
+ * intrinsic Transvectant(f::RngMPolElt,g::RngMPolElt,r::RngIntElt) -> RngMPolElt
  * intrinsic WPSEnumInit(FF::FldFin, Wght::SeqEnum) -> Rec
  * intrinsic WPSEnumNext(~V, ~WPSCtxt::Rec)
  * intrinsic WPSEqual(Wght::SeqEnum, V1::SeqEnum, V2::SeqEnum) -> BoolElt
@@ -36,6 +37,46 @@
  ********************************************************************/
 
 import "diophantine.m" : LimitedFactorization;
+
+/*
+Mestre "Construction de courbes de genre 2 a partir de leurs modules", p. 315,
+"Transvectant" [Uberschiebung (Clebsch) or "Translation" (Faa de Bruno)]
+*/
+
+function DerivativeSequence(f,n)
+    S := [ Parent(f) | ];
+    for k in [0..n] do
+        g := f;
+        for i in [1..n] do
+            if i le k then
+                g := Derivative(g,1);
+            else
+                g := Derivative(g,2);
+            end if;
+        end for;
+        S[k+1] := g;
+    end for;
+    return S;
+end function;
+
+intrinsic Transvectant(f::RngMPolElt,g::RngMPolElt,r::RngIntElt) -> RngMPolElt
+    {}
+    P := Parent(f);
+    require P eq Parent(f) : "Arguments 1 and 2 must be have the same parent.";
+    require IsHomogeneous(f) and IsHomogeneous(g) : "Arguments 1 and 2 must be homogeneous.";
+    if f eq 0 or g eq 0 then return P!0; end if;
+    Sf := DerivativeSequence(f,r);
+    Sg := DerivativeSequence(g,r);
+    Tfg := P!0;
+    for k in [0..r] do
+         Tfg +:= (-1)^k*Binomial(r,k)*Sf[k+1]*Sg[r-k+1];
+    end for;
+    n := TotalDegree(f);
+    m := TotalDegree(g);
+    cfg := Factorial(n-r)*Factorial(m-r)/(Factorial(n)*Factorial(m));
+    return cfg*Tfg;
+end intrinsic;
+
 
  /*
    Given two covariants F an G, coded as lists of the form [pol, degree, order],
