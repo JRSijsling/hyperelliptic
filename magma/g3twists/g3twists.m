@@ -1745,7 +1745,7 @@ end intrinsic;
 intrinsic TwistedHyperellipticPolynomialsFromShiodaInvariants(JI::SeqEnum[FldFinElt] : RationalModel := true, Deterministic := false) -> SeqEnum[CrvHyp], GrpPerm
     {Compute twisted  hyperelliptic polynomials and their automorphism groups from
     Shioda invariants.}
-"In TwistedHyperellipticPolynomialsFromShiodaInvariants...";
+
     FF := Universe(JI);
     p := Characteristic(FF);
 

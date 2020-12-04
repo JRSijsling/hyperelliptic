@@ -20,13 +20,14 @@
  *  along with this program; if not, write to the Free Software
  *  Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA  02110-1301  USA
  *
- *  Copyright 2011-2012, R. Basson & R. Lercier & C. Ritzenthaler & J. Sijsling & J. Sijsling
+ *  Copyright 2011-2012, R. Basson & R. Lercier & C. Ritzenthaler & J. Sijsling
  */
 
 import "../toolbox/misc.m" : LiftRing, ChangeBaseRing;
 
 
-function ShiodaInvariantsChar5(f : normalize := false)
+function ShiodaInvariantsChar5(f :
+    PrimaryOnly := false, degmax := Infinity(), degmin := 1)
 
     a0 := Coefficient(f, 0); a1 := Coefficient(f, 1);
     a2 := Coefficient(f, 2); a3 := Coefficient(f, 3);
@@ -7105,7 +7106,6 @@ function ShiodaInvariantsChar5(f : normalize := false)
     37
     ];
 
-    if normalize eq false then return JI, Wght; end if;
-    return WPSNormalize(Wght, JI), Wght;
+    return JI, Wght;
 
 end function;

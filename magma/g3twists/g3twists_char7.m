@@ -20,12 +20,13 @@
  *  along with this program; if not, write to the Free Software
  *  Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA  02110-1301  USA
  *
- *  Copyright 2013, R. Basson & R. Lercier & C. Ritzenthaler & J. Sijsling & J. Sijsling
+ *  Copyright 2013, R. Basson & R. Lercier & C. Ritzenthaler & J. Sijsling
  */
 
 import "../toolbox/sl2invtools.m"    : PowerRepresentativesInFiniteFields, ShiodaInvariantsAppend;
 
-function ShiodaInvariantsChar7(f : normalize:= true)
+function ShiodaInvariantsChar7(f :
+    PrimaryOnly := false, degmax := Infinity(), degmin := 1)
 
     a0:= Coefficient(f, 0); a1:= Coefficient(f, 1);
     a2:= Coefficient(f, 2); a3:= Coefficient(f, 3);
@@ -2308,8 +2309,7 @@ function ShiodaInvariantsChar7(f : normalize:= true)
     /* End */
     Wght:= [2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 13, 14, 15];
 
-    if normalize eq false then return JI, Wght; end if;
-    return WPSNormalize(Wght, JI), Wght;
+    return JI, Wght;
 
 end function;
 

@@ -433,7 +433,7 @@ function Genus3WeierstrassToArtinSchreierModel_T7(f, h)
 
 end function;
 
-function ShiodaInvariantsV4(abcde : normalize := false)
+function ShiodaInvariantsV4(abcde)
 
     n0, n1, n2, n3, n4, d0, d1, d2, d3, d4 := Explode(abcde);
 
@@ -557,12 +557,11 @@ function ShiodaInvariantsV4(abcde : normalize := false)
 
     Wght := [2, 2, 2, 3, 3, 3, 3, 4, 6, 8];
 
-    if normalize eq false then return JI, Wght; end if;
-    return WPSNormalize(Wght, JI), Wght;
+    return JI, Wght;
 
 end function;
 
-function ShiodaInvariantsChar2_T1111(abcde : normalize := false)
+function ShiodaInvariantsChar2_T1111(abcde)
 
 
     I02, I11, I20, I21, I12, I03, I30, I22, I33, I44 := Explode(ShiodaInvariantsV4(abcde));
@@ -626,12 +625,11 @@ function ShiodaInvariantsChar2_T1111(abcde : normalize := false)
 
     Wght := [2, 3, 2, 4, 5, 6, 8, 9, 11, 12];
 
-    if normalize eq false then return JI, Wght; end if;
-    return WPSNormalize(Wght, JI), Wght;
+    return JI, Wght;
 
 end function;
 
-function ShiodaInvariantsChar2_T113(abcde : normalize := false)
+function ShiodaInvariantsChar2_T113(abcde)
 
     /* a, b, c, d, s  of degree  1, 1, 1, 1, 1 */
     a, b, c, d, _, s := Explode(abcde);
@@ -661,11 +659,11 @@ function ShiodaInvariantsChar2_T113(abcde : normalize := false)
 
     Wght := [2, 3, 2, 2, 2, 2, 2];
 
-    if normalize eq false then return JI, Wght; end if;
-    return WPSNormalize(Wght, JI), Wght;
+    return JI, Wght;
+
 end function;
 
-function ShiodaInvariantsChar2_T33(abcde : normalize := false)
+function ShiodaInvariantsChar2_T33(abcde)
 
     /* a, b, c, d, s  of degree  3, 2, -2, -3, 0 */
     a, b, c, d, _, s := Explode(abcde);
@@ -700,11 +698,11 @@ function ShiodaInvariantsChar2_T33(abcde : normalize := false)
 
     Wght := [2, 3, 2, 2, 2];
 
-    if normalize eq false then return JI, Wght; end if;
-    return WPSNormalize(Wght, JI), Wght;
+    return JI, Wght;
+
 end function;
 
-function ShiodaInvariantsChar2_T15(abcde : normalize := false)
+function ShiodaInvariantsChar2_T15(abcde)
 
     /* a, b, c, d      of degree    5, 4, 3, -1 */
     a, b, c, d, _ := Explode(abcde);
@@ -730,12 +728,11 @@ function ShiodaInvariantsChar2_T15(abcde : normalize := false)
 
     Wght := [2, 3, 1, 3, 4, 5];
 
-    if normalize eq false then return JI, Wght; end if;
-    return WPSNormalize(Wght, JI), Wght;
+    return JI, Wght;
 
 end function;
 
-function ShiodaInvariantsChar2_T7(abcde : normalize := false)
+function ShiodaInvariantsChar2_T7(abcde)
 
     /* a, b, c, d      of degree    7, 6, 5, 4 */
     a, b, c, d, _ := Explode(abcde);
@@ -757,8 +754,7 @@ function ShiodaInvariantsChar2_T7(abcde : normalize := false)
 
     Wght := [2, 3, 7, 32, 40];
 
-    if normalize eq false then return JI, Wght; end if;
-    return WPSNormalize(Wght, JI), Wght;
+    return JI, Wght;
 
 end function;
 
@@ -812,7 +808,8 @@ function Genus3WeierstrassToArtinSchreierModel(f, h)
 
 end function;
 
-function ShiodaInvariantsChar2(f, h : normalize := false)
+function ShiodaInvariantsChar2(f, h,
+    PrimaryOnly := false, degmax := Infinity(), degmin := 1)
 
     Px := Parent(f); x := Px.1;
 
@@ -831,14 +828,14 @@ function ShiodaInvariantsChar2(f, h : normalize := false)
 	    if h1 eq 0 and h2 eq 0 and h3 eq 0 then
 		vprintf Hyperelliptic, 1 : "Type (7)\n";
 		_, _, abcde := Genus3WeierstrassToArtinSchreierModel_T7(f, h);
-		return ShiodaInvariantsChar2_T7(abcde : normalize := normalize);
+		return ShiodaInvariantsChar2_T7(abcde);
 
 	    end if;
 
 	    /* h with a root of order 3 */
 	    vprintf Hyperelliptic, 1 : "Type (1,5)\n";
 	    _, _, abcde := Genus3WeierstrassToArtinSchreierModel_T15(f, h);
-	    return ShiodaInvariantsChar2_T15(abcde : normalize := normalize);
+	    return ShiodaInvariantsChar2_T15(abcde);
 
 	end if;
 
@@ -846,20 +843,20 @@ function ShiodaInvariantsChar2(f, h : normalize := false)
 	if h1 eq 0 and h3 eq 0 then
 	    vprintf Hyperelliptic, 1 : "Type (3,3)\n";
 	    _, _, abcde :=  Genus3WeierstrassToArtinSchreierModel_T33(f, h);
-	    return ShiodaInvariantsChar2_T33(abcde : normalize := normalize);
+	    return ShiodaInvariantsChar2_T33(abcde);
 	end if;
 
 	/* h with a single root of order 2 */
 	vprintf Hyperelliptic, 1 : "Type (1,1,3)\n";
 	_, _, abcde :=  Genus3WeierstrassToArtinSchreierModel_T113(f, h);
-	return ShiodaInvariantsChar2_T113(abcde : normalize := normalize);
+	return ShiodaInvariantsChar2_T113(abcde);
 
     end if;
 
     /* Generic case, all roots are of order 1 */
     vprintf Hyperelliptic, 1 : "Type (1,1,1,1)\n";
     _, _, abcde := Genus3WeierstrassToArtinSchreierModel_T1111(f, h);
-    return ShiodaInvariantsChar2_T1111(abcde : normalize := normalize);
+    return ShiodaInvariantsChar2_T1111(abcde);
 
 end function;
 

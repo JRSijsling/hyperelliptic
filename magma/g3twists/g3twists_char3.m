@@ -25,7 +25,8 @@
 
 import "../toolbox/sl2invtools.m"    : PowerRepresentativesInFiniteFields, ShiodaInvariantsAppend;
 
-function ShiodaInvariantsChar3(f : normalize:= true)
+function ShiodaInvariantsChar3(f :
+    PrimaryOnly := false, degmax := Infinity(), degmin := 1)
 
     a0:= Coefficient(f, 0); a1:= Coefficient(f, 1);
     a2:= Coefficient(f, 2); a3:= Coefficient(f, 3);
@@ -540,8 +541,7 @@ function ShiodaInvariantsChar3(f : normalize:= true)
     /* End */
     Wght:= [2, 3, 4, 5, 6, 7, 8, 9, 10, 12];
 
-    if normalize eq false then return JI, Wght; end if;
-    return WPSNormalize(Wght, JI), Wght;
+    return JI, Wght;
 
 end function;
 
