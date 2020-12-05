@@ -26,8 +26,8 @@
 /***
  * Exported intrinsics.
  *
- * intrinsic ShiodaInvariants(f::RngUPolElt : normalize := false, scaled := true) -> SeqEnum, SeqEnum
- * intrinsic ShiodaInvariants(fh::SeqEnum : normalize := false, scaled := true) -> SeqEnum, SeqEnum
+ * intrinsic ShiodaInvariants(f::RngUPolElt : normalize := false) -> SeqEnum, SeqEnum
+ * intrinsic ShiodaInvariants(fh::SeqEnum : normalize := false) -> SeqEnum, SeqEnum
  * intrinsic ShiodaInvariants(C::CrvHyp : normalize := false) -> SeqEnum, SeqEnum
  * intrinsic ShiodaInvariantsEqual(V1::SeqEnum, V2::SeqEnum) -> BoolElt
  * intrinsic ShiodaAlgebraicInvariants(FreeJI::SeqEnum : ratsolve := true) -> SeqEnum
@@ -52,7 +52,7 @@ import "g3twists_charp.m" : ShiodaInvariantsCharp, ShiodaAlgebraicInvariantsChar
 intrinsic ShiodaInvariants(f::RngUPolElt, p::RngIntElt :
     normalize := false,
     PrimaryOnly := false,
-    IntegralNormalization := false, scaled := true,
+    IntegralNormalization := false,
     degmax := Infinity(), degmin := 1) -> SeqEnum, SeqEnum
 
     {Compute the Shioda invariants  'J2', 'J3', 'J4', 'J5', 'J6', 'J7',
@@ -79,7 +79,28 @@ intrinsic ShiodaInvariants(f::RngUPolElt, p::RngIntElt :
 	JI, Wght := ShiodaInvariantsChar7(f : PrimaryOnly := PrimaryOnly, degmax := degmax, degmin := degmin);
 
     else
+        scaled := true; if IntegralNormalization then scaled := false; end if;
+
         JI, Wght := ShiodaInvariantsCharp(f : PrimaryOnly := PrimaryOnly, scaled := scaled, degmax := degmax, degmin := degmin);
+
+        if IntegralNormalization then
+            Scaling := [
+                2^5 * 3^2,
+                2^8 * 3^4 * 5,
+                2^10 * 3^4 * 5^2,
+                2^14 * 3^6 * 5^2,
+                2^16 * 3^7 * 5^3,
+                2^20 * 3^9 * 5^3,
+                2^22 * 3^10 * 5^4,
+                2^26 * 3^12 * 5^4,
+                2^28 * 3^13 * 5^5
+                ];
+            for d := 2 to 10 do
+                if d ge degmin and d le degmax then
+                    JI[d-1] := Universe(JI)!(JI[d-1] / Scaling[d-1]);
+                end if;
+            end for;
+        end if;
 
     end if;
 
@@ -90,10 +111,38 @@ intrinsic ShiodaInvariants(f::RngUPolElt, p::RngIntElt :
 
 end intrinsic;
 
+intrinsic ShiodaInvariants(f::RngMPolElt, p::RngIntElt :
+    normalize := false,
+    PrimaryOnly := false,
+    IntegralNormalization := false,
+    degmax := Infinity(), degmin := 1) -> SeqEnum, SeqEnum
+
+    {Compute the Shioda invariants  'J2', 'J3', 'J4', 'J5', 'J6', 'J7',
+    'J8', 'J9' and 'J10' of a polynomial of degree at most 8, considered as a
+    binary form of degre 8 (see 1967 Shioda's  paper), and other invariants in
+    characteristic 2, 3, 5 and 7. Weights of these
+    invariants are returned too.
+    }
+
+    P := Parent(f);
+    require
+        Rank(P) eq 2 and {Degree(e) : e in Monomials(f)} eq {8} :
+        "Input must be a binary homogeneous polynomial of degree 8";
+
+    F := UnivariatePolynomial(Evaluate(f, 2, 1));
+
+    return ShiodaInvariants(F, p :
+        normalize := normalize,
+        IntegralNormalization := IntegralNormalization,
+        PrimaryOnly := PrimaryOnly,
+        degmax := degmax, degmin := degmin);
+
+end intrinsic;
+
 intrinsic ShiodaInvariants(f::RngUPolElt :
     normalize := false,
     PrimaryOnly := false,
-    IntegralNormalization := false, scaled := true,
+    IntegralNormalization := false,
     degmax := Infinity(), degmin := 1) -> SeqEnum, SeqEnum
 
     {Compute the Shioda invariants  'J2', 'J3', 'J4', 'J5', 'J6', 'J7',
@@ -107,7 +156,35 @@ intrinsic ShiodaInvariants(f::RngUPolElt :
 
     return ShiodaInvariants(f, Characteristic(Parent(f)) :
         normalize := normalize,
-        IntegralNormalization := IntegralNormalization, scaled := scaled,
+        IntegralNormalization := IntegralNormalization,
+        PrimaryOnly := PrimaryOnly,
+        degmax := degmax, degmin := degmin);
+
+end intrinsic;
+
+intrinsic ShiodaInvariants(f::RngMPolElt :
+    normalize := false,
+    PrimaryOnly := false,
+    IntegralNormalization := false,
+    degmax := Infinity(), degmin := 1) -> SeqEnum, SeqEnum
+
+    {Compute the Shioda invariants  'J2', 'J3', 'J4', 'J5', 'J6', 'J7',
+    'J8', 'J9' and 'J10' of a polynomial of degree at most 8, considered as a
+    binary form of degre 8 (see 1967 Shioda's  paper), and other invariants in
+    characteristic 2, 3, 5 and 7. Weights of these
+    invariants are returned too.
+    }
+
+    P := Parent(f);
+    require
+        Rank(P) eq 2 and {Degree(e) : e in Monomials(f)} eq {8} :
+        "Input must be a binary homogeneous polynomial of degree 8";
+
+    F := UnivariatePolynomial(Evaluate(f, 2, 1));
+
+    return ShiodaInvariants(F :
+        normalize := normalize,
+        IntegralNormalization := IntegralNormalization,
         PrimaryOnly := PrimaryOnly,
         degmax := degmax, degmin := degmin);
 
@@ -116,7 +193,7 @@ end intrinsic;
 intrinsic ShiodaInvariants(fh::SeqEnum :
     normalize := false,
     PrimaryOnly := false,
-    IntegralNormalization := false, scaled := true,
+    IntegralNormalization := false,
     degmax := Infinity(), degmin := 1) -> SeqEnum, SeqEnum
     {Let fh be equal to [f(x), h(x)]. Compute the invariants of the hyperelliptic curve y^2 + h(x) * y = f(x)
     (see 1967 Shioda's  paper). Weights of these invariants are returned
@@ -129,18 +206,23 @@ intrinsic ShiodaInvariants(fh::SeqEnum :
     K := CoefficientRing(Parent(f));
 
     if Characteristic(K) eq 2 then
-	return ShiodaInvariantsChar2(f, h :
+        JI, Wght := ShiodaInvariantsChar2(f, h :
             normalize := normalize,
-            IntegralNormalization := IntegralNormalization, scaled := scaled,
             PrimaryOnly := PrimaryOnly,
             degmax := degmax, degmin := degmin);
+
+        if normalize eq false then return JI, Wght; end if;
+
+        w := GCD(Wght);
+        return WPSNormalize([e div w : e in Wght], JI), Wght;
+
     end if;
 
     if h eq 0 then F := f; else F := 4*f+h^2; end if;
 
     return ShiodaInvariants(F :
             normalize := normalize,
-            IntegralNormalization := IntegralNormalization, scaled := scaled,
+            IntegralNormalization := IntegralNormalization,
             PrimaryOnly := PrimaryOnly,
             degmax := degmax, degmin := degmin);
 
@@ -149,7 +231,7 @@ end intrinsic;
 intrinsic ShiodaInvariants(C::CrvHyp :
     normalize := false,
     PrimaryOnly := false,
-    IntegralNormalization := false, scaled := true,
+    IntegralNormalization := false,
     degmax := Infinity(), degmin := 1) -> SeqEnum, SeqEnum
     {
     Compute geometric invariants of a genus 3 hyperelliptic curve, i.e. 'J2',
@@ -177,7 +259,7 @@ intrinsic ShiodaInvariants(C::CrvHyp :
 
     return ShiodaInvariants([f, h] :
             normalize := normalize,
-            IntegralNormalization := IntegralNormalization, scaled := scaled,
+            IntegralNormalization := IntegralNormalization,
             PrimaryOnly := PrimaryOnly,
             degmax := degmax, degmin := degmin
             );
