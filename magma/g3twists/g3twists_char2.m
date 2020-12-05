@@ -433,326 +433,481 @@ function Genus3WeierstrassToArtinSchreierModel_T7(f, h)
 
 end function;
 
-function ShiodaInvariantsV4(abcde)
+function ShiodaInvariantsV4(abcde :
+    degmax := Infinity(), degmin := 1)
+
+    JI := []; Wght := [];
+
+    if degmax le 1 then	return JI, Wght; end if;
 
     n0, n1, n2, n3, n4, d0, d1, d2, d3, d4 := Explode(abcde);
 
-    JI := [];
-
     // I02
-    Kx := d2^2 + d1*d3;
-    Append(~JI, Kx);
+    if degmin le 2 then
+        Kx := d2^2 + d1*d3;
+        Append(~JI, Kx); Append(~Wght, 2);
+    end if;
 
     // I11
-    Kx := n3*d1 + n1*d3;
-    Append(~JI, Kx);
+    if degmin le 2 then
+        Kx := n3*d1 + n1*d3;
+        Append(~JI, Kx); Append(~Wght, 2);
+    end if;
 
     // I20
-    Kx := n2^2 + n1*n3;
-    Append(~JI, Kx);
+    if degmin le 2 then
+        Kx := n2^2 + n1*n3;
+        Append(~JI, Kx); Append(~Wght, 2);
+    end if;
+    if degmax le 2 then return JI, Wght; end if;
 
     // I21
-    Kx := n3^2*d0 + n2*n3*d1 + n1*n3*d2 + n1*n2*d3 + n1^2*d4;
-    Append(~JI, Kx);
+    if degmin le 3 then
+        Kx := n3^2*d0 + n2*n3*d1 + n1*n3*d2 + n1*n2*d3 + n1^2*d4;
+        Append(~JI, Kx); Append(~Wght, 3);
+    end if;
 
     // I12
-    Kx := n4*d1^2 + n3*d1*d2 + n2*d1*d3 + n1*d2*d3 + n0*d3^2;
-    Append(~JI, Kx);
+    if degmin le 3 then
+        Kx := n4*d1^2 + n3*d1*d2 + n2*d1*d3 + n1*d2*d3 + n0*d3^2;
+        Append(~JI, Kx); Append(~Wght, 3);
+    end if;
 
     // I03
-    Kx := d1*d2*d3 + d0*d3^2 + d1^2*d4;
-    Append(~JI, Kx);
+    if degmin le 3 then
+        Kx := d1*d2*d3 + d0*d3^2 + d1^2*d4;
+        Append(~JI, Kx); Append(~Wght, 3);
+    end if;
 
     // I30
-    Kx := n1*n2*n3 + n0*n3^2 + n1^2*n4;
-    Append(~JI, Kx);
+    if degmin le 3 then
+        Kx := n1*n2*n3 + n0*n3^2 + n1^2*n4;
+        Append(~JI, Kx); Append(~Wght, 3);
+    end if;
+    if degmax le 3 then return JI, Wght; end if;
 
     // I22
-    Kx :=
-	n3*n4*d0*d1 + n2*n4*d1^2 + n3^2*d0*d2 + n2*n3*d1*d2 + n1*n4*d1*d2 + n1*n3*d2^2 +
-	n2*n3*d0*d3 + n1*n4*d0*d3 + n2^2*d1*d3 + n1*n2*d2*d3 + n0*n3*d2*d3 +
-	n0*n2*d3^2 + n1*n2*d1*d4 + n0*n3*d1*d4 + n1^2*d2*d4 + n0*n1*d3*d4;
-    Append(~JI, Kx);
+    if degmin le 4 then
+        Kx :=
+            n3*n4*d0*d1 + n2*n4*d1^2 + n3^2*d0*d2 + n2*n3*d1*d2 + n1*n4*d1*d2 + n1*n3*d2^2 +
+            n2*n3*d0*d3 + n1*n4*d0*d3 + n2^2*d1*d3 + n1*n2*d2*d3 + n0*n3*d2*d3 +
+            n0*n2*d3^2 + n1*n2*d1*d4 + n0*n3*d1*d4 + n1^2*d2*d4 + n0*n1*d3*d4;
+        Append(~JI, Kx); Append(~Wght, 4);
+    end if;
+    if degmax le 4 then return JI, Wght; end if;
 
     // I33
-    Kx :=
-	n3*n4^2*d0^2*d1 + n1*n4^2*d1^3 + n2^2*n3*d1*d2^2 + n1*n3^2*d1*d2^2 +
-	n1*n2*n4*d1*d2^2 + n0*n3*n4*d1*d2^2 + n1*n2*n3*d2^3 + n0*n3^2*d2^3 +
-	n1^2*n4*d2^3 + n3^3*d0^2*d3 + n1*n4^2*d0^2*d3 + n2^2*n3*d1^2*d3 +
-	n1*n2*n4*d1^2*d3 + n0*n3*n4*d1^2*d3 + n2^2*n3*d0*d2*d3 + n1*n3^2*d0*d2*d3 +
-	n2^3*d1*d2*d3 + n0*n3^2*d1*d2*d3 + n1^2*n4*d1*d2*d3 + n1*n2^2*d2^2*d3 +
-	n1^2*n3*d2^2*d3 + n0*n2*n3*d2^2*d3 + n0*n1*n4*d2^2*d3 + n2^3*d0*d3^2 +
-	n1*n2*n3*d0*d3^2 + n1*n2^2*d1*d3^2 + n0*n2*n3*d1*d3^2 + n0*n1*n4*d1*d3^2 +
-	n0^2*n3*d3^3 + n2^2*n3*d0*d1*d4 + n1*n3^2*d0*d1*d4 + n2^3*d1^2*d4 +
-	n1*n2*n3*d1^2*d4 + n1*n2^2*d1*d2*d4 + n1^2*n3*d1*d2*d4 + n1*n2^2*d0*d3*d4 +
-	n1^2*n3*d0*d3*d4 + n1^3*d1*d4^2 + n0^2*n3*d1*d4^2 + n0^2*n1*d3*d4^2;
-    Append(~JI, Kx);
+    if degmin le 6 then
+        Kx :=
+            n3*n4^2*d0^2*d1 + n1*n4^2*d1^3 + n2^2*n3*d1*d2^2 + n1*n3^2*d1*d2^2 +
+            n1*n2*n4*d1*d2^2 + n0*n3*n4*d1*d2^2 + n1*n2*n3*d2^3 + n0*n3^2*d2^3 +
+            n1^2*n4*d2^3 + n3^3*d0^2*d3 + n1*n4^2*d0^2*d3 + n2^2*n3*d1^2*d3 +
+            n1*n2*n4*d1^2*d3 + n0*n3*n4*d1^2*d3 + n2^2*n3*d0*d2*d3 + n1*n3^2*d0*d2*d3 +
+            n2^3*d1*d2*d3 + n0*n3^2*d1*d2*d3 + n1^2*n4*d1*d2*d3 + n1*n2^2*d2^2*d3 +
+            n1^2*n3*d2^2*d3 + n0*n2*n3*d2^2*d3 + n0*n1*n4*d2^2*d3 + n2^3*d0*d3^2 +
+            n1*n2*n3*d0*d3^2 + n1*n2^2*d1*d3^2 + n0*n2*n3*d1*d3^2 + n0*n1*n4*d1*d3^2 +
+            n0^2*n3*d3^3 + n2^2*n3*d0*d1*d4 + n1*n3^2*d0*d1*d4 + n2^3*d1^2*d4 +
+            n1*n2*n3*d1^2*d4 + n1*n2^2*d1*d2*d4 + n1^2*n3*d1*d2*d4 + n1*n2^2*d0*d3*d4 +
+            n1^2*n3*d0*d3*d4 + n1^3*d1*d4^2 + n0^2*n3*d1*d4^2 + n0^2*n1*d3*d4^2;
+        Append(~JI, Kx); Append(~Wght, 6);
+    end if;
+    if degmax le 6 then return JI, Wght; end if;
 
     // I44
-    Kx :=
-	n4^4*d0^4 + n3*n4^3*d0^3*d1 + n2*n4^3*d0^2*d1^2 + n1*n4^3*d0*d1^3 + n0*n4^3*d1^4
-	+ n3^2*n4^2*d0^3*d2 + n2*n3*n4^2*d0^2*d1*d2 + n1*n4^3*d0^2*d1*d2 +
-	n1*n3*n4^2*d0*d1^2*d2 + n0*n3*n4^2*d1^3*d2 + n2^2*n4^2*d0^2*d2^2 +
-	n2^2*n3*n4*d0*d1*d2^2 + n1*n3^2*n4*d0*d1*d2^2 + n1*n2*n4^2*d0*d1*d2^2 +
-	n0*n3*n4^2*d0*d1*d2^2 + n2^3*n4*d1^2*d2^2 + n1*n2*n3*n4*d1^2*d2^2 +
-	n0*n2*n4^2*d1^2*d2^2 + n2^2*n3^2*d0*d2^3 + n1*n3^3*d0*d2^3 +
-	n1^2*n4^2*d0*d2^3 + n2^3*n3*d1*d2^3 + n1*n2*n3^2*d1*d2^3 +
-	n1*n2^2*n4*d1*d2^3 + n1^2*n3*n4*d1*d2^3 + n0*n1*n4^2*d1*d2^3 +
-	n1*n2^2*n3*d2^4 + n1^2*n3^2*d2^4 + n0^2*n4^2*d2^4 + n3^3*n4*d0^3*d3 +
-	n2*n3*n4^2*d0^3*d3 + n1*n4^3*d0^3*d3 + n2*n3^2*n4*d0^2*d1*d3 +
-	n1*n3*n4^2*d0^2*d1*d3 + n2^2*n3*n4*d0*d1^2*d3 + n0*n3*n4^2*d0*d1^2*d3 +
-	n2^3*n4*d1^3*d3 + n1*n2*n3*n4*d1^3*d3 + n0*n3^2*n4*d1^3*d3 +
-	n2^2*n3*n4*d0^2*d2*d3 + n1*n2*n4^2*d0^2*d2*d3 + n0*n3*n4^2*d0^2*d2*d3 +
-	n1*n2*n3*n4*d0*d1*d2*d3 + n0*n3^2*n4*d0*d1*d2*d3 + n1^2*n4^2*d0*d1*d2*d3 +
-	n1*n2^2*n4*d1^2*d2*d3 + n1^2*n3*n4*d1^2*d2*d3 + n0*n2*n3*n4*d1^2*d2*d3 +
-	n0*n1*n4^2*d1^2*d2*d3 + n2^3*n3*d0*d2^2*d3 + n1*n2*n3^2*d0*d2^2*d3 +
-	n1*n2^2*n4*d0*d2^2*d3 + n0*n1*n4^2*d0*d2^2*d3 + n2^4*d1*d2^2*d3 +
-	n1*n2^2*n3*d1*d2^2*d3 + n0*n1*n3*n4*d1*d2^2*d3 + n1*n2^3*d2^3*d3 +
-	n1^2*n2*n3*d2^3*d3 + n0*n2^2*n3*d2^3*d3 + n0*n1*n3^2*d2^3*d3 +
-	n0^2*n3*n4*d2^3*d3 + n2^2*n3^2*d0^2*d3^2 + n1*n3^3*d0^2*d3^2 +
-	n2^3*n4*d0^2*d3^2 + n1*n2*n3*n4*d0^2*d3^2 + n0*n3^2*n4*d0^2*d3^2 +
-	n1^2*n4^2*d0^2*d3^2 + n0*n2*n4^2*d0^2*d3^2 + n1^2*n3*n4*d0*d1*d3^2 +
-	n0*n2*n3*n4*d0*d1*d3^2 + n0*n1*n4^2*d0*d1*d3^2 + n2^4*d1^2*d3^2 +
-	n1*n2^2*n3*d1^2*d3^2 + n0*n2^2*n4*d1^2*d3^2 + n1*n2^2*n3*d0*d2*d3^2 +
-	n1^2*n3^2*d0*d2*d3^2 + n1^2*n2*n4*d0*d2*d3^2 + n0*n1*n3*n4*d0*d2*d3^2 +
-	n0*n2^2*n3*d1*d2*d3^2 + n0*n1*n3^2*d1*d2*d3^2 + n0*n1*n2*n4*d1*d2*d3^2 +
-	n0^2*n3*n4*d1*d2*d3^2 + n0*n2^3*d2^2*d3^2 + n0*n1*n2*n3*d2^2*d3^2 +
-	n0^2*n2*n4*d2^2*d3^2 + n1*n2^3*d0*d3^3 + n1^2*n2*n3*d0*d3^3 +
-	n1^3*n4*d0*d3^3 + n0*n1*n2*n4*d0*d3^3 + n0^2*n3*n4*d0*d3^3 + n0*n2^3*d1*d3^3
-	+ n0*n1*n2*n3*d1*d3^3 + n0*n1^2*n4*d1*d3^3 + n0^2*n1*n4*d2*d3^3 +
-	n0^3*n4*d3^4 + n3^4*d0^3*d4 + n2*n3^3*d0^2*d1*d4 + n2^2*n3*n4*d0^2*d1*d4 +
-	n1*n3^2*n4*d0^2*d1*d4 + n1*n2*n4^2*d0^2*d1*d4 + n0*n3*n4^2*d0^2*d1*d4 +
-	n2^2*n3^2*d0*d1^2*d4 + n1*n2*n3*n4*d0*d1^2*d4 + n0*n3^2*n4*d0*d1^2*d4 +
-	n1^2*n4^2*d0*d1^2*d4 + n2^3*n3*d1^3*d4 + n1*n2*n3^2*d1^3*d4 +
-	n0*n3^3*d1^3*d4 + n0*n2*n3*n4*d1^3*d4 + n0*n1*n4^2*d1^3*d4 +
-	n2^2*n3^2*d0^2*d2*d4 + n1^2*n4^2*d0^2*d2*d4 + n1*n2*n3^2*d0*d1*d2*d4 +
-	n0*n3^3*d0*d1*d2*d4 + n1^2*n3*n4*d0*d1*d2*d4 + n1*n2^2*n3*d1^2*d2*d4 +
-	n1^2*n3^2*d1^2*d2*d4 + n0*n2*n3^2*d1^2*d2*d4 + n0*n1*n3*n4*d1^2*d2*d4 +
-	n1^2*n3^2*d0*d2^2*d4 + n1*n2^3*d1*d2^2*d4 + n1^2*n2*n3*d1*d2^2*d4 +
-	n0*n2^2*n3*d1*d2^2*d4 + n0^2*n3*n4*d1*d2^2*d4 + n1^2*n2^2*d2^3*d4 +
-	n1^3*n3*d2^3*d4 + n0^2*n3^2*d2^3*d4 + n2^3*n3*d0^2*d3*d4 +
-	n1*n2*n3^2*d0^2*d3*d4 + n0*n3^3*d0^2*d3*d4 + n1*n2^2*n4*d0^2*d3*d4 +
-	n1^2*n3*n4*d0^2*d3*d4 + n0*n1*n4^2*d0^2*d3*d4 + n1*n2^2*n3*d0*d1*d3*d4 +
-	n0*n2*n3^2*d0*d1*d3*d4 + n1^2*n2*n4*d0*d1*d3*d4 + n0*n1*n3^2*d1^2*d3*d4 +
-	n0*n1*n2*n4*d1^2*d3*d4 + n0^2*n3*n4*d1^2*d3*d4 + n1^2*n2*n3*d0*d2*d3*d4 +
-	n0*n1*n3^2*d0*d2*d3*d4 + n1^3*n4*d0*d2*d3*d4 + n0*n1*n2*n3*d1*d2*d3*d4 +
-	n0^2*n3^2*d1*d2*d3*d4 + n0*n1^2*n4*d1*d2*d3*d4 + n0*n1*n2^2*d2^2*d3*d4 +
-	n0*n1^2*n3*d2^2*d3*d4 + n0^2*n2*n3*d2^2*d3*d4 + n0^2*n1*n4*d2^2*d3*d4 +
-	n1^2*n2^2*d0*d3^2*d4 + n0*n1*n2*n3*d0*d3^2*d4 + n0^2*n3^2*d0*d3^2*d4 +
-	n0*n1^2*n4*d0*d3^2*d4 + n0*n1*n2^2*d1*d3^2*d4 + n0^2*n1*n4*d1*d3^2*d4 +
-	n0^2*n1*n3*d2*d3^2*d4 + n0^3*n3*d3^3*d4 + n2^4*d0^2*d4^2 +
-	n1*n2^3*d0*d1*d4^2 + n1^2*n2*n3*d0*d1*d4^2 + n0*n2^2*n3*d0*d1*d4^2 +
-	n0*n1*n3^2*d0*d1*d4^2 + n1^3*n4*d0*d1*d4^2 + n0^2*n3*n4*d0*d1*d4^2 +
-	n1^2*n2^2*d1^2*d4^2 + n0*n2^3*d1^2*d4^2 + n1^3*n3*d1^2*d4^2 +
-	n0*n1*n2*n3*d1^2*d4^2 + n0^2*n3^2*d1^2*d4^2 + n0*n1^2*n4*d1^2*d4^2 +
-	n0^2*n2*n4*d1^2*d4^2 + n1^2*n2^2*d0*d2*d4^2 + n0^2*n3^2*d0*d2*d4^2 +
-	n0*n1*n2^2*d1*d2*d4^2 + n0^2*n2*n3*d1*d2*d4^2 + n0^2*n1*n4*d1*d2*d4^2 +
-	n0^2*n2^2*d2^2*d4^2 + n1^3*n2*d0*d3*d4^2 + n0*n1*n2^2*d0*d3*d4^2 +
-	n0*n1^2*n3*d0*d3*d4^2 + n0^2*n2*n3*d0*d3*d4^2 + n0^2*n1*n4*d0*d3*d4^2 +
-	n0*n1^2*n2*d1*d3*d4^2 + n0^2*n1*n3*d1*d3*d4^2 + n0^2*n1*n2*d2*d3*d4^2 +
-	n0^3*n3*d2*d3*d4^2 + n0^3*n2*d3^2*d4^2 + n1^4*d0*d4^3 + n0*n1^3*d1*d4^3 +
-	n0^2*n1*n2*d1*d4^3 + n0^3*n3*d1*d4^3 + n0^2*n1^2*d2*d4^3 + n0^3*n1*d3*d4^3 +
-	n0^4*d4^4;
-    Append(~JI, Kx);
-
-    Wght := [2, 2, 2, 3, 3, 3, 3, 4, 6, 8];
+    if degmin le 8 then
+        Kx :=
+            n4^4*d0^4 + n3*n4^3*d0^3*d1 + n2*n4^3*d0^2*d1^2 + n1*n4^3*d0*d1^3 + n0*n4^3*d1^4
+            + n3^2*n4^2*d0^3*d2 + n2*n3*n4^2*d0^2*d1*d2 + n1*n4^3*d0^2*d1*d2 +
+            n1*n3*n4^2*d0*d1^2*d2 + n0*n3*n4^2*d1^3*d2 + n2^2*n4^2*d0^2*d2^2 +
+            n2^2*n3*n4*d0*d1*d2^2 + n1*n3^2*n4*d0*d1*d2^2 + n1*n2*n4^2*d0*d1*d2^2 +
+            n0*n3*n4^2*d0*d1*d2^2 + n2^3*n4*d1^2*d2^2 + n1*n2*n3*n4*d1^2*d2^2 +
+            n0*n2*n4^2*d1^2*d2^2 + n2^2*n3^2*d0*d2^3 + n1*n3^3*d0*d2^3 +
+            n1^2*n4^2*d0*d2^3 + n2^3*n3*d1*d2^3 + n1*n2*n3^2*d1*d2^3 +
+            n1*n2^2*n4*d1*d2^3 + n1^2*n3*n4*d1*d2^3 + n0*n1*n4^2*d1*d2^3 +
+            n1*n2^2*n3*d2^4 + n1^2*n3^2*d2^4 + n0^2*n4^2*d2^4 + n3^3*n4*d0^3*d3 +
+            n2*n3*n4^2*d0^3*d3 + n1*n4^3*d0^3*d3 + n2*n3^2*n4*d0^2*d1*d3 +
+            n1*n3*n4^2*d0^2*d1*d3 + n2^2*n3*n4*d0*d1^2*d3 + n0*n3*n4^2*d0*d1^2*d3 +
+            n2^3*n4*d1^3*d3 + n1*n2*n3*n4*d1^3*d3 + n0*n3^2*n4*d1^3*d3 +
+            n2^2*n3*n4*d0^2*d2*d3 + n1*n2*n4^2*d0^2*d2*d3 + n0*n3*n4^2*d0^2*d2*d3 +
+            n1*n2*n3*n4*d0*d1*d2*d3 + n0*n3^2*n4*d0*d1*d2*d3 + n1^2*n4^2*d0*d1*d2*d3 +
+            n1*n2^2*n4*d1^2*d2*d3 + n1^2*n3*n4*d1^2*d2*d3 + n0*n2*n3*n4*d1^2*d2*d3 +
+            n0*n1*n4^2*d1^2*d2*d3 + n2^3*n3*d0*d2^2*d3 + n1*n2*n3^2*d0*d2^2*d3 +
+            n1*n2^2*n4*d0*d2^2*d3 + n0*n1*n4^2*d0*d2^2*d3 + n2^4*d1*d2^2*d3 +
+            n1*n2^2*n3*d1*d2^2*d3 + n0*n1*n3*n4*d1*d2^2*d3 + n1*n2^3*d2^3*d3 +
+            n1^2*n2*n3*d2^3*d3 + n0*n2^2*n3*d2^3*d3 + n0*n1*n3^2*d2^3*d3 +
+            n0^2*n3*n4*d2^3*d3 + n2^2*n3^2*d0^2*d3^2 + n1*n3^3*d0^2*d3^2 +
+            n2^3*n4*d0^2*d3^2 + n1*n2*n3*n4*d0^2*d3^2 + n0*n3^2*n4*d0^2*d3^2 +
+            n1^2*n4^2*d0^2*d3^2 + n0*n2*n4^2*d0^2*d3^2 + n1^2*n3*n4*d0*d1*d3^2 +
+            n0*n2*n3*n4*d0*d1*d3^2 + n0*n1*n4^2*d0*d1*d3^2 + n2^4*d1^2*d3^2 +
+            n1*n2^2*n3*d1^2*d3^2 + n0*n2^2*n4*d1^2*d3^2 + n1*n2^2*n3*d0*d2*d3^2 +
+            n1^2*n3^2*d0*d2*d3^2 + n1^2*n2*n4*d0*d2*d3^2 + n0*n1*n3*n4*d0*d2*d3^2 +
+            n0*n2^2*n3*d1*d2*d3^2 + n0*n1*n3^2*d1*d2*d3^2 + n0*n1*n2*n4*d1*d2*d3^2 +
+            n0^2*n3*n4*d1*d2*d3^2 + n0*n2^3*d2^2*d3^2 + n0*n1*n2*n3*d2^2*d3^2 +
+            n0^2*n2*n4*d2^2*d3^2 + n1*n2^3*d0*d3^3 + n1^2*n2*n3*d0*d3^3 +
+            n1^3*n4*d0*d3^3 + n0*n1*n2*n4*d0*d3^3 + n0^2*n3*n4*d0*d3^3 + n0*n2^3*d1*d3^3
+            + n0*n1*n2*n3*d1*d3^3 + n0*n1^2*n4*d1*d3^3 + n0^2*n1*n4*d2*d3^3 +
+            n0^3*n4*d3^4 + n3^4*d0^3*d4 + n2*n3^3*d0^2*d1*d4 + n2^2*n3*n4*d0^2*d1*d4 +
+            n1*n3^2*n4*d0^2*d1*d4 + n1*n2*n4^2*d0^2*d1*d4 + n0*n3*n4^2*d0^2*d1*d4 +
+            n2^2*n3^2*d0*d1^2*d4 + n1*n2*n3*n4*d0*d1^2*d4 + n0*n3^2*n4*d0*d1^2*d4 +
+            n1^2*n4^2*d0*d1^2*d4 + n2^3*n3*d1^3*d4 + n1*n2*n3^2*d1^3*d4 +
+            n0*n3^3*d1^3*d4 + n0*n2*n3*n4*d1^3*d4 + n0*n1*n4^2*d1^3*d4 +
+            n2^2*n3^2*d0^2*d2*d4 + n1^2*n4^2*d0^2*d2*d4 + n1*n2*n3^2*d0*d1*d2*d4 +
+            n0*n3^3*d0*d1*d2*d4 + n1^2*n3*n4*d0*d1*d2*d4 + n1*n2^2*n3*d1^2*d2*d4 +
+            n1^2*n3^2*d1^2*d2*d4 + n0*n2*n3^2*d1^2*d2*d4 + n0*n1*n3*n4*d1^2*d2*d4 +
+            n1^2*n3^2*d0*d2^2*d4 + n1*n2^3*d1*d2^2*d4 + n1^2*n2*n3*d1*d2^2*d4 +
+            n0*n2^2*n3*d1*d2^2*d4 + n0^2*n3*n4*d1*d2^2*d4 + n1^2*n2^2*d2^3*d4 +
+            n1^3*n3*d2^3*d4 + n0^2*n3^2*d2^3*d4 + n2^3*n3*d0^2*d3*d4 +
+            n1*n2*n3^2*d0^2*d3*d4 + n0*n3^3*d0^2*d3*d4 + n1*n2^2*n4*d0^2*d3*d4 +
+            n1^2*n3*n4*d0^2*d3*d4 + n0*n1*n4^2*d0^2*d3*d4 + n1*n2^2*n3*d0*d1*d3*d4 +
+            n0*n2*n3^2*d0*d1*d3*d4 + n1^2*n2*n4*d0*d1*d3*d4 + n0*n1*n3^2*d1^2*d3*d4 +
+            n0*n1*n2*n4*d1^2*d3*d4 + n0^2*n3*n4*d1^2*d3*d4 + n1^2*n2*n3*d0*d2*d3*d4 +
+            n0*n1*n3^2*d0*d2*d3*d4 + n1^3*n4*d0*d2*d3*d4 + n0*n1*n2*n3*d1*d2*d3*d4 +
+            n0^2*n3^2*d1*d2*d3*d4 + n0*n1^2*n4*d1*d2*d3*d4 + n0*n1*n2^2*d2^2*d3*d4 +
+            n0*n1^2*n3*d2^2*d3*d4 + n0^2*n2*n3*d2^2*d3*d4 + n0^2*n1*n4*d2^2*d3*d4 +
+            n1^2*n2^2*d0*d3^2*d4 + n0*n1*n2*n3*d0*d3^2*d4 + n0^2*n3^2*d0*d3^2*d4 +
+            n0*n1^2*n4*d0*d3^2*d4 + n0*n1*n2^2*d1*d3^2*d4 + n0^2*n1*n4*d1*d3^2*d4 +
+            n0^2*n1*n3*d2*d3^2*d4 + n0^3*n3*d3^3*d4 + n2^4*d0^2*d4^2 +
+            n1*n2^3*d0*d1*d4^2 + n1^2*n2*n3*d0*d1*d4^2 + n0*n2^2*n3*d0*d1*d4^2 +
+            n0*n1*n3^2*d0*d1*d4^2 + n1^3*n4*d0*d1*d4^2 + n0^2*n3*n4*d0*d1*d4^2 +
+            n1^2*n2^2*d1^2*d4^2 + n0*n2^3*d1^2*d4^2 + n1^3*n3*d1^2*d4^2 +
+            n0*n1*n2*n3*d1^2*d4^2 + n0^2*n3^2*d1^2*d4^2 + n0*n1^2*n4*d1^2*d4^2 +
+            n0^2*n2*n4*d1^2*d4^2 + n1^2*n2^2*d0*d2*d4^2 + n0^2*n3^2*d0*d2*d4^2 +
+            n0*n1*n2^2*d1*d2*d4^2 + n0^2*n2*n3*d1*d2*d4^2 + n0^2*n1*n4*d1*d2*d4^2 +
+            n0^2*n2^2*d2^2*d4^2 + n1^3*n2*d0*d3*d4^2 + n0*n1*n2^2*d0*d3*d4^2 +
+            n0*n1^2*n3*d0*d3*d4^2 + n0^2*n2*n3*d0*d3*d4^2 + n0^2*n1*n4*d0*d3*d4^2 +
+            n0*n1^2*n2*d1*d3*d4^2 + n0^2*n1*n3*d1*d3*d4^2 + n0^2*n1*n2*d2*d3*d4^2 +
+            n0^3*n3*d2*d3*d4^2 + n0^3*n2*d3^2*d4^2 + n1^4*d0*d4^3 + n0*n1^3*d1*d4^3 +
+            n0^2*n1*n2*d1*d4^3 + n0^3*n3*d1*d4^3 + n0^2*n1^2*d2*d4^3 + n0^3*n1*d3*d4^3 +
+            n0^4*d4^4;
+        Append(~JI, Kx); Append(~Wght, 8);
+    end if;
 
     return JI, Wght;
 
 end function;
 
-function ShiodaInvariantsChar2_T1111(abcde)
+function ShiodaInvariantsChar2_T1111(abcde :
+    PrimaryOnly := false, degmax := Infinity(), degmin := 1)
 
+    JI := []; Wght := [];
 
-    I02, I11, I20, I21, I12, I03, I30, I22, I33, I44 := Explode(ShiodaInvariantsV4(abcde));
+    if degmax le 1 then	return JI, Wght; end if;
 
-    JI := [];
+    SIV4 := Explode(ShiodaInvariantsV4(abcde : degmax := degmax, degmin := degmin));
 
     // j2
-    Kx :=
-	I02;
-    Append(~JI, Kx);
+    if degmin le 2 then
+        I02, I11, I20 := Explode(SIV4[1..3]); SIV4 := SIV4[4..#SIV4];
+
+        Kx :=
+            I02;
+        Append(~JI, Kx); Append(~Wght, 2);
+    end if;
 
     // j3
-    Kx :=
-	I03;
-    Append(~JI, Kx);
+    if degmin le 3 and degmax ge 3 then
+        I21, I12, I03, I30 := Explode(SIV4[1..4]); SIV4 := SIV4[5..#SIV4];
+
+        Kx :=
+            I03;
+        Append(~JI, Kx); Append(~Wght, 3);
+    end if;
 
     // J2
-    Kx :=
-	I11;
-    Append(~JI, Kx);
+    if not PrimaryOnly and degmin le 2 then
+        Kx :=
+            I11;
+        Append(~JI, Kx); Append(~Wght, 2);
+    end if;
+    if degmax le 3 then return JI, Wght; end if;
 
     // J4
-    Kx :=
-	I22;
-    Append(~JI, Kx);
+    if not PrimaryOnly and degmin le 4 then
+        I22 := Explode(SIV4[1..1]); SIV4 := SIV4[2..#SIV4];
+
+        Kx :=
+            I22;
+        Append(~JI, Kx); Append(~Wght, 4);
+    end if;
+    if degmax le 4 then return JI, Wght; end if;
 
     // J5
-    Kx :=
-	I02*I21 + I11*I12 + I20*I03;
-    Append(~JI, Kx);
+    if degmin le 5 then
+        Kx :=
+            I02*I21 + I11*I12 + I20*I03;
+        Append(~JI, Kx); Append(~Wght, 5);
+    end if;
+    if degmax le 5 then return JI, Wght; end if;
 
     // J6
-    Kx :=
-	I12^2 + I21*I03;
-    Append(~JI, Kx);
+    if degmin le 6 then
+        I33 := Explode(SIV4[1..1]); SIV4 := SIV4[2..#SIV4];
+
+        Kx :=
+            I12^2 + I21*I03;
+        Append(~JI, Kx); Append(~Wght, 6);
+    end if;
+    if degmax le 6 then return JI, Wght; end if;
 
     // J8
-    Kx :=
-	I20*I21*I03 + I02*I20*I22 + I44;
-    Append(~JI, Kx);
+    if degmin le 8 then
+        I44 := Explode(SIV4[1..1]);
+
+        Kx :=
+            I20*I21*I03 + I02*I20*I22 + I44;
+        Append(~JI, Kx); Append(~Wght, 8);
+    end if;
+    if degmax le 8 then return JI, Wght; end if;
 
     // J9
-    Kx :=
-	I12^3 + I21*I12*I03 + I02*I12*I22 + I11*I03*I22 + I03*I33;
-    Append(~JI, Kx);
+    if degmin le 9 then
+        Kx :=
+            I12^3 + I21*I12*I03 + I02*I12*I22 + I11*I03*I22 + I03*I33;
+        Append(~JI, Kx); Append(~Wght, 9);
+    end if;
+    if degmax le 9 then return JI, Wght; end if;
 
     // J11
-    Kx :=
-	I02*I21^2*I12 + I11*I21*I12^2 + I11*I21^2*I03 + I02*I21*I03*I30 + I02*I11*I21*I22 + I02*I20*I12*I22 + I02^2*I30*I22 + I12*I22^2
-	+ I02*I21*I33 + I20*I03*I33;
-    Append(~JI, Kx);
+    if not PrimaryOnly and degmin le 11 then
+        Kx :=
+            I02*I21^2*I12 + I11*I21*I12^2 + I11*I21^2*I03 + I02*I21*I03*I30 + I02*I11*I21*I22 + I02*I20*I12*I22 + I02^2*I30*I22 + I12*I22^2
+            + I02*I21*I33 + I20*I03*I33;
+        Append(~JI, Kx); Append(~Wght, 11);
+    end if;
+    if degmax le 11 then return JI, Wght; end if;
 
     // J12
-    Kx :=
-	I11^3*I21*I12 + I02*I20^2*I21*I03	+ I11*I20^2*I12*I03 + I20^3*I03^2 +
-	I02^2*I11*I21*I30 + I02*I11^2*I12*I30 + I02^2*I20*I12*I30 + I02^3*I30^2 +
-	+ I11^4*I22 + I02*I21^2*I22 + I20*I12^2*I22 + I02*I12*I30*I22 + I02*I11*I20*I33
-	+ I11*I22*I33 + I11^2*I44 + I22*I44;
-    Append(~JI, Kx);
-
-
-    Wght := [2, 3, 2, 4, 5, 6, 8, 9, 11, 12];
+    if not PrimaryOnly and degmin le 12 then
+        Kx :=
+            I11^3*I21*I12 + I02*I20^2*I21*I03	+ I11*I20^2*I12*I03 + I20^3*I03^2 +
+            I02^2*I11*I21*I30 + I02*I11^2*I12*I30 + I02^2*I20*I12*I30 + I02^3*I30^2 +
+            + I11^4*I22 + I02*I21^2*I22 + I20*I12^2*I22 + I02*I12*I30*I22 + I02*I11*I20*I33
+            + I11*I22*I33 + I11^2*I44 + I22*I44;
+        Append(~JI, Kx); Append(~Wght, 12);
+    end if;
 
     return JI, Wght;
 
 end function;
 
-function ShiodaInvariantsChar2_T113(abcde)
+function ShiodaInvariantsChar2_T113(abcde :
+    PrimaryOnly := false, degmax := Infinity(), degmin := 1)
+
+    JI := []; Wght := [];
+
+    if degmax le 1 then	return JI, Wght; end if;
 
     /* a, b, c, d, s  of degree  1, 1, 1, 1, 1 */
     a, b, c, d, _, s := Explode(abcde);
 
-    /* J2, J3 */
-    JI := [1+0*a, 0*a];
+    // j2
+    if degmin le 2 then
+        Kx :=
+            1+0*a;
+        Append(~JI, Kx); Append(~Wght, 2);
+    end if;
+
+    // j3
+    if not PrimaryOnly and degmin le 3 and degmax ge 3 then
+        Kx :=
+            0*a;
+        Append(~JI, Kx); Append(~Wght, 3);
+    end if;
 
     // Deg. 1
-    Kx := a;
-    Append(~JI, Kx);
+    if degmin le 2 then
+        Kx := a;
+        Append(~JI, Kx); Append(~Wght, 2);
+    end if;
 
     // Deg. 1
-    Kx := c;
-    Append(~JI, Kx);
+    if degmin le 2 then
+        Kx := c;
+        Append(~JI, Kx); Append(~Wght, 2);
+    end if;
 
     // Deg. 3
-    Kx := s*c^2+d^2+c*d;
-    Append(~JI, Kx);
+    if degmin le 2 then
+        Kx := s*c^2+d^2+c*d;
+        Append(~JI, Kx); Append(~Wght, 2);
+    end if;
 
     // Deg. 5
-    Kx := s^2*c*a^2 + s*c*a^2 + d*a^2 + c*b + d*a;
-    Append(~JI, Kx);
+    if not PrimaryOnly and degmin le 2 then
+        Kx := s^2*c*a^2 + s*c*a^2 + d*a^2 + c*b + d*a;
+        Append(~JI, Kx); Append(~Wght, 2);
+    end if;
 
     // Deg. 8
-    Kx := s^4*a^4 + s^2*a^3 + s*a^3 + s*a^2 + b*a^2 + b^2 + b*a;
-    Append(~JI, Kx);
-
-    Wght := [2, 3, 2, 2, 2, 2, 2];
+    if degmin le 2 then
+        Kx := s^4*a^4 + s^2*a^3 + s*a^3 + s*a^2 + b*a^2 + b^2 + b*a;
+        Append(~JI, Kx); Append(~Wght, 2);
+    end if;
 
     return JI, Wght;
 
 end function;
 
-function ShiodaInvariantsChar2_T33(abcde)
+function ShiodaInvariantsChar2_T33(abcde :
+    PrimaryOnly := false, degmax := Infinity(), degmin := 1)
+
+    JI := []; Wght := [];
+
+    if degmax le 1 then	return JI, Wght; end if;
 
     /* a, b, c, d, s  of degree  3, 2, -2, -3, 0 */
     a, b, c, d, _, s := Explode(abcde);
 
-    /* J2, J3 */
-    JI := [1+0*a, 0*a];
+    // j2
+    if degmin le 2 then
+        Kx :=
+            1+0*a;
+        Append(~JI, Kx); Append(~Wght, 2);
+    end if;
+
+    // j3
+    if not PrimaryOnly and degmin le 3 and degmax ge 3 then
+        Kx :=
+            0*a;
+        Append(~JI, Kx); Append(~Wght, 3);
+    end if;
 
     // Deg. 3
-    Kx := s*c^2 + d^2 + d*c;
-    Append(~JI, Kx);
+    if degmin le 2 then
+        Kx := s*c^2 + d^2 + d*c;
+        Append(~JI, Kx); Append(~Wght, 2);
+    end if;
 
     // Deg. 4
-    Kx := s*c^2*a + c^2*a^2 + a^4 + c^3 + c^2*b + d^2*a + c^2*a + s*a^2 + a^3
-	+ c^2 + b^2 + c*a + b*a;
-    Append(~JI, Kx);
+    if degmin le 2 then
+        Kx := s*c^2*a + c^2*a^2 + a^4 + c^3 + c^2*b + d^2*a + c^2*a + s*a^2 + a^3
+            + c^2 + b^2 + c*a + b*a;
+        Append(~JI, Kx); Append(~Wght, 2);
+    end if;
 
     // Deg. 10
-    Kx :=
-	s^3*c^6*a + s^2*c^6*a^2 + s^2*c^7 + s^2*c^6*b + s^2*d^2*c^4*a + s^2*c^6*a + c^8
-	+ s*d^4*c^2*a + s*d^2*c^4*a + s*c^6*a + d^4*c^2*a^2 + s^2*c^4*a^2 +
-	d^2*c^4*a^2 + c^6*a^2 + c^4*a^4 + s*c^2*a^5 + c^2*a^6 + d^4*c^3 + d^2*c^5 +
-	c^7 + d^4*c^2*b + d^2*c^4*b + c^6*b + d^6*a + s^2*c^4*a + s*c^4*a^2 +
-	s^2*c^2*a^3 + s*c^2*a^4 + c^3*a^4 + c^2*b*a^4 + d^2*a^5 + s^2*c^4 + s*c^5 +
-	c^6 + s*c^4*b + c^4*b^2 + s*d*c^3*a + s*c^2*b^2*a + d^4*a^2 + s^2*c^2*a^2 +
-	d^2*c^2*a^2 + d*c^3*a^2 + c^4*a^2 + c^2*b^2*a^2 + s*d^2*a^3 + s*c^2*a^3 +
-	d*c*a^4 + d^2*c^3 + s*c^4 + d*c^4 + c^5 + d^2*c^2*b + d*c^3*b + c^4*b +
-	s*c^2*b^2 + c^3*b^2 + c^2*b^3 + d^4*a + d^3*c*a + s*c^3*a + d*c^3*a +
-	s*c^2*b*a + d^2*b^2*a + s*d^2*a^2 + s*d*c*a^2 + d^2*c*a^2 + d^2*b*a^2 +
-	d*c*a^3 + d^4 + d*c^3 + d^2*b^2 + d*c*b^2 + d^2*c*a + d*c^2*a + d^2*b*a +
-	d*c*b*a;
-    Append(~JI, Kx);
-
-    Wght := [2, 3, 2, 2, 2];
+    if degmin le 2 then
+        Kx :=
+            s^3*c^6*a + s^2*c^6*a^2 + s^2*c^7 + s^2*c^6*b + s^2*d^2*c^4*a + s^2*c^6*a + c^8
+            + s*d^4*c^2*a + s*d^2*c^4*a + s*c^6*a + d^4*c^2*a^2 + s^2*c^4*a^2 +
+            d^2*c^4*a^2 + c^6*a^2 + c^4*a^4 + s*c^2*a^5 + c^2*a^6 + d^4*c^3 + d^2*c^5 +
+            c^7 + d^4*c^2*b + d^2*c^4*b + c^6*b + d^6*a + s^2*c^4*a + s*c^4*a^2 +
+            s^2*c^2*a^3 + s*c^2*a^4 + c^3*a^4 + c^2*b*a^4 + d^2*a^5 + s^2*c^4 + s*c^5 +
+            c^6 + s*c^4*b + c^4*b^2 + s*d*c^3*a + s*c^2*b^2*a + d^4*a^2 + s^2*c^2*a^2 +
+            d^2*c^2*a^2 + d*c^3*a^2 + c^4*a^2 + c^2*b^2*a^2 + s*d^2*a^3 + s*c^2*a^3 +
+            d*c*a^4 + d^2*c^3 + s*c^4 + d*c^4 + c^5 + d^2*c^2*b + d*c^3*b + c^4*b +
+            s*c^2*b^2 + c^3*b^2 + c^2*b^3 + d^4*a + d^3*c*a + s*c^3*a + d*c^3*a +
+            s*c^2*b*a + d^2*b^2*a + s*d^2*a^2 + s*d*c*a^2 + d^2*c*a^2 + d^2*b*a^2 +
+            d*c*a^3 + d^4 + d*c^3 + d^2*b^2 + d*c*b^2 + d^2*c*a + d*c^2*a + d^2*b*a +
+            d*c*b*a;
+        Append(~JI, Kx); Append(~Wght, 2);
+    end if;
 
     return JI, Wght;
 
 end function;
 
-function ShiodaInvariantsChar2_T15(abcde)
+function ShiodaInvariantsChar2_T15(abcde :
+    PrimaryOnly := false, degmax := Infinity(), degmin := 1)
+
+    JI := []; Wght := [];
+
+    if degmax le 0 then	return JI, Wght; end if;
 
     /* a, b, c, d      of degree    5, 4, 3, -1 */
     a, b, c, d, _ := Explode(abcde);
 
-    /* J2, J3 */
-    JI := [0*a, 0*a];
+    // j2
+    if degmin le 2 and degmax ge 2 then
+        Kx :=
+            0*a;
+        Append(~JI, Kx); Append(~Wght, 2);
+    end if;
+
+    // j3
+    if not PrimaryOnly and degmin le 3 and degmax ge 3 then
+        Kx :=
+            0*a;
+        Append(~JI, Kx); Append(~Wght, 3);
+    end if;
 
     // Deg. 1
-    Kx := d eq 0 select 0 else 1/d;
-    Append(~JI, Kx);
+    if degmin le 1 then
+        Kx := d eq 0 select 0 else 1/d;
+        Append(~JI, Kx); Append(~Wght, 3);
+    end if;
+    if degmax le 2 then return JI, Wght; end if;
 
     // Deg. 3
-    Kx := c;
-    Append(~JI, Kx);
+    if degmin le 3 then
+        Kx := c;
+        Append(~JI, Kx); Append(~Wght, 3);
+    end if;
+    if degmax le 3 then return JI, Wght; end if;
 
     // Deg. 4
-    Kx := b;
-    Append(~JI, Kx);
+    if degmin le 4 then
+        Kx := b;
+        Append(~JI, Kx); Append(~Wght, 4);
+    end if;
+    if degmax le 4 then return JI, Wght; end if;
 
     // Deg. 5
-    Kx := a;
-    Append(~JI, Kx);
-
-    Wght := [2, 3, 1, 3, 4, 5];
+    if degmin le 5 then
+        Kx := a;
+        Append(~JI, Kx); Append(~Wght, 5);
+    end if;
+    if degmax le 5 then return JI, Wght; end if;
 
     return JI, Wght;
 
 end function;
 
-function ShiodaInvariantsChar2_T7(abcde)
+function ShiodaInvariantsChar2_T7(abcde :
+    PrimaryOnly := false, degmax := Infinity(), degmin := 1)
+
+    JI := []; Wght := [];
+
+    if degmax le 1 then	return JI, Wght; end if;
 
     /* a, b, c, d      of degree    7, 6, 5, 4 */
     a, b, c, d, _ := Explode(abcde);
 
-    /* J2, J3 */
-    JI := [0*a, 0*a];
+    // j2
+    if not PrimaryOnly and degmin le 2 and degmax ge 2 then
+        Kx :=
+            0*a;
+        Append(~JI, Kx); Append(~Wght, 2);
+    end if;
+
+    // j3
+    if not PrimaryOnly and degmin le 3 and degmax ge 3 then
+        Kx :=
+            0*a;
+        Append(~JI, Kx); Append(~Wght, 3);
+    end if;
+    if degmax le 6 then return JI, Wght; end if;
 
     // Deg. 7
-    Kx := a;
-    Append(~JI, Kx);
+    if degmin le 7 then
+        Kx := a;
+        Append(~JI, Kx); Append(~Wght, 7);
+    end if;
+    if degmax le 7 then return JI, Wght; end if;
 
     // Deg 32
-    Kx := c^4*b^2 + c^5*a + c*b*a^3 + d*a^4;
-    Append(~JI, Kx);
+    if degmin le 32 then
+        Kx := c^4*b^2 + c^5*a + c*b*a^3 + d*a^4;
+        Append(~JI, Kx); Append(~Wght, 32);
+    end if;
+    if degmax le 32 then return JI, Wght; end if;
 
     // Deg 40
-    Kx := c^8 + b^2*a^4 + c*a^5;
-    Append(~JI, Kx);
-
-    Wght := [2, 3, 7, 32, 40];
+    if degmin le 40 then
+        Kx := c^8 + b^2*a^4 + c*a^5;
+        Append(~JI, Kx); Append(~Wght, 40);
+    end if;
+    if degmax le 40 then return JI, Wght; end if;
 
     return JI, Wght;
 
@@ -828,14 +983,16 @@ function ShiodaInvariantsChar2(f, h,
 	    if h1 eq 0 and h2 eq 0 and h3 eq 0 then
 		vprintf Hyperelliptic, 1 : "Type (7)\n";
 		_, _, abcde := Genus3WeierstrassToArtinSchreierModel_T7(f, h);
-		return ShiodaInvariantsChar2_T7(abcde);
+                return ShiodaInvariantsChar2_T7(abcde :
+                    PrimaryOnly := PrimaryOnly, degmax := degmax, degmin := degmin);
 
 	    end if;
 
 	    /* h with a root of order 3 */
 	    vprintf Hyperelliptic, 1 : "Type (1,5)\n";
 	    _, _, abcde := Genus3WeierstrassToArtinSchreierModel_T15(f, h);
-	    return ShiodaInvariantsChar2_T15(abcde);
+            return ShiodaInvariantsChar2_T15(abcde :
+                PrimaryOnly := PrimaryOnly, degmax := degmax, degmin := degmin);
 
 	end if;
 
@@ -843,20 +1000,23 @@ function ShiodaInvariantsChar2(f, h,
 	if h1 eq 0 and h3 eq 0 then
 	    vprintf Hyperelliptic, 1 : "Type (3,3)\n";
 	    _, _, abcde :=  Genus3WeierstrassToArtinSchreierModel_T33(f, h);
-	    return ShiodaInvariantsChar2_T33(abcde);
+            return ShiodaInvariantsChar2_T33(abcde :
+                PrimaryOnly := PrimaryOnly, degmax := degmax, degmin := degmin);
 	end if;
 
 	/* h with a single root of order 2 */
 	vprintf Hyperelliptic, 1 : "Type (1,1,3)\n";
 	_, _, abcde :=  Genus3WeierstrassToArtinSchreierModel_T113(f, h);
-	return ShiodaInvariantsChar2_T113(abcde);
+        return ShiodaInvariantsChar2_T113(abcde :
+            PrimaryOnly := PrimaryOnly, degmax := degmax, degmin := degmin);
 
     end if;
 
     /* Generic case, all roots are of order 1 */
     vprintf Hyperelliptic, 1 : "Type (1,1,1,1)\n";
     _, _, abcde := Genus3WeierstrassToArtinSchreierModel_T1111(f, h);
-    return ShiodaInvariantsChar2_T1111(abcde);
+    return ShiodaInvariantsChar2_T1111(abcde :
+        PrimaryOnly := PrimaryOnly, degmax := degmax, degmin := degmin);
 
 end function;
 
