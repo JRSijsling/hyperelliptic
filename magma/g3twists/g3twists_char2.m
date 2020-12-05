@@ -963,7 +963,7 @@ function Genus3WeierstrassToArtinSchreierModel(f, h)
 
 end function;
 
-function ShiodaInvariantsChar2(f, h,
+function ShiodaInvariantsChar2(f, h :
     PrimaryOnly := false, degmax := Infinity(), degmin := 1)
 
     Px := Parent(f); x := Px.1;
