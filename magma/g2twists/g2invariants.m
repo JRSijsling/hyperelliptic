@@ -1010,6 +1010,56 @@ intrinsic IgusaInvariants(f::RngUPolElt: Quick  := false, extend := false, norma
 
 end intrinsic;
 
+intrinsic IgusaInvariants(f::RngMPolElt : Quick  := false, extend := false, normalize := false) -> SeqEnum, SeqEnum
+
+    {Compute the Shioda invariants  'J2', 'J3', 'J4', 'J5', 'J6', 'J7',
+    'J8', 'J9' and 'J10' of a polynomial of degree at most 8, considered as a
+    binary form of degre 8 (see 1967 Shioda's  paper), and other invariants in
+    characteristic 2, 3, 5 and 7. Weights of these
+    invariants are returned too.
+    }
+
+    P := Parent(f);
+    require
+        Rank(P) eq 2 and {Degree(e) : e in Monomials(f)} eq {6} :
+        "Input must be a binary homogeneous polynomial of degree 6";
+
+    F := UnivariatePolynomial(Evaluate(f, 2, 1));
+
+    return IgusaInvariants(F : Quick := Quick, extend := extend, normalize := normalize);
+
+end intrinsic;
+
+intrinsic IgusaInvariants(f::RngUPolElt, p::RngIntElt : Quick  := false, extend := false, normalize := false) -> SeqEnum, SeqEnum
+    {Compute the Igusa J-invariants of a polynomial of degree at most 6.
+    The integer 2 must be a unit of the coefficient ring, and if Quick,
+    the base field must not be of characteristic 2, 3, or 5.}
+
+    return IgusaInvariants(f : Quick := Quick, extend := extend, normalize := normalize);
+
+end intrinsic;
+
+intrinsic IgusaInvariants(f::RngMPolElt, p::RngIntElt : Quick  := false, extend := false, normalize := false) -> SeqEnum, SeqEnum
+
+    {Compute the Shioda invariants  'J2', 'J3', 'J4', 'J5', 'J6', 'J7',
+    'J8', 'J9' and 'J10' of a polynomial of degree at most 8, considered as a
+    binary form of degre 8 (see 1967 Shioda's  paper), and other invariants in
+    characteristic 2, 3, 5 and 7. Weights of these
+    invariants are returned too.
+    }
+
+    P := Parent(f);
+    require
+        Rank(P) eq 2 and {Degree(e) : e in Monomials(f)} eq {6} :
+        "Input must be a binary homogeneous polynomial of degree 6";
+
+    F := UnivariatePolynomial(Evaluate(f, 2, 1));
+
+    return IgusaInvariants(F, p : Quick := Quick, extend := extend, normalize := normalize);
+
+end intrinsic;
+
+
 intrinsic IgusaInvariants(C::CrvHyp : Quick := false, extend := false, normalize := false) -> SeqEnum, SeqEnum
     {Compute the Igusa J-invariants of a genus 2 curve over a field.
     If Quick, the base field must not be of characteristic 2, 3, or 5.}
