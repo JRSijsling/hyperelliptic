@@ -20,7 +20,7 @@
  *  along with this program; if not, write to the Free Software
  *  Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA  02110-1301  USA
  *
- *  Copyright 2013, R. Basson & R. Lercier & C. Ritzenthaler & J. Sijsling & J. Sijsling
+ *  Copyright 2013, R. Basson & R. Lercier & C. Ritzenthaler & J. Sijsling
  */
 
 import "../toolbox/sl2invtools.m"    : PowerRepresentativesInFiniteFields, ShiodaInvariantsAppend;
@@ -34,7 +34,7 @@ function ShiodaInvariantsChar3(f :
     /* Degree 2 */
     if degmax lt 2 then	return JI, Wght; end if;
 
-    if Characteristic(CoefficientRing(f)) eq 0 then
+    if Characteristic(CoefficientRing(f)) ne 3 then
 
         J2s, J3s, J4s, J5s, J6s, J7s, J8s, J9s, J10s :=
             Explode(ShiodaInvariantsCharp(f : scaled := false));
@@ -66,67 +66,65 @@ function ShiodaInvariantsChar3(f :
 
         // J4
         if degmin le 4 then
-            Kx := -1/3*j2^2 + 1/3*j4;
+            Kx := /* (1 / 2^10 / 7^4) * */ (j4 - 4*j2^2)/3;
             Append(~JI, Kx); Append(~Wght, 4);
         end if;
         if degmax le 4 then return JI, Wght; end if;
 
         // J5
         if degmin le 5 then
-            Kx := j5;
+            Kx := /* (1 / 2^9 / 7^5 / 5) * */ (j5 - 2*j2*j3);
             Append(~JI, Kx); Append(~Wght, 5);
         end if;
         if degmax le 5 then return JI, Wght; end if;
 
         // J6
         if not PrimaryOnly and degmin le 6 then
-            Kx := -49/81*j2^3 - 1/3*j3^2 - 2/27*j2*j4 + 1/81*j6;
+            Kx := /* (1 / 2^14 / 7^6) * */ (j6 - 6*j4*j2 - 837*j3^2 - 130*j2^3)/3^4;
             Append(~JI, Kx); Append(~Wght, 6);
         end if;
         if degmax le 6 then return JI, Wght; end if;
 
         // J7
         if degmin le 7 then
-            Kx := -1/3*j2*j5 + 1/3*j7;
+            Kx := /* (1 / 2^15 / 5 / 7^7) * */ (j7 - 7*j2*j5)/3;
             Append(~JI, Kx); Append(~Wght, 7);
         end if;
         if degmax le 7 then return JI, Wght; end if;
 
         // J8
         if not PrimaryOnly and degmin le 8 then
-            Kx := -209/729*j2^4 - 8/27*j2*j3^2 - 46/243*j2^2*j4 - 1/3*j3*j5 - 4/729*j2*j6 +
-                1/9*j8;
+            Kx := /* (1 / 2^17 / 5^2 / 7^9) */ 2 * (81*j8 - 4*j6*j2 - 2430*j5*j3
+                - 381*j4*j2^2 - 216*j3^2*j2 + 763*j2^4)/3^6;
             Append(~JI, Kx); Append(~Wght, 8);
         end if;
         if degmax le 8 then return JI, Wght; end if;
 
         // J9
         if degmin le 9 then
-            Kx := -356/729*j2^3*j3 - 2/27*j3^3 - 52/243*j2*j3*j4 - 65/81*j2^2*j5 - 1/729*j3*j6
-                - 8/81*j2*j7 + 1/81*j9;
+            Kx := /* (1 / 2^19 / 5 / 7^9) / 8 * */ 2 * (2012*j2^3*j3+1152*j2^2*j5
+            -276*j2*j3*j4+4671*j3^3-576*j2*j7-8*j3*j6+72*j9)/3^6;
             Append(~JI, Kx); Append(~Wght, 9);
         end if;
         if degmax le 9 then return JI, Wght; end if;
 
         // J10
         if not PrimaryOnly and degmin le 10 then
-            Kx := -961/2187*j2^5 - 28/81*j2^2*j3^2 - 4/81*j2^3*j4 - 4/27*j3^2*j4 +
-                4/243*j2*j4^2 - 2/9*j2*j3*j5 + 13/2187*j2^2*j6 - 2/729*j4*j6 - 1/9*j3*j7
-                - 2/27*j2*j8 + 1/27*j10;
+            Kx := /* (1 / 2^22 / 5^2 / 7^11) / 4 * */ (3446*j2^5+5400*j2^3*j4+3537*j2^2*j3^2+
+            52*j2^2*j6+243*j2*j3*j5+144*j2*j4^2+5265*j3^2*j4+5913*j2*j8+5589*j3*j7+6537*j4*j6+
+                324*j10)/3^7;
             Append(~JI, Kx); Append(~Wght, 10);
         end if;
         if degmax le 10 then return JI, Wght; end if;
 
         // J12
         if degmin le 12 then
-            Kx := 9733/19683*j2^6 + 176/729*j2^3*j3^2 - 17/27*j3^4 - 8/2187*j2^4*j4 -
-                8/81*j2*j3^2*j4 - 67/2187*j2^2*j4^2 + 5/9*j2^2*j3*j5 - 5/27*j3*j4*j5 -
-                5/9*j2*j5^2 - 56/19683*j2^3*j6 + 1/729*j3^2*j6 + 8/2187*j2*j4*j6 -
-                2/19683*j6^2 - 4/27*j2*j3*j7 - 1/9*j5*j7 + 5/81*j2^2*j8 - 1/81*j4*j8 -
-                2/81*j2*j10;
+            Kx := /* ( -1 / 2^22 / 5^2 / 7^11 ) / 2^6 / 7^2 */ 2 * (13699*j2^6+21069*j2^4*j4
+            +40068*j2^3*j3^2+25825*j2^3*j6+24057*j2^2*j3*j5+17568*j2^2*j4^2+17010*j2*j3^2*j4
+                +37908*j3^4+54432*j2^2*j8+25515*j2*j3*j7+477*j2*j4*j6+28431*j2*j5^2+32751*j3^2*j6
+                +7290*j3*j4*j5+53460*j10*j2+486*j4*j8+17496*j5*j7+52663*j6^2)/3^9;
             Append(~JI, Kx); Append(~Wght, 12);
         end if;
-        if degmax le 12 then return JI, Wght; end if;
 
         return JI, Wght;
 
