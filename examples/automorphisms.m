@@ -13,14 +13,15 @@ f := x^6 + x^5 + 2*x^3 + 5*x^2 + x + 1; g := f; deg := 6;
 f := x^5 + x; g := f; deg := 6;
 f := 4*x^6 + 1; g := f; deg := 6;
 
-_, IsoLst := IsGL2GeometricEquivalent(f, g, deg : commonfield := false);
-_, IsoLst := IsGL2GeometricEquivalent(f, g, deg : commonfield := false, covariant := false);
+_, IsoLst := IsGL2Equivalent(f, g, deg : commonfield := false, covariant := true);
+_, IsoLst := IsGL2Equivalent(f, g, deg : commonfield := false, covariant := false);
 print "Covariant:";
-time _, IsoLst := IsGL2GeometricEquivalent(f, g, deg : commonfield := true);
+time _, IsoLst := IsGL2Equivalent(f, g, deg : commonfield := true, covariant := true);
 print "Direct:";
-time _, IsoLst := IsGL2GeometricEquivalent(f, g, deg : commonfield := true, covariant := false);
+time _, IsoLst := IsGL2Equivalent(f, g, deg : commonfield := true, covariant := false);
 print #IsoLst;
-print Universe(IsoLst[1]);
+print IsoLst;
+print BaseRing(IsoLst[1]);
 
 deg := 50; B := 100; D := [-B..B];
 while true do
@@ -34,7 +35,7 @@ while true do
     g := f^T;
     X := HyperellipticCurve(f); Y := HyperellipticCurve(g);
     print "Covariant:";
-    time _, IsoLst := IsIsomorphicHyperelliptic(X, Y : geometric := false);
+    time _, IsoLst := IsIsomorphicHyperelliptic(X, Y : geometric := false, covariant := true);
     print "Direct:";
     time _, IsoLst := IsIsomorphicHyperelliptic(X, Y : geometric := false, covariant := false);
     print T;

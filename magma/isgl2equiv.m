@@ -958,12 +958,17 @@ while ret eq true and #MFL eq 0 and nbtry lt 20 do
             h := HomFromRoot(Q, L, Q1L[i]);
             T := ConjugateMatrix(h, ML);
             Ti := ConjugateMatrix(h, MLi);
+            Append(~MFL, [* T*A*Ti : A in MFML[i] *]);
         else
-            /* This probably also works in commonfield case */
-            T := Matrix(L, 2, 2, Eltseq(ML));
-            Ti := Matrix(L, 2, 2, Eltseq(MLi));
+            MF := [* *];
+            for A in MFML[i] do
+                L := BaseRing(A);
+                TL := Matrix(L, 2, 2, Eltseq(ML));
+                TLi := Matrix(L, 2, 2, Eltseq(MLi));
+                Append(~MF, TL*A*TLi);
+            end for;
+            Append(~MFL, MF);
         end if;
-        Append(~MFL, [* T*A*Ti : A in MFML[i] *]);
     end for;
     MFL := [* [* Eltseq(A) : A in MF *] : MF in MFL *];
 
@@ -988,24 +993,20 @@ return ret, MFL, Q1L;
 end function;
 
 
-intrinsic IsGL2GeometricEquivalent(_f::RngUPolElt, _F::RngUPolElt, deg::RngIntElt: geometric := true, covariant := true, commonfield := false) -> BoolElt, SeqEnum
-{Returns a boolean and the full set of isomorphisms.}
-
-/* Is this fast? Replace? */
-//if not geometric then
-//    return IsGL2Equivalent(_f, _F, deg);
-//end if;
+intrinsic IsGL2Equivalent(f1::RngUPolElt, f2::RngUPolElt, deg::RngIntElt: geometric := false, covariant := true, commonfield := false) -> BoolElt, List
+{Returns a boolean indicating whether a matrix T exists such that f1*T is a multiple of f2, as well as a full list of all such matrices.}
 
 /* Refer and normalize back */
 if not geometric then commonfield := false; end if;
-ret, MFL, Q1L := IsGL2GeometricEquivalentCandidates(_f, _F, deg : geometric := geometric, covariant := covariant, commonfield := commonfield);
-return CheckNormalizeToCommonBase(ret, MFL, Q1L, _f, _F, deg : commonfield := commonfield);
+ret, MFL, Q1L := IsGL2GeometricEquivalentCandidates(f1, f2, deg : geometric := geometric, covariant := covariant, commonfield := commonfield);
+test, seqs := CheckNormalizeToCommonBase(ret, MFL, Q1L, f1, f2, deg : commonfield := commonfield);
+return test, [* Matrix(2,2, seq) : seq in seqs *];
 
 end intrinsic;
 
 
-intrinsic IsIsomorphicHyperelliptic(X1::CrvHyp, X2::CrvHyp : geometric := false, covariant := true, commonfield := false) ->  BoolElt, SeqEnum
-{Returns a boolean and the full set of isomorphisms.}
+intrinsic IsIsomorphicHyperelliptic(X1::CrvHyp, X2::CrvHyp : geometric := false, covariant := true, commonfield := false) ->  BoolElt, List
+{Returns a boolean indicating whether a matrix T and a scalar e exist that induce an isomorphism X1 --> X2, as well as a full list of all such pairs.}
 
 assert BaseRing(X1) eq BaseRing(X2);
 K := BaseRing(X1); assert Characteristic(K) ne 2;
@@ -1013,19 +1014,8 @@ f1, h1 := HyperellipticPolynomials(X1);
 f2, h2 := HyperellipticPolynomials(X2);
 g1 := 4*f1 + h1^2; g2 := 4*f2 + h2^2;
 d1 := 2*((Degree(g1) + 1) div 2); d2 := 2*((Degree(g2) + 1) div 2);
-if not d1 eq d2 then
-    if commonfield then
-        return false, [ ];
-    else
-        return false, [* *];
-    end if;
-end if;
-
-test, Ls := IsGL2GeometricEquivalent(g1, g2, d1 : geometric := geometric, covariant := covariant, commonfield := commonfield);
-if commonfield then
-    return test, [ Transpose(Matrix(2, 2, L)) : L in Ls ];
-else
-    return test, [* Transpose(Matrix(2, 2, L)) : L in Ls *];
-end if;
+if not d1 eq d2 then return false, [* *]; end if;
+test, Ts := IsGL2Equivalent(g1, g2, d1 : geometric := geometric, covariant := covariant, commonfield := commonfield);
+return test, [* Transpose(T) : T in Ts *];
 
 end intrinsic;
