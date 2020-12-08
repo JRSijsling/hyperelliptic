@@ -379,6 +379,7 @@ function G3ModelsInCharFF_G8_5(JI : geometric := false)
 	k2 := x^3 - 27*I^3/J^2*x - 27*I^3/J^2;
 
 	ret, ML := IsGL2Equivalent(Parent(x)!k_cov[1], k2, 4);
+        ML := [* Eltseq(c) : c in ML *];
 
 	f2 := MActOnC(Parent(x)!f1, 8, Matrix(2, 2, ML[1]));
 	f2 := f2/LeadingCoefficient(f2);
@@ -433,6 +434,7 @@ function G3ModelsInCharFF_G8_5(JI : geometric := false)
     /* a faster version of that follows
 
     ret, MLc := IsGL2Equivalent(f, fc, 8);
+    MLc := [* Eltseq(c) : c in MLc *];
     error if ret eq false,
 	"[Hyperelliptic] No galois geometric automorphism found in G3ModelsInCharFF_G8_5";
     M := Matrix(2, 2, MLc[1])^(-1);

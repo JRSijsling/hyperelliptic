@@ -790,7 +790,7 @@ if #MFL eq 0 then
     return false, [ ];
 end if;
 
-/* Normalize */
+/* Normalize by row */
 MFL0 := [ ];
 for MF in MFL do
     MF0 := [* *];
@@ -1005,6 +1005,15 @@ return test, [* Matrix(2,2, seq) : seq in seqs *];
 end intrinsic;
 
 
+function Normalize22Column(T)
+
+col := Eltseq(Rows(Transpose(T))[1]);
+i0 := Minimum([ i : i in [1..#col] | col[i] ne 0 ]);
+return (1/col[i0])*T;
+
+end function;
+
+
 intrinsic IsIsomorphicHyperelliptic(X1::CrvHyp, X2::CrvHyp : geometric := false, covariant := true, commonfield := false) ->  BoolElt, List
 {Returns a boolean indicating whether a matrix T and a scalar e exist that induce an isomorphism X1 --> X2, as well as a full list of all such pairs.}
 
@@ -1015,7 +1024,104 @@ f2, h2 := HyperellipticPolynomials(X2);
 g1 := 4*f1 + h1^2; g2 := 4*f2 + h2^2;
 d1 := 2*((Degree(g1) + 1) div 2); d2 := 2*((Degree(g2) + 1) div 2);
 if not d1 eq d2 then return false, [* *]; end if;
-test, Ts := IsGL2Equivalent(g1, g2, d1 : geometric := geometric, covariant := covariant, commonfield := commonfield);
-return test, [* Transpose(T) : T in Ts *];
+test, Ts := IsGL2Equivalent(g2, g1, d1 : geometric := geometric, covariant := covariant, commonfield := commonfield);
+if not test then return false, [* *]; end if;
+
+if not geometric then
+    pairs := [* *];
+    for T in Ts do
+        U := Normalize22Column(T);
+        K := BaseRing(U);
+        R := PolynomialRing(K);
+        h1 := &+[ (K ! Coefficient(g1, j))*R.1^j : j in [0..Degree(g1)] ];
+        h2 := &+[ (K ! Coefficient(g2, j))*R.1^j : j in [0..Degree(g2)] ];
+        scal := K ! (TransformPolynomial(h2, d2, Eltseq(U))/h1);
+        test, e := IsSquare(scal);
+        if test then
+            Append(~pairs, [* U, e *]);
+            Append(~pairs, [* U, -e *]);
+        end if;
+    end for;
+    return #pairs ne 0, pairs;
+end if;
+
+/* Either elementwise */
+if not commonfield then
+    pairs := [* *];
+    for T in Ts do
+        U := Normalize22Column(T);
+        K := BaseRing(U);
+        R := PolynomialRing(K);
+        h1 := &+[ (K ! Coefficient(g1, j))*R.1^j : j in [0..Degree(g1)] ];
+        h2 := &+[ (K ! Coefficient(g2, j))*R.1^j : j in [0..Degree(g2)] ];
+        scal := K ! (TransformPolynomial(h2, d2, Eltseq(U))/h1);
+        test, e := IsSquare(scal);
+        if test then
+            Append(~pairs, [* U, e *]);
+            Append(~pairs, [* U, -e *]);
+        else
+            L := ext< BaseRing(U) | R.1^2 - scal >;
+            e := L.1; assert e^2 eq scal;
+            Append(~pairs, [* ChangeRing(U, L), e *]);
+            Append(~pairs, [* ChangeRing(U, L), -e *]);
+        end if;
+    end for;
+    return #pairs ne 0, pairs;
+end if;
+
+/* Or keep extending */
+pairs := [* *]; i := 0;
+Us := [* Normalize22Column(T) : T in Ts *];
+repeat
+    i +:= 1;
+    U := Us[i];
+    K := BaseRing(U);
+    R := PolynomialRing(K);
+    h1 := &+[ (K ! Coefficient(g1, j))*R.1^j : j in [0..Degree(g1)] ];
+    h2 := &+[ (K ! Coefficient(g2, j))*R.1^j : j in [0..Degree(g2)] ];
+    scal := K ! (TransformPolynomial(h2, d2, Eltseq(U))/h1);
+    test, e := IsSquare(scal);
+    if test then
+        Append(~pairs, [* U, e *]);
+        Append(~pairs, [* U, -e *]);
+    else
+        L := SplittingField(R.1^2 - scal);
+        RL := PolynomialRing(L);
+        e := Roots(RL.1^2 - (L ! scal))[1][1]; assert e^2 eq (L ! scal);
+        hom1 := HomFromRoot(K, L, L ! K.1);
+        Us := [* ConjugateMatrix(hom1, U) : U in Us *];
+        pairs := [* [* ConjugateMatrix(hom1, pairs[1]), hom1(pairs[2]) *] : pair in pairs *];
+        U := ConjugateMatrix(hom1, U);
+
+        F := BaseRing(K);
+        rt := hom1(K ! F.1);
+        hom2 := MakeRelativeFromRoot(F, L, rt);
+        Us := [* ConjugateMatrix(hom2, U) : U in Us *];
+        pairs := [* [* ConjugateMatrix(hom2, pairs[1]), hom2(pairs[2]) *] : pair in pairs *];
+        U := ConjugateMatrix(hom2, U);
+        e := hom2(e);
+        Append(~pairs, [* U, -e *]);
+        Append(~pairs, [* U, e *]);
+    end if;
+until i eq #Ts;
+return #pairs ne 0, pairs;
+
+end intrinsic;
+
+
+intrinsic AutomorphismGroupBinary(f::RngUPolElt, deg::RngIntElt: geometric := false, covariant := true, commonfield := false) -> List
+{Returns a full list of matrices T.}
+
+test, pairs := IsGL2Equivalent(f, f, deg : geometric := geometric, covariant := covariant, commonfield := commonfield);
+return pairs;
+
+end intrinsic;
+
+
+intrinsic AutomorphismGroupHyperelliptic(X::CrvHyp : geometric := false, covariant := true, commonfield := false) -> List
+{Returns a full list of pairs (T, e).}
+
+test, pairs := IsIsomorphicHyperelliptic(X, X : geometric := geometric, covariant := covariant, commonfield := commonfield);
+return pairs;
 
 end intrinsic;

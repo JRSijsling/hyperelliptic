@@ -259,6 +259,7 @@ function G3Models_C2x3(JI : geometric:= false, descent:= true)
 	    end if;
 
 	    ret, ML:= IsGL2Equivalent(Parent(x)!CK3, k2, 4);
+	    ML := [* Eltseq(c) : c in ML *];
 
 	    f:= MActOnC(Parent(x)!fK3, 8, Matrix(2, 2, ML[1]));
 	    f:= f/LeadingCoefficient(f);
