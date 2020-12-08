@@ -40,5 +40,4 @@ while true do
     time _, IsoLst := IsIsomorphicHyperelliptic(X, Y : geometric := false, covariant := false);
     print T;
     print IsoLst[1];
-    print BaseRing(IsoLst[1]);
 end while;

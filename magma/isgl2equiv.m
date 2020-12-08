@@ -1090,16 +1090,18 @@ repeat
         e := Roots(RL.1^2 - (L ! scal))[1][1]; assert e^2 eq (L ! scal);
         hom1 := HomFromRoot(K, L, L ! K.1);
         Us := [* ConjugateMatrix(hom1, U) : U in Us *];
-        pairs := [* [* ConjugateMatrix(hom1, pairs[1]), hom1(pairs[2]) *] : pair in pairs *];
+        pairs := [* [* ConjugateMatrix(hom1, pair[1]), hom1(pair[2]) *] : pair in pairs *];
         U := ConjugateMatrix(hom1, U);
 
-        F := BaseRing(K);
-        rt := hom1(K ! F.1);
-        hom2 := MakeRelativeFromRoot(F, L, rt);
-        Us := [* ConjugateMatrix(hom2, U) : U in Us *];
-        pairs := [* [* ConjugateMatrix(hom2, pairs[1]), hom2(pairs[2]) *] : pair in pairs *];
-        U := ConjugateMatrix(hom2, U);
-        e := hom2(e);
+        if Type(K) eq FldNum then
+            F := BaseRing(K);
+            rt := hom1(K ! F.1);
+            hom2 := MakeRelativeFromRoot(F, L, rt);
+            Us := [* ConjugateMatrix(hom2, U) : U in Us *];
+            pairs := [* [* ConjugateMatrix(hom2, pair[1]), hom2(pair[2]) *] : pair in pairs *];
+            U := ConjugateMatrix(hom2, U);
+            e := hom2(e);
+        end if;
         Append(~pairs, [* U, -e *]);
         Append(~pairs, [* U, e *]);
     end if;
