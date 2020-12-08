@@ -19,7 +19,7 @@ AttachSpec("~/Programs/hyperelliptic/magma/spec");
 Usage
 --
 
-Example that tests the routines in this package can be found in the directory `examples`.
+Examples that test the routines in this package can be found in the directory `examples`.
 
 Verbose comments are enabled by
 ```
