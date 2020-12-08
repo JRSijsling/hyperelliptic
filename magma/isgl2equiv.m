@@ -773,6 +773,7 @@ end function;
 
 function CheckNormalizeToCommonBase(ret, MFL, Q1L, _f, _F, deg : geometric := true, commonfield := false);
 
+MFL := [* [* Eltseq(M) : M in MF *] : MF in MFL *];
 Q := BaseRing(Parent(_f));
 /* Throw away irrelevant entries */
 ks := [ k : k in [1..#MFL] | #MFL[k] ne 0 ];

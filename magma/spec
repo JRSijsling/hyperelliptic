@@ -13,4 +13,8 @@
   {
     +g3twists.spec
   }
+  twists
+  {
+    twists.m
+  }
 }
