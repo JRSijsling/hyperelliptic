@@ -279,7 +279,7 @@ function G3Char3Models_C2x3(JI : geometric:= false, descent:= true)
 
 	       k2:= x^3 + JCK3[1]*x^2 + 2*JCK3[2]/JCK3[1]^3;
 
-	       ret, ML:= IsGL2Equivalent(Parent(x)!CK3, k2, 4);
+	       ret, ML:= IsGL2EquivalentNew(Parent(x)!CK3, k2, 4);
 	       ML := [* Eltseq(c) : c in ML *];
 
 	       f:= MActOnC(Parent(x)!fK3, 8, Matrix(2, 2, ML[1]));

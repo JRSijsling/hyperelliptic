@@ -93,7 +93,7 @@ intrinsic HyperellipticPolynomialTwists(f::RngUPolElt, n::RngIntElt) -> SeqEnum[
 
     /* Geometric isomorphisms */
     SF := SplittingField(f); FF := CoefficientRing(f);
-    _, GeomIsom := IsGL2Equivalent(PolynomialRing(SF)!f, PolynomialRing(SF)!f, n);
+    _, GeomIsom := IsGL2EquivalentNew(PolynomialRing(SF)!f, PolynomialRing(SF)!f, n);
     GeomIsom := [* Eltseq(c) : c in GeomIsom *];
     AutGrp := {@ Matrix(2, 2, M) : M in GeomIsom @};
 
@@ -165,7 +165,7 @@ intrinsic HyperellipticPolynomialTwists(f::RngUPolElt, n::RngIntElt) -> SeqEnum[
     Twists := []; eps := PrimitiveElement(FF);
     for f in LTwists do
 	Append(~Twists, f);
-	fp := eps*f; _, list := IsGL2Equivalent(f, fp, n);
+	fp := eps*f; _, list := IsGL2EquivalentNew(f, fp, n);
         list := [* Eltseq(c) : c in list *];
 	for t in list do
 	    g := MActOnC(f, n, Matrix(2, 2, t));

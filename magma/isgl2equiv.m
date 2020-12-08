@@ -977,11 +977,15 @@ while ret eq true and #MFL eq 0 and nbtry lt 20 do
     if not (ret eq true and #MFL eq 0) then
         return ret, MFL, Q1L;
     end if;
-
 end while;
 
 /* Classical one in the very rare cases where nothing else was possible
    (this may happen by accident and over small finite fields) */
+if not geometric then
+    ret, MF := IsGL2Equivalent(_f, _F, deg);
+    MFL := [* MF *]; Q1L := [* Q.1 *];
+    return ret, MFL, Q1L;
+end if;
 if Type(Q) eq FldFin then
     L := SplittingField(_f*_F);
 else
@@ -994,7 +998,7 @@ return ret, MFL, Q1L;
 end function;
 
 
-intrinsic IsGL2Equivalent(f1::RngUPolElt, f2::RngUPolElt, deg::RngIntElt: geometric := false, covariant := true, commonfield := false) -> BoolElt, List
+intrinsic IsGL2EquivalentNew(f1::RngUPolElt, f2::RngUPolElt, deg::RngIntElt: geometric := false, covariant := true, commonfield := false) -> BoolElt, List
 {Returns a boolean indicating whether a matrix T exists such that f1*T is a multiple of f2, as well as a full list of all such matrices.}
 
 /* Refer and normalize back */
@@ -1025,7 +1029,7 @@ f2, h2 := HyperellipticPolynomials(X2);
 g1 := 4*f1 + h1^2; g2 := 4*f2 + h2^2;
 d1 := 2*((Degree(g1) + 1) div 2); d2 := 2*((Degree(g2) + 1) div 2);
 if not d1 eq d2 then return false, [* *]; end if;
-test, Ts := IsGL2Equivalent(g2, g1, d1 : geometric := geometric, covariant := covariant, commonfield := commonfield);
+test, Ts := IsGL2EquivalentNew(g2, g1, d1 : geometric := geometric, covariant := covariant, commonfield := commonfield);
 if not test then return false, [* *]; end if;
 
 if not geometric then
@@ -1115,7 +1119,7 @@ end intrinsic;
 intrinsic AutomorphismGroupBinary(f::RngUPolElt, deg::RngIntElt: geometric := false, covariant := true, commonfield := false) -> List
 {Returns a full list of matrices T.}
 
-test, pairs := IsGL2Equivalent(f, f, deg : geometric := geometric, covariant := covariant, commonfield := commonfield);
+test, pairs := IsGL2EquivalentNew(f, f, deg : geometric := geometric, covariant := covariant, commonfield := commonfield);
 return pairs;
 
 end intrinsic;
