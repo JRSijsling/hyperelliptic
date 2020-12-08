@@ -27,7 +27,7 @@ SetVerbose("Hyperelliptic", n);
 ```
 where `n` is either `1` or `2`. A higher value gives more comments.
 
-A basic use of the package is as follows.
+Basic use of the package is as follows.
 
 * Compute Shioda Invariants [J2, J3, J4, J5, J6, J7, J8, J9, J10] of a genus 3
   hyperelliptic curve
