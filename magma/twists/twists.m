@@ -245,12 +245,6 @@ intrinsic GeneralTwists(C::Crv) -> Any
         return TwistsOverFiniteField(C,Aut), ProjectiveMatrixGroup(Aut);
       end if;
     end if;
-  else
-    if Genus(C) eq 3 and Characteristic(F) ge 11 then
-      _,Aut:= IsIsomorphicQuartic(C,C : geometric:=true);
-      Aut := [ NormalizedM(Transpose(A^(-1))) : A in Aut ];
-      return TwistsOverFiniteField(C,Aut), ProjectiveMatrixGroup(Aut);
-    end if;
   end if;
   return "twists not implemented";
 end intrinsic;
