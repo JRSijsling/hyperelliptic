@@ -176,7 +176,31 @@ intrinsic HyperellipticPolynomialTwists(f::RngUPolElt, n::RngIntElt) -> SeqEnum[
 	Append(~Twists, fp);
     end for;
 
-//    #Twists, "polynomials finally found.";
+    //    #Twists, "polynomials finally found.";
+
+    // Verification...
+function NormalizedM(M)
+
+    for j := 1 to Nrows(M) do
+        for i := 1 to Nrows(M) do
+            if M[i,j] ne 0 then return (1 / M[i,j]) * M; end if;
+        end for;
+    end for;
+
+    return M;
+end function;
+
+    H := HyperellipticCurve(f);
+
+    _, Aut:= IsIsomorphicHyperelliptic(H, H : geometric := true, commonfield := true);
+    Aut := [* A[1] : A in Aut *];
+    Aut := [ NormalizedM(Transpose(A^(-1))) : A in Aut ];
+
+    twists := TwistsOverFiniteField(H, Aut);
+
+    require #twists eq #Twists :
+        "A bug !!!";
+    // ... done
 
     return Twists;
 

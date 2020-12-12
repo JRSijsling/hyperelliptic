@@ -593,7 +593,7 @@ function ShiodaInvariantsChar2_T1111(abcde :
 
     if degmax le 1 then	return JI, Wght; end if;
 
-    SIV4 := Explode(ShiodaInvariantsV4(abcde : degmax := degmax, degmin := degmin));
+    SIV4 := ShiodaInvariantsV4(abcde : degmax := degmax, degmin := degmin);
 
     // j2
     if degmin le 2 then

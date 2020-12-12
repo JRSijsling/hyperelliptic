@@ -93,7 +93,6 @@
  * intrinsic TwistedHyperellipticPolynomialsFromShiodaInvariants(JI::SeqEnum[FldFinElt]) -> SeqEnum[CrvHyp], GrpPerm
  * intrinsic TwistsFromShiodaInvariants(JI::SeqEnum[FldFinElt]) -> SeqEnum[CrvHyp], GrpPerm
  *
- * intrinsic TwistsOfGenus3HyperellipticCurve(H::CrvHyp) -> SeqEnum[CrvHyp], GrpPerm
  * intrinsic TwistsOfGenus3HyperellipticPolynomials(f::RngUPolElt) -> SeqEnum[RngUPolElt], GrpPerm
  * intrinsic TwistsOfGenus3HyperellipticPolynomials(fh::SeqEnum[RngUPolElt]) -> SeqEnum[CRngUPolElt], GrpPerm
  *
@@ -1788,14 +1787,6 @@ intrinsic TwistsFromShiodaInvariants(JI::SeqEnum[FldFinElt]) -> SeqEnum[CrvHyp],
     twists, aut := TwistedHyperellipticPolynomialsFromShiodaInvariants(JI);
 
     return [HyperellipticCurve(fh) : fh in twists], aut;
-
-end intrinsic;
-
-intrinsic TwistsOfGenus3HyperellipticCurve(H::CrvHyp) -> SeqEnum[CrvHyp], GrpPerm
-    {Compute twisted  hyperelliptic curves and their automorphism groups from
-    a genus 3 hyperelliptic curve.}
-
-    return TwistsFromShiodaInvariants(ShiodaInvariants(H));
 
 end intrinsic;
 

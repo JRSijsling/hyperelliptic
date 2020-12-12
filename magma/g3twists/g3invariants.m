@@ -210,7 +210,6 @@ intrinsic ShiodaInvariants(fh::SeqEnum :
 
     if Characteristic(K) eq 2 then
         JI, Wght := ShiodaInvariantsChar2(f, h :
-            normalize := normalize,
             PrimaryOnly := PrimaryOnly,
             degmax := degmax, degmin := degmin);
 

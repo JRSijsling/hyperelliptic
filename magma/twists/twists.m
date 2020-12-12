@@ -303,6 +303,8 @@ intrinsic Twists(H::CrvHyp : AutomorphismGroup := false) -> SeqEnum[CrvHyp], Grp
 
     g := Genus(H);
 
+    /* Temporary commented, the time to make things more robust...
+
     if g eq 2 then
         twists, aut := G2Models(IgusaInvariants(H));
         if AutomorphismGroup then return twists, aut; end if;
@@ -314,6 +316,7 @@ intrinsic Twists(H::CrvHyp : AutomorphismGroup := false) -> SeqEnum[CrvHyp], Grp
         if AutomorphismGroup then return twists, aut; end if;
         return twists;
     end if;
+    */
 
     require Characteristic(F) ge 3 :
         "2 must be invertible in the base ring.";
