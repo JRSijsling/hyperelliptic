@@ -99,8 +99,6 @@
  *
  * intrinsic HyperellipticCurveFromG2Invariants(GI::SeqEnum : RationalModel := false) -> CrvHyp, GrpPerm
  * intrinsic HyperellipticCurveFromIgusaInvariants(JI::SeqEnum : RationalModel := false) -> CrvHyp, GrpPerm
- * intrinsic Twists(GI::SeqEnum) -> SeqEnum[CrvHyp], GrpPerm
- * intrinsic Twists(H::CrvHyp) -> SeqEnum[CrvHyp], GrpPerm
  * intrinsic GeometricAutomorphismGroup(GI:SeqEnum) -> GrpPerm
  * intrinsic GeometricAutomorphismGroup(H::CrvHyp) -> GrpPerm
  * intrinsic GeometricAutomorphismGroupClassification(FF::FldFin) -> SeqEnum,SeqEnum
@@ -1220,8 +1218,6 @@ intrinsic HyperellipticCurveFromG2Invariants(GI::SeqEnum : RationalModel := fals
 
 end intrinsic;
 
-
-
  /***
   * Twists
   *
@@ -1243,17 +1239,17 @@ intrinsic Twists(II::SeqEnum[FldFinElt]) -> SeqEnum[CrvHyp], GrpPerm
 
 end intrinsic;
 
-intrinsic Twists(H::CrvHyp) -> SeqEnum[CrvHyp], GrpPerm
+intrinsic TwistsFromIgusaInvariants(JI::SeqEnum[FldFinElt]) -> SeqEnum[CrvHyp], GrpPerm
     {Compute twisted  hyperelliptic curves and their automorphism groups from
-    an hyperlliptic curve of genus 2.}
+    Igusa invariants.}
 
-    require Genus(H) eq 2 :
-	"Curve must be of genus 2.";
+    require #JI eq 5 or #JI eq 6 :
+	"Argument must be a sequence of 5 (or possibly 6) Igusa invariants.";
 
-    require Type(CoefficientRing(H)) eq FldFin :
+    require Type(Universe(JI)) eq FldFin :
 	"Twist computations only available in finite fields";
 
-    twists, aut := G2Models(IgusaInvariants(H));
+    twists, aut := G2Models(JI);
     return twists, aut;
 
 end intrinsic;

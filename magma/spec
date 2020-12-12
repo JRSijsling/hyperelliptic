@@ -15,6 +15,6 @@
   }
   twists
   {
-    twists.m
+    +twists.spec
   }
 }
