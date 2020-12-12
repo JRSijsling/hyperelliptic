@@ -24,7 +24,7 @@ f:=x^12-1;
 //f:= x^6 + x^3 + 3;
 C:=HyperellipticCurve(f);
 g:=Genus(C);
-T1:=GeneralTwists(C);
+T1:=Twists(C);
 
 X1 := T1[1];
 X2 := T1[2];

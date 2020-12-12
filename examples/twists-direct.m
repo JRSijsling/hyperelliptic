@@ -23,7 +23,7 @@ f:=x^12-1;
 //f:= x^6 + x^3 + 3;
 C:=HyperellipticCurve(f);
 g:=Genus(C);
-T1:=GeneralTwists(C);
+T1:=Twists(C);
 
 #T1;
 [[[i,j] : j in [i+1..#T1], i in [1..#T1-1] | IsIsomorphicHyperelliptic(T1[i],T1[j])]];
@@ -68,7 +68,7 @@ while p le 30 do
         for M in Aut do Embed(BaseRing(M),F2); end for;
         Aut:=[ChangeRing(M,GF(p^e)) : M in Aut];
         T1:=TwistsOverFiniteField(H,Aut) ;
-        if #T1 ne #HL then print H,#T1,#HL,#Aut, 
+        if #T1 ne #HL then print H,#T1,#HL,#Aut,
                 [[[i,j] : j in [i+1..#T1], i in [1..#T1-1] | IsIsomorphic(T1[i],T1[j])]]; end if;
         end for;
         p:=NextPrime(p);
@@ -103,7 +103,7 @@ repeat
                         for M in Aut do Embed(BaseRing(M),F2); end for;
                         Aut:=[ChangeRing(M,GF(p^e)) : M in Aut];
                         T1:=TwistsOverFiniteField(H,Aut) ;
-                        if #T1 ne #HL then print H,#T1,#HL,#Aut, 
+                        if #T1 ne #HL then print H,#T1,#HL,#Aut,
                                 [[[i,j] : j in [i+1..#T1], i in [1..#T1-1] | IsIsomorphic(T1[i],T1[j])]]; end if;
                 end if;
         end for;
