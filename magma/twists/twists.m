@@ -203,6 +203,7 @@ function ReducedAutomorphismGroupOfTwistDefinedOverF(Aut, f, A, g)
         boo, B := IsDefinedOver(B,F);
         if boo then
             Append(~L,B);
+            // M; Evaluate(ft,(B[1,1]*x+B[1,2])/(B[2,1]*x+B[2,2]))*(B[2,1]*x+B[2,2])^(2*g+2)/ft;
             Append (~eN,F!(Evaluate(ft,(B[1,1]*x+B[1,2])/(B[2,1]*x+B[2,2]))*(B[2,1]*x+B[2,2])^(2*g+2)/ft));
         end if;
     end for;
@@ -236,6 +237,12 @@ function ProjectiveMatrixGroup(L)
     // return [MM!psi(h) : h in I], I;
 
     return I;
+end function;
+
+function Normalize22Column(T)
+    col := Eltseq(Rows(Transpose(T))[1]);
+    i0 := Minimum([ i : i in [1..#col] | col[i] ne 0 ]);
+    return (1/col[i0]) * T;
 end function;
 
 /* Given a projective curve C and its Automorphism group Aut
@@ -303,7 +310,7 @@ intrinsic Twists(H::CrvHyp : AutomorphismGroup := false) -> SeqEnum[CrvHyp], Grp
 
     g := Genus(H);
 
-    /* Temporary commented, the time to make things more robust...
+    /* Temporary commented, the time to make things more robust
 
     if g eq 2 then
         twists, aut := G2Models(IgusaInvariants(H));
@@ -321,11 +328,14 @@ intrinsic Twists(H::CrvHyp : AutomorphismGroup := false) -> SeqEnum[CrvHyp], Grp
     require Characteristic(F) ge 3 :
         "2 must be invertible in the base ring.";
 
-    _, Aut:= IsIsomorphicHyperelliptic(H, H : geometric := true, commonfield := true);
-    Aut := [* A[1] : A in Aut *];
-    Aut := [ NormalizedM(Transpose(A^(-1))) : A in Aut ];
+    f, h := HyperellipticPolynomials(H);
+    g := 4*f + h^2;
+    d := 2*((Degree(g) + 1) div 2);
 
-    twists := TwistsOverFiniteField(H, Aut);
+    _, Aut := IsGL2EquivalentNew(f, f, d : geometric := true, commonfield := true);
+
+    twists := TwistsOverFiniteField(HyperellipticCurve(g), [ Normalize22Column(A) : A in Aut ]);
+
     if AutomorphismGroup then return twists, ProjectiveMatrixGroup(Aut); end if;
     return twists;
 

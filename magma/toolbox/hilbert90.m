@@ -86,122 +86,20 @@ function Glasby(_M, sigma, Fq)
    return X;
 end function;
 
+function Normalize22Column(T)
+    col := Eltseq(Rows(Transpose(T))[1]);
+    i0 := Minimum([ i : i in [1..#col] | col[i] ne 0 ]);
+    return (1/col[i0]) * T;
+end function;
 
 intrinsic HyperellipticPolynomialTwists(f::RngUPolElt, n::RngIntElt) -> SeqEnum[RngUPolElt]
     {Found polynomials fp s.t. the curves y^2 = f(x) and y^2 = fp(x) are
     twisted each other.}
 
-    /* Geometric isomorphisms */
-    SF := SplittingField(f); FF := CoefficientRing(f);
-    _, GeomIsom := IsGL2EquivalentNew(PolynomialRing(SF)!f, PolynomialRing(SF)!f, n);
-    GeomIsom := [* Eltseq(c) : c in GeomIsom *];
-    AutGrp := {@ Matrix(2, 2, M) : M in GeomIsom @};
+    _, Aut := IsGL2EquivalentNew(f, f, n : geometric := true, commonfield := true);
 
-    /* Galois Cohomology Classes */
-    _, phi := AutomorphismGroup(ProjectiveSpace(SF, 1)); /* Undirectly PGL2 */
+    Twists := TwistsOverFiniteField(HyperellipticCurve(f), [ Normalize22Column(A) : A in Aut ]);
 
-    tau := FrobeniusMap(SF, FF);
-    FL1 := AutGrp; FL0 := [];
-    while #FL1 gt 0 do
-	V := FL1[1]; CUR := {@@};
-	for B in FL1 do
-	    for A in AutGrp do
-		if phi(MConj(A, tau) * Matrix(V)) eq phi(B * A) then
-		    CUR join:= {@ B @}; continue B;
-		end if;
-	    end for;
-	end for;
-	FL1 := FL1 diff CUR; Append(~FL0, CUR);
-    end while;
-
-    /* Computing a twist for each class */
-    LTwists := [];
-    for CUR in FL0 do
-
-	/* Is the current representative equivalent to the identity ? */
-	Mt := CUR[1];
-//	""; "***";
-//	"Starting from", Mt;"";
-//	"#CUR is", #CUR;
-	if Identity(Parent(Mt)) in CUR then
-	    Append(~LTwists, f); continue;
-	end if;
-
-	/* Otherwise, let us get its cohomologic order */
-	tau := FrobeniusMap(SF, FF);
-	MM := Mt; ord := 1;
-	while not IsScalar(MM) or
-	    not ((MM[1, 1] in FF) and (MM[2, 2] in FF) and (MM[1, 1] eq MM[2, 2])) do
-	    ord +:= 1; MM :=  MConj(MM, tau)*Mt;
-	end while;
-	ord := LCM(Degree(SF), ord) div Degree(SF);
-//	"Ord =", ord, "to be compared to", #GeomIsom div #CUR;
-
-        /* Let us construct the right extension... */
-	RF :=  ext<SF |  IrreduciblePolynomial(SF, ord)>;
-	sigma := FrobeniusMap(RF, FF);
-
-	/* ... and find the decomposition */
-	A := Glasby(ChangeRing(Mt, RF), sigma, FF);
-
-	if A eq 0 then /* Should not happen... */
-	    "HUMM..., no rational model found .....";
-	    "JI :=", ShiodaInvariants(f), ";";
-	    continue;
-	end if;
-
-	/* And ftilde */
-	ftilde  :=  MActOnC(ChangeRing(f, RF), n, A^(-1));
-	ftilde /:= Coefficient(ftilde, Degree(ftilde));
-	ftilde  := PolynomialRing(FF)!Eltseq(ftilde);
-
-//	"Found", ftilde;
-
-	Append(~LTwists, ftilde);
-
-    end for;
-
-    /* Computing the quadratic twists and check the non isomorphism */
-    Twists := []; eps := PrimitiveElement(FF);
-    for f in LTwists do
-	Append(~Twists, f);
-	fp := eps*f; _, list := IsGL2EquivalentNew(f, fp, n);
-        list := [* Eltseq(c) : c in list *];
-	for t in list do
-	    g := MActOnC(f, n, Matrix(2, 2, t));
-	    c := LeadingCoefficient(g)/LeadingCoefficient(fp);
-	    fl, _ := IsSquare(c);
-	    if fl then continue f; end if;
-	end for;
-	Append(~Twists, fp);
-    end for;
-
-    //    #Twists, "polynomials finally found.";
-
-    // Verification...
-function NormalizedM(M)
-
-    for j := 1 to Nrows(M) do
-        for i := 1 to Nrows(M) do
-            if M[i,j] ne 0 then return (1 / M[i,j]) * M; end if;
-        end for;
-    end for;
-
-    return M;
-end function;
-
-    H := HyperellipticCurve(f);
-
-    _, Aut:= IsIsomorphicHyperelliptic(H, H : geometric := true, commonfield := true);
-    Aut := [* A[1] : A in Aut *];
-    Aut := [ NormalizedM(Transpose(A^(-1))) : A in Aut ];
-
-    twists := TwistsOverFiniteField(H, Aut);
-
-    require #twists eq #Twists :
-        "A bug !!!";
-    // ... done
-
-    return Twists;
+    return [HyperellipticPolynomials(g) : g in Twists];
 
 end intrinsic;

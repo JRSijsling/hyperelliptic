@@ -301,7 +301,7 @@ procedure GeometricRoots(f, ~LST : geometric := true, commonfield := false)
         return;
     end if;
 
-    Q := CoefficientRing(f); 
+    Q := CoefficientRing(f);
     /* Single splitting field extension */
     if commonfield then
         if Type(Q) eq FldFin then
@@ -846,7 +846,7 @@ if not commonfield then
 else
     if #MFL eq 1 then
         MF := MFL[1];
-    else 
+    else
         L1 := Parent(MFL[1][1][1]); Q1 := Q1L[1]; assert Q1 in L1;
         L2 := Parent(MFL[2][1][1]); Q2 := Q1L[1]; assert Q2 in L2;
         L, h1, h2, h := CombineSplittingFields(Q, L1, L2);
