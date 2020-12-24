@@ -70,7 +70,7 @@ function ShiodaInvariantsChar5(F :
     j10 := (1/1337415067238400000) * J10s;	/* [ <2, 28>, <3, 13>, <5, 5> ] */
 
     // Degree 1
-    if not PrimaryOnly and degmin le 1 then
+    if degmin le 1 then
         if Characteristic(Polring) ne 0 then
             Append(~JI, a4); Append(~Wght, 1);
         else
@@ -80,19 +80,21 @@ function ShiodaInvariantsChar5(F :
     if degmax le 1 then return JI, Wght; end if;
 
     // Degree 4
-    if not PrimaryOnly and degmin le 4 then
+    if degmin le 4 then
         Kx := j4;
         Append(~JI, ConvFct(Kx, Polring)); Append(~Wght, 4);
     end if;
     if degmax le 4 then return JI, Wght; end if;
 
     // Degree 6
-    if not PrimaryOnly and degmin le 6 then
+    if degmin le 6 then
         Kx := j6;
         Append(~JI, ConvFct(Kx, Polring)); Append(~Wght, 6);
 
-        Kx := -26/125*j2^3 - 93/125*j3^2 - 2/5*j2*j4;
-        Append(~JI, ConvFct(Kx, Polring)); Append(~Wght, 6);
+        if not PrimaryOnly then
+            Kx := -26/125*j2^3 - 93/125*j3^2 - 2/5*j2*j4;
+            Append(~JI, ConvFct(Kx, Polring)); Append(~Wght, 6);
+        end if;
     end if;
     if degmax le 6 then return JI, Wght; end if;
 
@@ -136,24 +138,28 @@ function ShiodaInvariantsChar5(F :
     if degmax le 11 then return JI, Wght; end if;
 
     // Degree 12
-    if not PrimaryOnly and degmin le 12 then
+    if degmin le 12 then
         Kx := -91926/390625*j2^6 + 276414/390625*j2^3*j3^2 + 103226/390625*j3^4 +
             12991/15625*j2^4*j4 + 10838/15625*j2*j3^2*j4 + 54/125*j2^2*j4^2 +
             3/25*j4^3 + 1/125*j2^2*j3*j5 - 6/625*j3*j4*j5 + 18/625*j2*j5^2;
         Append(~JI, ConvFct(Kx, Polring)); Append(~Wght, 12);
 
-        Kx := -91861/390625*j2^6 + 38629/390625*j2^3*j3^2 - 307339/390625*j3^4 +
-            11761/15625*j2^4*j4 + 16823/15625*j2*j3^2*j4 + 129/125*j2^2*j4^2 -
-            22/25*j4^3 + 19/125*j2^2*j3*j5 - 26/625*j3*j4*j5 + 423/625*j2*j5^2 +
-            1/625*j2^3*j6 + 18/625*j3^2*j6 - 2/25*j2*j4*j6 + 14/125*j2*j3*j7 -
-            4/25*j5*j7 - 19/125*j2^2*j8 - 3/25*j4*j8 - 4/125*j3*j9 - 1/125*j2*j10;
-        Append(~JI, ConvFct(Kx, Polring)); Append(~Wght, 12);
+        if not PrimaryOnly then
 
-        Kx := -6548/15625*j2^6 - 48/15625*j2^3*j3^2 - 3687/15625*j3^4 - 333/3125*j2^4*j4 +
-            3506/3125*j2*j3^2*j4 + 6/25*j2^2*j4^2 - 2/5*j4^3 + 2/125*j2^2*j3*j5 -
-            2/125*j3*j4*j5 - 422/625*j2^3*j6 + 279/625*j3^2*j6 + 1/25*j2*j4*j6 -
-            3/25*j5*j7 - 2/25*j4*j8;
-        Append(~JI, ConvFct(Kx, Polring)); Append(~Wght, 12);
+            Kx := -91861/390625*j2^6 + 38629/390625*j2^3*j3^2 - 307339/390625*j3^4 +
+                11761/15625*j2^4*j4 + 16823/15625*j2*j3^2*j4 + 129/125*j2^2*j4^2 -
+                22/25*j4^3 + 19/125*j2^2*j3*j5 - 26/625*j3*j4*j5 + 423/625*j2*j5^2 +
+                1/625*j2^3*j6 + 18/625*j3^2*j6 - 2/25*j2*j4*j6 + 14/125*j2*j3*j7 -
+                4/25*j5*j7 - 19/125*j2^2*j8 - 3/25*j4*j8 - 4/125*j3*j9 - 1/125*j2*j10;
+            Append(~JI, ConvFct(Kx, Polring)); Append(~Wght, 12);
+
+            Kx := -6548/15625*j2^6 - 48/15625*j2^3*j3^2 - 3687/15625*j3^4 - 333/3125*j2^4*j4 +
+                3506/3125*j2*j3^2*j4 + 6/25*j2^2*j4^2 - 2/5*j4^3 + 2/125*j2^2*j3*j5 -
+                2/125*j3*j4*j5 - 422/625*j2^3*j6 + 279/625*j3^2*j6 + 1/25*j2*j4*j6 -
+                3/25*j5*j7 - 2/25*j4*j8;
+            Append(~JI, ConvFct(Kx, Polring)); Append(~Wght, 12);
+
+        end if;
 
     end if;
     if degmax le 12 then return JI, Wght; end if;
@@ -658,7 +664,9 @@ function ShiodaInvariantsChar5(F :
             309/15625*j2*j3*j5*j10 + 87/3125*j5^2*j10 + 102/3125*j2^2*j6*j10 -
             4/625*j4*j6*j10 - 229/3125*j3*j7*j10 + 7/3125*j2*j8*j10;
         Append(~JI, ConvFct(Kx, Polring)); Append(~Wght, 20);
+    end if;
 
+    if degmin le 20 then
         Kx :=       -483189171/30517578125*j2^10 - 42911319359/30517578125*j2^7*j3^2 -
             109793372712/30517578125*j2^4*j3^4 + 15685721353/30517578125*j2*j3^6 +
             109824543/244140625*j2^8*j4 + 1080496173/244140625*j2^5*j3^2*j4 -

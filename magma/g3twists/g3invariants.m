@@ -68,8 +68,10 @@ intrinsic ShiodaInvariants(f::RngUPolElt, p::RngIntElt :
     require Degree(f) le 8:
         "Polynomial must have degree at most 8.";
 
+    /*
     require not (p eq 5 and PrimaryOnly eq true) :
         "Primary invariants are not known in char 5";
+    */
 
     /* Rings of small characteristic  */
     if p eq 3 then
