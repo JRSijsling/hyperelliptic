@@ -4,13 +4,13 @@
   {
     +toolbox.spec
   }
-  g2twists
+  genus2
   {
-    +g2twists.spec
+    +genus2.spec
   }
-  g3twists
+  genus3
   {
-    +g3twists.spec
+    +genus3.spec
   }
   twists
   {
