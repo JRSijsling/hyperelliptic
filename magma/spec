@@ -1,6 +1,5 @@
 {
   Verbose.m
-  isgl2equiv.m
   toolbox
   {
     +toolbox.spec
