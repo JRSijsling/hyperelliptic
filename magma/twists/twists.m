@@ -332,7 +332,7 @@ intrinsic Twists(H::CrvHyp : AutomorphismGroup := false) -> SeqEnum[CrvHyp], Grp
     g := 4*f + h^2;
     d := 2*((Degree(g) + 1) div 2);
 
-    _, Aut := IsGL2EquivalentNew(f, f, d : geometric := true, commonfield := true);
+    _, Aut := IsGL2EquivalentExtended(f, f, d : geometric := true, commonfield := true);
 
     twists := TwistsOverFiniteField(HyperellipticCurve(g), [ Normalize22Column(A) : A in Aut ]);
 

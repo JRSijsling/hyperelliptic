@@ -29,7 +29,7 @@ T1:=Twists(C);
 [[[i,j] : j in [i+1..#T1], i in [1..#T1-1] | IsIsomorphicHyperelliptic(T1[i],T1[j])]];
 
 // part to be integrated
-_,Aut:=IsGL2EquivalentNew(f,f,2*g+2 : geometric := true, commonfield := true);
+_,Aut:=IsGL2EquivalentExtended(f,f,2*g+2 : geometric := true, commonfield := true);
 Aut:=[* NormalizedM(M) : M in Aut *];
 e:=Lcm([Degree(BaseRing(M)) : M in Aut]);
 p:=Characteristic(BaseRing(Aut[1]));
@@ -60,7 +60,7 @@ while p le 30 do
           H:=HyperellipticCurveFromG2Invariants([JL[1],JL[2],JL[3]]);
           HL:=Twists(H);
           f:=HyperellipticPolynomials(H);
-          _,Aut:=IsGL2EquivalentNew(f,f,2*g+2 : geometric := true, commonfield := true);
+          _,Aut:=IsGL2EquivalentExtended(f,f,2*g+2 : geometric := true, commonfield := true);
                 Aut:=[* NormalizedM(M) : M in Aut *];
         e:=Lcm([Degree(BaseRing(M)) : M in Aut]);
         p:=Characteristic(BaseRing(Aut[1]));
@@ -95,7 +95,7 @@ repeat
                         HL:=TwistedHyperellipticPolynomialsFromShiodaInvariants(j);
                         f:=HyperellipticPolynomials(H);
                         print f;
-                        _,Aut:=IsGL2EquivalentNew(f,f,2*g+2 : geometric := true, commonfield := true);
+                        _,Aut:=IsGL2EquivalentExtended(f,f,2*g+2 : geometric := true, commonfield := true);
                         Aut:=[* NormalizedM(M) : M in Aut *];
                         e:=Lcm([Degree(BaseRing(M)) : M in Aut]);
                         p:=Characteristic(BaseRing(Aut[1]));

@@ -96,7 +96,7 @@ intrinsic HyperellipticPolynomialTwists(f::RngUPolElt, n::RngIntElt) -> SeqEnum[
     {Found polynomials fp s.t. the curves y^2 = f(x) and y^2 = fp(x) are
     twisted each other.}
 
-    _, Aut := IsGL2EquivalentNew(f, f, n : geometric := true, commonfield := true);
+    _, Aut := IsGL2EquivalentExtended(f, f, n : geometric := true, commonfield := true);
 
     Twists := TwistsOverFiniteField(HyperellipticCurve(f), [ Normalize22Column(A) : A in Aut ]);
 
