@@ -310,8 +310,6 @@ intrinsic Twists(H::CrvHyp : AutomorphismGroup := false) -> SeqEnum[CrvHyp], Grp
 
     g := Genus(H);
 
-    /* Temporary commented, the time to make things more robust
-
     if g eq 2 then
         twists, aut := G2Models(IgusaInvariants(H));
         if AutomorphismGroup then return twists, aut; end if;
@@ -323,7 +321,6 @@ intrinsic Twists(H::CrvHyp : AutomorphismGroup := false) -> SeqEnum[CrvHyp], Grp
         if AutomorphismGroup then return twists, aut; end if;
         return twists;
     end if;
-    */
 
     require Characteristic(F) ge 3 :
         "2 must be invertible in the base ring.";
@@ -338,5 +335,17 @@ intrinsic Twists(H::CrvHyp : AutomorphismGroup := false) -> SeqEnum[CrvHyp], Grp
 
     if AutomorphismGroup then return twists, ProjectiveMatrixGroup(Aut); end if;
     return twists;
+
+end intrinsic;
+
+intrinsic HyperellipticPolynomialTwists(f::RngUPolElt, n::RngIntElt) -> SeqEnum[RngUPolElt]
+    {Found polynomials fp s.t. the curves y^2 = f(x) and y^2 = fp(x) are
+    twisted each other.}
+
+    _, Aut := IsGL2EquivalentExtended(f, f, n : geometric := true, commonfield := true);
+
+    Twists := TwistsOverFiniteField(HyperellipticCurve(f), [ Normalize22Column(A) : A in Aut ]);
+
+    return [HyperellipticPolynomials(g) : g in Twists];
 
 end intrinsic;

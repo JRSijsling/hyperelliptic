@@ -270,6 +270,71 @@ intrinsic ShiodaInvariants(C::CrvHyp :
 
 end intrinsic;
 
+intrinsic ShiodaInvariantsEqual(V1::SeqEnum, V2::SeqEnum) -> BoolElt
+    {Check whether Shioda Invariants V1 en V2 of two genus 3 hyperelliptic curves or of
+     two binary forms of degree 8 are equivalent.}
+
+    CR := Universe(V1);
+
+    /* Rings of small characteristic  */
+    case Characteristic(CR):
+
+    when 2:
+	require (#V1 eq 10 and #V2 eq 10) or (#V1 eq 7 and #V2 eq 7)
+		or (#V1 eq 6 and #V2 eq 6) or (#V1 eq 5 and #V2 eq 5)
+		: "V1, V2 must be of size 5, 6, 7 or 10";
+
+        case #V1:
+
+	when 5:
+	    if V1[1] eq 0 and V1[2] eq 0 and V2[1] eq 0 and V2[2] eq 0 then
+		return WPSEqual([2, 3, 7, 32, 40], V1, V2);
+	    elif V1[1] ne 0 and V1[2] eq 0 and V2[1] ne 0 and V2[2] eq 0 then
+		return WPSEqual([2, 3, 2, 2, 2], V1, V2);
+	    else
+		"Type (3, 3) inconsistent with Type 7";
+	    end if;
+
+	when 6:
+	    return WPSEqual([2, 3, 1, 3, 4, 5], V1, V2);
+
+	when 7:
+	    return WPSEqual([2, 3, 2, 2, 2, 2, 2], V1, V2);
+
+	when 10:
+	    return WPSEqual([2, 3, 2, 4, 5, 6, 8, 9, 11, 12], V1, V2);
+
+	end case;
+
+    when 3:
+	require #V1 eq 10 and #V2 eq 10 : "V1, V2 must be of size 10 (J2, ..., J10, J12)";
+
+	return WPSEqual([2, 3, 4, 5, 6, 7, 8, 9, 10, 12], V1, V2);
+
+    when 5:
+	require #V1 eq 62 and #V2 eq 62 : "V1, V2 must be of size 62";
+
+	Wght := [ 1, 4, 6, 6, 8, 8, 9, 10, 10, 11, 12, 12, 12, 13,
+		  14, 14, 14, 15, 15, 15, 16, 16, 16, 17, 17, 17,
+		  18, 18, 18, 19, 19, 20, 20, 20, 20, 21, 21, 21, 21,
+		  22, 22, 23, 23, 24, 24, 24, 25, 25, 25, 26, 27, 27,
+		  28, 28, 29, 29, 30, 31, 32, 33, 33, 37 ];
+	return WPSEqual(Wght, V1, V2);
+
+    when 7:
+	require #V1 eq 13 and #V2 eq 13 : "V1, V2 must be of size 13 (J2, ..., J10, J11, J13, J14, J15)";
+
+	return WPSEqual([2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 13, 14, 15], V1, V2);
+
+    end case;
+
+    /* Other rings (p = 0 or p > 7) */
+    require #V1 eq 9 and #V2 eq 9 : "V1, V2 must be of size 9 (J2, ..., J10)";
+
+    return WPSEqual([2, 3, 4, 5, 6, 7, 8, 9, 10], V1, V2);
+
+end intrinsic;
+
 intrinsic ShiodaAlgebraicInvariants(PrimaryInvariants::SeqEnum : ratsolve := true) -> SeqEnum
     {
     This function returns the algebraic relations between the six primary

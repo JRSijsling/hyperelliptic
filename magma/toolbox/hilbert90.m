@@ -85,21 +85,3 @@ function Glasby(_M, sigma, Fq)
 
    return X;
 end function;
-
-function Normalize22Column(T)
-    col := Eltseq(Rows(Transpose(T))[1]);
-    i0 := Minimum([ i : i in [1..#col] | col[i] ne 0 ]);
-    return (1/col[i0]) * T;
-end function;
-
-intrinsic HyperellipticPolynomialTwists(f::RngUPolElt, n::RngIntElt) -> SeqEnum[RngUPolElt]
-    {Found polynomials fp s.t. the curves y^2 = f(x) and y^2 = fp(x) are
-    twisted each other.}
-
-    _, Aut := IsGL2EquivalentExtended(f, f, n : geometric := true, commonfield := true);
-
-    Twists := TwistsOverFiniteField(HyperellipticCurve(f), [ Normalize22Column(A) : A in Aut ]);
-
-    return [HyperellipticPolynomials(g) : g in Twists];
-
-end intrinsic;
