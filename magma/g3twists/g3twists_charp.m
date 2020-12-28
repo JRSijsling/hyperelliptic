@@ -216,16 +216,16 @@ J2^3*J3^2*J4^2-83/127575*J2^3*J4^2*J6+83/1360800*J2^2*J4*J6^2+1/1080*J2^2*J5^2*J
 
 end function;
 
-function ShiodaAlgebraicInvariantsCharp(FreeJI, ratsolve)
+function ShiodaAlgebraicInvariantsCharp(PrimaryInvariants, ratsolve)
 
-    FF := Universe(FreeJI);
+    FF := Universe(PrimaryInvariants);
 
     P3 := PolynomialRing(FF, 3); J8 := P3.1; J9 := P3.2; J10 := P3.3;
 
     if ratsolve eq false or not IsFinite(FF) then
 	g := 1; LG := [ FF!1 ];
     else
-	Support := [i : i in [1..#FreeJI] | FreeJI[i] ne 0];
+	Support := [i : i in [1..#PrimaryInvariants] | PrimaryInvariants[i] ne 0];
 	if #Support eq 0 then
 	    g := 1;
 	else
@@ -241,7 +241,7 @@ function ShiodaAlgebraicInvariantsCharp(FreeJI, ratsolve)
     JIs := [];
     for L in LG do
 
-	J2, J3, J4, J5, J6, J7 := Explode([L^((i+1) div g)*FreeJI[i] : i in [1..#FreeJI]]);
+	J2, J3, J4, J5, J6, J7 := Explode([L^((i+1) div g)*PrimaryInvariants[i] : i in [1..#PrimaryInvariants]]);
 
 	A6, A7, A8, A16,
 	    B7, B8, B9, B17,

@@ -82,8 +82,6 @@
   f := a0*y^10+a1*x*y^9+a2*x^2*y^8+a3*x^3*y^7+a4*x^4*y^6+a5*x^5*y^5+a6*x^6*y^4+a7*x^7*y^3+a8*x^8*y^2+a9*x^9*y+a10*x^10:
   g := b0*Y^10+b1*X*Y^9+b2*X^2*Y^8+b3*X^3*Y^7+b4*X^4*Y^6+b5*X^5*Y^5+b6*X^6*Y^4+b7*X^7*Y^3+b8*X^8*Y^2+b9*X^9*Y+b10*X^10:
 
-
-
   EQ := subs(x = bet*Y, y = gam*X + del*Y, f) - g;
   EQ  := collect(numer(EQ), [X, Y], distributed);
 

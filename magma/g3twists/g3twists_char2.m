@@ -1020,19 +1020,19 @@ function ShiodaInvariantsChar2(f, h :
 
 end function;
 
-function ShiodaAlgebraicInvariantsChar2(FreeJI, ratsolve)
+function ShiodaAlgebraicInvariantsChar2(PrimaryInvariants, ratsolve)
 
-    FF := Universe(FreeJI);
+    FF := Universe(PrimaryInvariants);
 
     /* Type (1,1,1,1) : j2, j3, J5, J6, J8, J9 yields J2, J4, J11, J12 */
-    if #FreeJI eq 6 then
+    if #PrimaryInvariants eq 6 then
 	Pg := PolynomialRing(FF, 4);
 	J2 := Pg.1; J4 := Pg.2; J11 := Pg.3; J12 := Pg.4;
 
 	/* if ratsolve eq false or not IsFinite(FF) then */
 	    g := 1; LG := [ FF!1 ];
 	/* else */
-	/*     Support := [i : i in [1..#FreeJI] | FreeJI[i] ne 0]; */
+	/*     Support := [i : i in [1..#PrimaryInvariants] | PrimaryInvariants[i] ne 0]; */
 	/*     if #Support eq 0 then */
 	/* 	g := 1; */
 	/*     else */
@@ -1048,7 +1048,7 @@ function ShiodaAlgebraicInvariantsChar2(FreeJI, ratsolve)
 	JIs := [];
 	for L in LG do
 	    j2, j3, J5, J6, J8, J9 :=
-		Explode([L^([2, 3, 5, 6, 8, 9][i] div g)*FreeJI[i] : i in [1..#FreeJI]]);
+		Explode([L^([2, 3, 5, 6, 8, 9][i] div g)*PrimaryInvariants[i] : i in [1..#PrimaryInvariants]]);
 
 	    RES := [
 		j3*J2^2*J4 + j3*J4^2 + J5*J6 + J2*J9,
@@ -1094,14 +1094,14 @@ function ShiodaAlgebraicInvariantsChar2(FreeJI, ratsolve)
     Type(1,5) is a dim. 3 stratum, but we have to distinguish it from Type(3,3).
     Testing j2 = 0 is an easy way of doing it.
     */
-    if #FreeJI eq 5 then
+    if #PrimaryInvariants eq 5 then
 
 	/* Type (1,1,3) */
-	if FreeJI[1] ne 0 then
+	if PrimaryInvariants[1] ne 0 then
 
 	    Pg := PolynomialRing(FF); K3 := Pg.1;
 
-	    j2, K0, K1, K2, K4 := Explode(FreeJI);
+	    j2, K0, K1, K2, K4 := Explode(PrimaryInvariants);
 
 	    RES := [K3^2*j2^5+K0^2*K1*K3*j2^2+K0*K1*K3*j2^3+K0^4*K2+K0^2*K2*j2^2+K1^2*K4*j2^2];
 
@@ -1121,7 +1121,7 @@ function ShiodaAlgebraicInvariantsChar2(FreeJI, ratsolve)
 	end if;
 
 	/* Type (1,5) */
-	j2, M1, M3, M4, M5 := Explode(FreeJI);
+	j2, M1, M3, M4, M5 := Explode(PrimaryInvariants);
 	Pg := PolynomialRing(FF); j3 := Pg.1;
 
 	if ratsolve eq false then return [j3]; end if;
@@ -1133,8 +1133,8 @@ function ShiodaAlgebraicInvariantsChar2(FreeJI, ratsolve)
     end if;
 
     /* Type (3,3) : j2, L, L', L'' yields j3 = 0 */
-    if #FreeJI eq 4 then
-	j2, L0, L1, L2 := Explode(FreeJI);
+    if #PrimaryInvariants eq 4 then
+	j2, L0, L1, L2 := Explode(PrimaryInvariants);
 	Pg := PolynomialRing(FF); j3 := Pg.1;
 
 	if ratsolve eq false then return [j3]; end if;
@@ -1144,7 +1144,7 @@ function ShiodaAlgebraicInvariantsChar2(FreeJI, ratsolve)
     end if;
 
     /* Type (7) : N7, N32, N40 yields j2 = 0, j3 = 0 */
-    N7, N32, N40 := Explode(FreeJI);
+    N7, N32, N40 := Explode(PrimaryInvariants);
     Pg := PolynomialRing(FF, 2); j2 := Pg.1; j3 := Pg.2;
 
     if ratsolve eq false then return [j2, j3]; end if;

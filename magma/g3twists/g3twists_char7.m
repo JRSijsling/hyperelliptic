@@ -2496,9 +2496,9 @@ function ShiodaInvariantsChar7(f :
 
 end function;
 
-function ShiodaAlgebraicInvariantsChar7(FreeJI, ratsolve)
+function ShiodaAlgebraicInvariantsChar7(PrimaryInvariants, ratsolve)
 
-    FF := Universe(FreeJI);
+    FF := Universe(PrimaryInvariants);
 
     P7 := PolynomialRing(FF, 7);
     J2 := P7.1; J7 := P7.2; J8 := P7.3;
@@ -2507,7 +2507,7 @@ function ShiodaAlgebraicInvariantsChar7(FreeJI, ratsolve)
     if ratsolve eq false or not IsFinite(FF) then
 	g := 1; LG := [ FF!1 ];
     else
-	Support := [i : i in [1..#FreeJI] | FreeJI[i] ne 0];
+	Support := [i : i in [1..#PrimaryInvariants] | PrimaryInvariants[i] ne 0];
 	if #Support eq 0 then
 	    g := 1;
 	else
@@ -2523,7 +2523,7 @@ function ShiodaAlgebraicInvariantsChar7(FreeJI, ratsolve)
     JIs := [];
     for L in LG do
 
-	J3, J4, J5, J6, J10, J14 := Explode([L^([ 3, 4, 5, 6, 10, 14][i] div g)*FreeJI[i] : i in [1..#FreeJI]]);
+	J3, J4, J5, J6, J10, J14 := Explode([L^([ 3, 4, 5, 6, 10, 14][i] div g)*PrimaryInvariants[i] : i in [1..#PrimaryInvariants]]);
 
 	RES := [];
 

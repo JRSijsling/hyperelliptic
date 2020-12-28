@@ -30,7 +30,7 @@
  * intrinsic ShiodaInvariants(fh::SeqEnum : normalize := false) -> SeqEnum, SeqEnum
  * intrinsic ShiodaInvariants(C::CrvHyp : normalize := false) -> SeqEnum, SeqEnum
  * intrinsic ShiodaInvariantsEqual(V1::SeqEnum, V2::SeqEnum) -> BoolElt
- * intrinsic ShiodaAlgebraicInvariants(FreeJI::SeqEnum : ratsolve := true) -> SeqEnum
+ * intrinsic ShiodaAlgebraicInvariants(PrimaryInvariants::SeqEnum : ratsolve := true) -> SeqEnum
  *
  * intrinsic MaedaInvariants(f::RngUPolElt) -> SeqEnum
  * intrinsic MaedaInvariants(C::CrvHyp) -> SeqEnum
@@ -270,75 +270,7 @@ intrinsic ShiodaInvariants(C::CrvHyp :
 
 end intrinsic;
 
-
-intrinsic ShiodaInvariantsEqual(V1::SeqEnum, V2::SeqEnum) -> BoolElt
-    {Check whether Shioda Invariants V1 en V2 of two genus 3 hyperelliptic curves or of
-     two binary forms of degree 8 are equivalent.}
-
-    CR := Universe(V1);
-
-    /* Rings of small characteristic  */
-    case Characteristic(CR):
-
-    when 2:
-	require (#V1 eq 10 and #V2 eq 10) or (#V1 eq 7 and #V2 eq 7)
-		or (#V1 eq 6 and #V2 eq 6) or (#V1 eq 5 and #V2 eq 5)
-		: "V1, V2 must be of size 5, 6, 7 or 10";
-
-        case #V1:
-
-	when 5:
-	    if V1[1] eq 0 and V1[2] eq 0 and V2[1] eq 0 and V2[2] eq 0 then
-		return WPSEqual([2, 3, 7, 32, 40], V1, V2);
-	    elif V1[1] ne 0 and V1[2] eq 0 and V2[1] ne 0 and V2[2] eq 0 then
-		return WPSEqual([2, 3, 2, 2, 2], V1, V2);
-	    else
-		"Type (3, 3) inconsistent with Type 7";
-	    end if;
-
-	when 6:
-	    return WPSEqual([2, 3, 1, 3, 4, 5], V1, V2);
-
-	when 7:
-	    return WPSEqual([2, 3, 2, 2, 2, 2, 2], V1, V2);
-
-	when 10:
-	    return WPSEqual([2, 3, 2, 4, 5, 6, 8, 9, 11, 12], V1, V2);
-
-	end case;
-
-    when 3:
-	require #V1 eq 10 and #V2 eq 10 : "V1, V2 must be of size 10 (J2, ..., J10, J12)";
-
-	return WPSEqual([2, 3, 4, 5, 6, 7, 8, 9, 10, 12], V1, V2);
-
-    when 5:
-	require #V1 eq 62 and #V2 eq 62 : "V1, V2 must be of size 62";
-
-	Wght := [ 1, 4, 6, 6, 8, 8, 9, 10, 10, 11, 12, 12, 12, 13,
-		  14, 14, 14, 15, 15, 15, 16, 16, 16, 17, 17, 17,
-		  18, 18, 18, 19, 19, 20, 20, 20, 20, 21, 21, 21, 21,
-		  22, 22, 23, 23, 24, 24, 24, 25, 25, 25, 26, 27, 27,
-		  28, 28, 29, 29, 30, 31, 32, 33, 33, 37 ];
-	return WPSEqual(Wght, V1, V2);
-
-    when 7:
-	require #V1 eq 13 and #V2 eq 13 : "V1, V2 must be of size 13 (J2, ..., J10, J11, J13, J14, J15)";
-
-	return WPSEqual([2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 13, 14, 15], V1, V2);
-
-    end case;
-
-    /* Other rings (p = 0 or p > 7) */
-    require #V1 eq 9 and #V2 eq 9 : "V1, V2 must be of size 9 (J2, ..., J10)";
-
-    return WPSEqual([2, 3, 4, 5, 6, 7, 8, 9, 10], V1, V2);
-
-end intrinsic;
-
-
-
-intrinsic ShiodaAlgebraicInvariants(FreeJI::SeqEnum : ratsolve := true) -> SeqEnum
+intrinsic ShiodaAlgebraicInvariants(PrimaryInvariants::SeqEnum : ratsolve := true) -> SeqEnum
     {
     This function returns the algebraic relations between the six primary
     invariants given in input and the other invariants.
@@ -351,7 +283,7 @@ intrinsic ShiodaAlgebraicInvariants(FreeJI::SeqEnum : ratsolve := true) -> SeqEn
     (ratsolve := false), the system is returned as is.
     }
 
-    FF := Universe(FreeJI);
+    FF := Universe(PrimaryInvariants);
     p := Characteristic(FF);
 
     /* Not yet implemented */
@@ -364,31 +296,31 @@ intrinsic ShiodaAlgebraicInvariants(FreeJI::SeqEnum : ratsolve := true) -> SeqEn
     case p:
 
     when 2:
-	require #FreeJI eq 6 or #FreeJI eq 5 or #FreeJI eq 4 or #FreeJI eq 3
+	require #PrimaryInvariants eq 6 or #PrimaryInvariants eq 5 or #PrimaryInvariants eq 4 or #PrimaryInvariants eq 3
 	    : "Argument must be a sequence of size 3 (N7, N32, N40), 4 (j2, L, L', L''), 5 (j2<>0, K, K', K'', K'''') or (j2=0, M1, M3, M4, M5) or 6 (j2, j3, J5, J6, J8, J9) invariants";
 
-	return ShiodaAlgebraicInvariantsChar2(FreeJI, ratsolve);
+	return ShiodaAlgebraicInvariantsChar2(PrimaryInvariants, ratsolve);
 
     when 3:
-	require #FreeJI eq 6:
+	require #PrimaryInvariants eq 6:
 	    "Argument must be a sequence of six free Shioda invariants J2, J4, J5, J7, J9, J12.";
-	return ShiodaAlgebraicInvariantsChar3(FreeJI, ratsolve);
+	return ShiodaAlgebraicInvariantsChar3(PrimaryInvariants, ratsolve);
 
     when 7:
-	require #FreeJI eq 6:
+	require #PrimaryInvariants eq 6:
 	    "Argument must be a sequence of six free Shioda invariants J2, J4, J5, J7, J9, J12.";
-	return ShiodaAlgebraicInvariantsChar7(FreeJI, ratsolve);
+	return ShiodaAlgebraicInvariantsChar7(PrimaryInvariants, ratsolve);
 
     end case;
 
-    require #FreeJI eq 6:
+    require #PrimaryInvariants eq 6:
 	"Argument must be a sequence of six free Shioda invariants J2, J3, J4, J5, J6, J7.";
 
-    if Universe(FreeJI) cmpeq Integers() then
-	ChangeUniverse(~FreeJI, Rationals());
+    if Universe(PrimaryInvariants) cmpeq Integers() then
+	ChangeUniverse(~PrimaryInvariants, Rationals());
     end if;
 
-    return ShiodaAlgebraicInvariantsCharp(FreeJI, ratsolve);
+    return ShiodaAlgebraicInvariantsCharp(PrimaryInvariants, ratsolve);
 
 end intrinsic;
 
