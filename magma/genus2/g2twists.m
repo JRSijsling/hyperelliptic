@@ -1222,19 +1222,17 @@ end intrinsic;
   * Twists
   *
   ********************************************************************/
-intrinsic Twists(II::SeqEnum[FldFinElt]) -> SeqEnum[CrvHyp], GrpPerm
+intrinsic TwistsFromG2Invariants(II::SeqEnum[FldFinElt]) -> SeqEnum[CrvHyp], GrpPerm
     {Compute genus 2 twisted  hyperelliptic curves and their automorphism group from
-    given Igusa or Cardona-Quer-Nart-Pujolas invariants.}
+    Cardona-Quer-Nart-Pujolas invariants.}
 
-    require #II eq 3 or #II eq 5 or #II eq 6 :
-	"Argument must be a sequence of three absolute invariants or 5 (or possibly 6) Igusa invariants.";
+    require #II eq 3  :
+	"Argument must be a sequence of three absolute invariants.";
 
     require Type(Universe(II)) eq FldFin :
 	"Twist computations only available in finite fields";
 
-    JI := II; if #II eq 3 then JI := G2ToIgusaInvariants(II); end if;
-
-    twists, aut := G2Models(JI);
+    twists, aut := G2Models(G2ToIgusaInvariants(II));
     return twists, aut;
 
 end intrinsic;

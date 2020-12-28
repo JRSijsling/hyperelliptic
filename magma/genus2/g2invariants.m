@@ -977,7 +977,7 @@ intrinsic IgusaInvariants(f::RngUPolElt, h::RngUPolElt: extend := false, normali
     if Characteristic(K) eq 2 then
 	Js := IgusaInvariantsCharacteristicTwo(f,h);
         if normalize eq false then return Js; end if;
-        return WPSNormalize([2,4,6,8,10], Js), [2,4,6,8,10];
+        return WPSNormalize([1,2,3,4,5], Js), [2,4,6,8,10];
     end if;
 
     ScaledJs := ScaledIgusaInvariants(f,h);
@@ -1081,5 +1081,51 @@ intrinsic IgusaInvariants(C::CrvHyp : Quick := false, extend := false, normalize
     end if;
 
     return IgusaInvariants(f,h : extend := extend, normalize:=normalize);
+
+end intrinsic;
+
+intrinsic IgusaInvariantsEqual(V1::SeqEnum, V2::SeqEnum) -> BoolElt
+    {Check whether Igusa Invariants V1 and V2 of two genus 2 hyperelliptic curves or of
+    two binary forms of degree 8 are equivalent.}
+
+    require (#V1 eq 6 and #V2 eq 6) or (#V1 eq 5 and #V2 eq 5)
+        : "V1, V2 must be of size 5 or 6";
+
+    if #V1 eq 6 then
+        return WPSEqual([2,4,6,8,10,15], V1, V2);
+    end if;
+
+    return WPSEqual([1,2,3,4,5], V1, V2);
+
+end intrinsic;
+
+intrinsic IgusaAlgebraicRelations(JI::SeqEnum) -> SeqEnum
+    {}
+
+    K := Universe(JI);
+
+    require IsUnit(K!(2)) :
+       "Argument must be a polynomial over a ring in which 2 is a unit.";
+
+   require #JI eq 6 or #JI eq 5
+        : "JI must be of size 5 or 6";
+
+   if #JI eq 5 then
+       I2,I4,I6,I8,I10 := Explode(JI);
+       return [ 4*I8-(I2*I6-I4^2) ];
+   end if;
+
+   I2,I4,I6,I8,I10,I15 := Explode(JI);
+   return [
+       4*I8-(I2*I6-I4^2),
+       I15^2 - 2^22 * (
+       I2^6*I6^3-2*I2^5*I4^2*I6^2+I2^4*I4^4*I6-72*I10*I2^5*I4*I6+8*I10*I2^4*I4^3-72*I2^4*I4*I6^3+
+       136*I2^3*I4^3*I6^2-64*I2^2*I4^5*I6-432*I10^2*I2^5-48*I10*I2^4*I6^2+4816*I10*I2^3*I4^2*I6-
+       512*I10*I2^2*I4^4+216*I2^3*I6^4+1080*I2^2*I4^2*I6^3-2304*I2*I4^4*I6^2+1024*I4^6*I6+
+       28800*I10^2*I2^3*I4-12960*I10*I2^2*I4*I6^2-84480*I10*I2*I4^3*I6+8192*I10*I4^5-
+       7776*I2*I4*I6^4+6912*I4^3*I6^3-96000*I10^2*I2^2*I6-512000*I10^2*I2*I4^2-129600*I10*I2*I6^3+
+       691200*I10*I4^2*I6^2+11664*I6^5+11520000*I10^2*I4*I6+51200000*I10^3
+       )
+       ];
 
 end intrinsic;

@@ -271,7 +271,7 @@ intrinsic ShiodaInvariants(C::CrvHyp :
 end intrinsic;
 
 intrinsic ShiodaInvariantsEqual(V1::SeqEnum, V2::SeqEnum) -> BoolElt
-    {Check whether Shioda Invariants V1 en V2 of two genus 3 hyperelliptic curves or of
+    {Check whether Shioda Invariants V1 and V2 of two genus 3 hyperelliptic curves or of
      two binary forms of degree 8 are equivalent.}
 
     CR := Universe(V1);
@@ -334,6 +334,8 @@ intrinsic ShiodaInvariantsEqual(V1::SeqEnum, V2::SeqEnum) -> BoolElt
     return WPSEqual([2, 3, 4, 5, 6, 7, 8, 9, 10], V1, V2);
 
 end intrinsic;
+
+
 
 intrinsic ShiodaAlgebraicInvariants(PrimaryInvariants::SeqEnum : ratsolve := true) -> SeqEnum
     {
