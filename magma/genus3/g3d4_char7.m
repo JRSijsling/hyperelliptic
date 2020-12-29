@@ -117,7 +117,7 @@ function G3Char7Models_D2(JI : geometric := false)
 
 	vprintf Hyperelliptic, 2 : "[Hyperelliptic] D2 : *** f = %o\n", f;
 	if geometric then return [f]; end if;
-	return HyperellipticPolynomialTwists(f, 8);
+	return TwistsOfHyperellipticPolynomials(f, 8);
     end if;
 
     if I2a eq 0 then
@@ -165,7 +165,7 @@ function G3Char7Models_D2(JI : geometric := false)
 
 	vprintf Hyperelliptic, 2 : "[Hyperelliptic] D2 : *** f = %o\n", f;
 	if geometric then return [f]; end if;
-	return HyperellipticPolynomialTwists(f, 8);
+	return TwistsOfHyperellipticPolynomials(f, 8);
 
     end if;
 
@@ -203,6 +203,6 @@ function G3Char7Models_D2(JI : geometric := false)
 
     vprintf Hyperelliptic, 2 : "[Hyperelliptic] D2 : *** f = %o\n", f;
     if geometric then return [f]; end if;
-    return HyperellipticPolynomialTwists(f, 8);
+    return TwistsOfHyperellipticPolynomials(f, 8);
 
 end function;

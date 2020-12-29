@@ -99,9 +99,8 @@
  *
  * intrinsic HyperellipticCurveFromG2Invariants(GI::SeqEnum : RationalModel := false) -> CrvHyp, GrpPerm
  * intrinsic HyperellipticCurveFromIgusaInvariants(JI::SeqEnum : RationalModel := false) -> CrvHyp, GrpPerm
- * intrinsic GeometricAutomorphismGroup(GI:SeqEnum) -> GrpPerm
- * intrinsic GeometricAutomorphismGroup(H::CrvHyp) -> GrpPerm
- * intrinsic GeometricAutomorphismGroupClassification(FF::FldFin) -> SeqEnum,SeqEnum
+ * intrinsic GeometricAutomorphismGroupFromIgusaInvariants(GI:SeqEnum) -> GrpPerm
+ * intrinsic GeometricAutomorphismGroupGenus2Classification(FF::FldFin) -> SeqEnum,SeqEnum
  *
  ********************************************************************/
 
@@ -1096,7 +1095,35 @@ function G2Models(JI : geometric := false, models := true, RationalModel := fals
             if models then
                 twists := G2ModelsInChar5FF_G240(GI : geometric := geometric);
             end if;
-            return twists, SmallGroup(240,90);
+            return twists,
+                sub<Sym(240)|
+                [ 7, 8, 9, 10, 11, 12, 14, 15, 13, 17, 18, 16, 43, 44, 45, 46, 47, 48, 1, 2, 3, 4, 5,
+                6, 21, 19, 20, 24, 22, 23, 73, 74, 75, 76, 77, 78, 85, 86, 87, 88, 89, 90, 51, 49, 50,
+                54, 52, 53, 68, 69, 67, 71, 72, 70, 97, 98, 99, 100, 101, 102, 109, 110, 111, 112,
+                113, 114, 25, 26, 27, 28, 29, 30, 121, 122, 123, 124, 125, 126, 31, 32, 33, 34, 35,
+                36, 145, 146, 147, 148, 149, 150, 37, 38, 39, 40, 41, 42, 157, 158, 159, 160, 161,
+                162, 55, 56, 57, 58, 59, 60, 181, 182, 183, 184, 185, 186, 61, 62, 63, 64, 65, 66, 91,
+                92, 93, 94, 95, 96, 193, 194, 195, 196, 197, 198, 199, 200, 201, 202, 203, 204, 130,
+                131, 132, 128, 129, 127, 79, 80, 81, 82, 83, 84, 136, 137, 138, 134, 135, 133, 115,
+                116, 117, 118, 119, 120, 217, 218, 219, 220, 221, 222, 223, 224, 225, 226, 227, 228,
+                174, 172, 173, 169, 170, 171, 103, 104, 105, 106, 107, 108, 168, 166, 167, 163, 164,
+                165, 216, 214, 215, 211, 212, 213, 210, 208, 209, 205, 206, 207, 139, 140, 141, 142,
+                143, 144, 151, 152, 153, 154, 155, 156, 232, 233, 234, 230, 231, 229, 238, 239, 240,
+                236, 237, 235, 175, 176, 177, 178, 179, 180, 187, 188, 189, 190, 191, 192 ],
+                [ 13, 14, 15, 16, 17, 18, 31, 32, 33, 34, 35, 36, 49, 50, 51, 52, 53, 54, 55, 56, 57,
+                58, 59, 60, 1, 2, 3, 4, 5, 6, 68, 69, 67, 71, 72, 70, 7, 8, 9, 10, 11, 12, 63, 61, 62,
+                66, 64, 65, 25, 26, 27, 28, 29, 30, 44, 45, 43, 47, 48, 46, 19, 20, 21, 22, 23, 24,
+                39, 37, 38, 42, 40, 41, 127, 128, 129, 130, 131, 132, 139, 140, 141, 142, 143, 144,
+                133, 134, 135, 136, 137, 138, 151, 152, 153, 154, 155, 156, 163, 164, 165, 166, 167,
+                168, 175, 176, 177, 178, 179, 180, 169, 170, 171, 172, 173, 174, 187, 188, 189, 190,
+                191, 192, 181, 182, 183, 184, 185, 186, 85, 86, 87, 88, 89, 90, 73, 74, 75, 76, 77,
+                78, 91, 92, 93, 94, 95, 96, 157, 158, 159, 160, 161, 162, 79, 80, 81, 82, 83, 84, 121,
+                122, 123, 124, 125, 126, 109, 110, 111, 112, 113, 114, 97, 98, 99, 100, 101, 102, 115,
+                116, 117, 118, 119, 120, 145, 146, 147, 148, 149, 150, 103, 104, 105, 106, 107, 108,
+                213, 211, 212, 216, 214, 215, 207, 205, 206, 210, 208, 209, 194, 195, 193, 197, 198,
+                196, 200, 201, 199, 203, 204, 202, 236, 237, 235, 239, 240, 238, 230, 231, 229, 233,
+                234, 232, 219, 217, 218, 222, 220, 221, 225, 223, 224, 228, 226, 227 ]
+                >;/* SmallGroup(240,90) */
         end if;
         if models then
             twists := G2ModelsInFF_G48(GI : geometric := geometric);
@@ -1256,9 +1283,9 @@ end intrinsic;
   * Geometric Automorphism group
   *
   ********************************************************************/
-intrinsic GeometricAutomorphismGroup(II::SeqEnum) -> GrpPerm
+intrinsic GeometricAutomorphismGroupFromIgusaInvariants(II::SeqEnum) -> GrpPerm
     {Compute the automorphism group from
-    given Igusa or Cardona-Quer-Nart-Pujolas invariants.}
+    given Igusa (or Cardona-Quer-Nart-Pujolas) invariants.}
 
     require #II eq 3 or #II eq 5 or #II eq 6 :
 	"Argument must be a sequence of three absolute invariants or 5 (or possibly 6) Igusa invariants.";
@@ -1274,20 +1301,10 @@ intrinsic GeometricAutomorphismGroup(II::SeqEnum) -> GrpPerm
 
 end intrinsic;
 
-intrinsic GeometricAutomorphismGroup(H::CrvHyp) -> GrpPerm
-    {Compute the automorphism group of a genus 2 curve.}
-
-    require Genus(H) eq 2 :
-	"Curve must be of genus 2.";
-
-    _, aut := G2Models(IgusaInvariants(H) : models := false);
-    return aut;
-
-end intrinsic;
 
 /* Geometric automorphism group classification
    see [Cardona2003] and [CaNaPu2005] */
-intrinsic GeometricAutomorphismGroupClassification(FF::FldFin) -> SeqEnum, SeqEnum
+intrinsic GeometricAutomorphismGroupGenus2Classification(FF::FldFin) -> SeqEnum, SeqEnum
     {Give all possible automorphism groups of a genus 2 curve, and the
     corresponding number of curves (up to isomorphism and twists) with
     this group, defined over the finite field given in input.}
@@ -1369,7 +1386,34 @@ intrinsic GeometricAutomorphismGroupClassification(FF::FldFin) -> SeqEnum, SeqEn
 	    [9,10,11,12,13,14,15,16,1,2,3,4,5,6,7,8]>)]; Nmbs cat:= [nbth_M160];
     end if;
     if nbth_G240 ne 0 then
-	Grps cat:= [SmallGroup(240,90)]; Nmbs cat:= [nbth_G240];
+	Grps cat:= [sub<Sym(240)|
+            [ 7, 8, 9, 10, 11, 12, 14, 15, 13, 17, 18, 16, 43, 44, 45, 46, 47, 48, 1, 2, 3, 4, 5,
+            6, 21, 19, 20, 24, 22, 23, 73, 74, 75, 76, 77, 78, 85, 86, 87, 88, 89, 90, 51, 49, 50,
+            54, 52, 53, 68, 69, 67, 71, 72, 70, 97, 98, 99, 100, 101, 102, 109, 110, 111, 112,
+            113, 114, 25, 26, 27, 28, 29, 30, 121, 122, 123, 124, 125, 126, 31, 32, 33, 34, 35,
+            36, 145, 146, 147, 148, 149, 150, 37, 38, 39, 40, 41, 42, 157, 158, 159, 160, 161,
+            162, 55, 56, 57, 58, 59, 60, 181, 182, 183, 184, 185, 186, 61, 62, 63, 64, 65, 66, 91,
+            92, 93, 94, 95, 96, 193, 194, 195, 196, 197, 198, 199, 200, 201, 202, 203, 204, 130,
+            131, 132, 128, 129, 127, 79, 80, 81, 82, 83, 84, 136, 137, 138, 134, 135, 133, 115,
+            116, 117, 118, 119, 120, 217, 218, 219, 220, 221, 222, 223, 224, 225, 226, 227, 228,
+            174, 172, 173, 169, 170, 171, 103, 104, 105, 106, 107, 108, 168, 166, 167, 163, 164,
+            165, 216, 214, 215, 211, 212, 213, 210, 208, 209, 205, 206, 207, 139, 140, 141, 142,
+            143, 144, 151, 152, 153, 154, 155, 156, 232, 233, 234, 230, 231, 229, 238, 239, 240,
+            236, 237, 235, 175, 176, 177, 178, 179, 180, 187, 188, 189, 190, 191, 192 ],
+            [ 13, 14, 15, 16, 17, 18, 31, 32, 33, 34, 35, 36, 49, 50, 51, 52, 53, 54, 55, 56, 57,
+            58, 59, 60, 1, 2, 3, 4, 5, 6, 68, 69, 67, 71, 72, 70, 7, 8, 9, 10, 11, 12, 63, 61, 62,
+            66, 64, 65, 25, 26, 27, 28, 29, 30, 44, 45, 43, 47, 48, 46, 19, 20, 21, 22, 23, 24,
+            39, 37, 38, 42, 40, 41, 127, 128, 129, 130, 131, 132, 139, 140, 141, 142, 143, 144,
+            133, 134, 135, 136, 137, 138, 151, 152, 153, 154, 155, 156, 163, 164, 165, 166, 167,
+            168, 175, 176, 177, 178, 179, 180, 169, 170, 171, 172, 173, 174, 187, 188, 189, 190,
+            191, 192, 181, 182, 183, 184, 185, 186, 85, 86, 87, 88, 89, 90, 73, 74, 75, 76, 77,
+            78, 91, 92, 93, 94, 95, 96, 157, 158, 159, 160, 161, 162, 79, 80, 81, 82, 83, 84, 121,
+            122, 123, 124, 125, 126, 109, 110, 111, 112, 113, 114, 97, 98, 99, 100, 101, 102, 115,
+            116, 117, 118, 119, 120, 145, 146, 147, 148, 149, 150, 103, 104, 105, 106, 107, 108,
+            213, 211, 212, 216, 214, 215, 207, 205, 206, 210, 208, 209, 194, 195, 193, 197, 198,
+            196, 200, 201, 199, 203, 204, 202, 236, 237, 235, 239, 240, 238, 230, 231, 229, 233,
+            234, 232, 219, 217, 218, 222, 220, 221, 225, 223, 224, 228, 226, 227 ]
+            >]; Nmbs cat:= [nbth_G240];
     end if;
 
     return Grps, Nmbs;

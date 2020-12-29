@@ -72,7 +72,7 @@ function G3ModelsInCharFF_D4(JI : geometric := false, RationalModel := true)
 
 	vprintf Hyperelliptic, 2 : "[Hyperelliptic] D4: *** f = %o\n", f;
 	if geometric then return [f]; end if;
-	return HyperellipticPolynomialTwists(f, 8);
+	return TwistsOfHyperellipticPolynomials(f, 8);
     end if;
 
     /* Some easy cases */
@@ -87,7 +87,7 @@ function G3ModelsInCharFF_D4(JI : geometric := false, RationalModel := true)
 
 	vprintf Hyperelliptic, 2 : "[Hyperelliptic] D4: *** f = %o\n", f;
 	if geometric then return [f]; end if;
-	return HyperellipticPolynomialTwists(f, 8);
+	return TwistsOfHyperellipticPolynomials(f, 8);
 
     end if;
 
@@ -122,7 +122,7 @@ function G3ModelsInCharFF_D4(JI : geometric := false, RationalModel := true)
 
 	vprintf Hyperelliptic, 2 : "[Hyperelliptic] D4: *** f = %o\n", f;
 	if geometric then return [f]; end if;
-	return HyperellipticPolynomialTwists(f, 8);
+	return TwistsOfHyperellipticPolynomials(f, 8);
 
     end if;
 
@@ -158,6 +158,6 @@ function G3ModelsInCharFF_D4(JI : geometric := false, RationalModel := true)
 
     vprintf Hyperelliptic, 2 : "[Hyperelliptic] D4: *** f = %o\n", f;
     if geometric then return [f]; end if;
-    return HyperellipticPolynomialTwists(f, 8);
+    return TwistsOfHyperellipticPolynomials(f, 8);
 
 end function;

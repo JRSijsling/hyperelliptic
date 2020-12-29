@@ -90,17 +90,14 @@
  * intrinsic HyperellipticPolynomialFromShiodaInvariants(JI::SeqEnum: RationalModel := true) -> SeqEnum, GrpPerm
  * intrinsic HyperellipticPolynomialsFromShiodaInvariants(JI::SeqEnum: RationalModel := true) -> SeqEnum, GrpPerm
  *
- * intrinsic TwistedHyperellipticPolynomialsFromShiodaInvariants(JI::SeqEnum[FldFinElt]) -> SeqEnum[CrvHyp], GrpPerm
+ * intrinsic TwistedHyperellipticPolynomialsFromShiodaInvariants(JI::SeqEnum[FldFinElt]) -> SeqEnum, GrpPerm
  * intrinsic TwistsFromShiodaInvariants(JI::SeqEnum[FldFinElt]) -> SeqEnum[CrvHyp], GrpPerm
  *
  * intrinsic TwistsOfGenus3HyperellipticPolynomials(f::RngUPolElt) -> SeqEnum[RngUPolElt], GrpPerm
  * intrinsic TwistsOfGenus3HyperellipticPolynomials(fh::SeqEnum[RngUPolElt]) -> SeqEnum[CRngUPolElt], GrpPerm
  *
  * intrinsic GeometricAutomorphismGroupFromShiodaInvariants(JI::SeqEnum) -> GrpPerm
- * intrinsic GeometricAutomorphismGroupFromGenus3HyperellipticPolynomials(fh::SeqEnum) -> GrpPerm
- * intrinsic GeometricAutomorphismGroupFromGenus3HyperellipticPolynomials(f::RngUPolElt) -> GrpPerm
- * intrinsic GeometricAutomorphismGroupFromGenus3HyperellipticCurve(H::CrvHyp) -> GrpPerm
- * intrinsic GeometricAutomorphismGroupClassificationForGenus3HyperellipticCurve(FF::FldFin) -> SeqEnum, SeqEnum
+ * intrinsic GeometricAutomorphismGroupGenus3Classification(FF::FldFin) -> SeqEnum, SeqEnum
  *
  ********************************************************************/
 
@@ -152,7 +149,7 @@ function G3ModelsInCharFF_G48_48(JI : geometric := false)
     FF := Universe(JI); x := PolynomialRing(FF).1;
     f := x^8 + 14*x^4 + 1;
     if geometric then return [f]; end if;
-    return HyperellipticPolynomialTwists(f, 8);
+    return TwistsOfHyperellipticPolynomials(f, 8);
 end function;
 
 /* Case V8.
@@ -165,7 +162,7 @@ function G3ModelsInCharFF_G32_9(JI : geometric := false)
     FF := Universe(JI); x := PolynomialRing(FF).1;
     f := x^8 - 1;
     if geometric then return [f]; end if;
-    return HyperellipticPolynomialTwists(f, 8);
+    return TwistsOfHyperellipticPolynomials(f, 8);
 end function;
 
 /* Case U6.
@@ -178,7 +175,7 @@ function G3ModelsInCharFF_G24_5(JI : geometric := false)
     FF := Universe(JI); x := PolynomialRing(FF).1;
     f := x * (x^6 - 1);
     if geometric then return [f]; end if;
-    return HyperellipticPolynomialTwists(f, 8);
+    return TwistsOfHyperellipticPolynomials(f, 8);
 end function;
 
 /* Case C14.
@@ -191,7 +188,7 @@ function G3ModelsInCharFF_C14(JI : geometric := false)
     FF := Universe(JI); x := PolynomialRing(FF).1;
     f := x^7 - 1;
     if geometric then return [f]; end if;
-    return HyperellipticPolynomialTwists(f, 8);
+    return TwistsOfHyperellipticPolynomials(f, 8);
 end function;
 
 /* Case C2xD8
@@ -221,7 +218,7 @@ function G3ModelsInCharFF_G16_11(JI : geometric := false)
 
     f := x^8 + a4*x^4 + a0;
     if geometric then return [f]; end if;
-    return HyperellipticPolynomialTwists(f, 8);
+    return TwistsOfHyperellipticPolynomials(f, 8);
 
 end function;
 
@@ -252,7 +249,7 @@ function G3ModelsInCharFF_D12(JI : geometric := false)
 
     f := x * (x^6 + a4*x^3 + a1);
     if geometric then return [f]; end if;
-    return HyperellipticPolynomialTwists(f, 8);
+    return TwistsOfHyperellipticPolynomials(f, 8);
 
 end function;
 
@@ -292,7 +289,7 @@ function G3ModelsInCharFF_C2xC4(JI : geometric := false)
 
     f := a^2*x^8+2*a^2*x^6+8*a*x^2-16;
     if geometric then return [f]; end if;
-    return HyperellipticPolynomialTwists(f, 8);
+    return TwistsOfHyperellipticPolynomials(f, 8);
 
 end function;
 
@@ -337,7 +334,7 @@ function G3ModelsInCharFF_G8_5(JI : geometric := false)
 
 	f := a8*x^8 + a6*x^6 + a4*x^4 + l*a6*x^2 + l^2*a8;
 	if geometric then return [f]; end if;
-	return HyperellipticPolynomialTwists(f, 8);
+	return TwistsOfHyperellipticPolynomials(f, 8);
     end if;
 
     /* Let's go in a degree 3 extension */
@@ -461,7 +458,7 @@ function G3ModelsInCharFF_G8_5(JI : geometric := false)
     ftilde  := PolynomialRing(FF)!Eltseq(ftilde);
 
     if geometric then return [ftilde]; end if;
-    return HyperellipticPolynomialTwists(ftilde, 8);
+    return TwistsOfHyperellipticPolynomials(ftilde, 8);
 end function;
 
 
@@ -506,7 +503,7 @@ function G3Models(JI: geometric := false, models := true, RationalModel := true,
 	J8 eq 0 and J9 eq 0 and
 	J10 eq 0 then
 
-	aut := SmallGroup(1,1);/* FixMe: <1,1> is not the good choice here */
+	aut := Sym(1);/* FixMe: <1,1> is not the good choice here */
 	if models then twists := [PolynomialRing(FF).1^8]; end if;
 	if geometric or not models then return twists, aut; end if;
 	error "[Hyperelliptic] no possible twist computations for singular forms, sorry";
@@ -523,7 +520,16 @@ function G3Models(JI: geometric := false, models := true, RationalModel := true,
     if J2^3-30*J3^2 eq 0 and J4 eq 0 and J5 eq 0 and J6 eq 0
 	and J7 eq 0 and J8 eq 0 and J9 eq 0 and J10 eq 0 then
 	vprintf Hyperelliptic, 1 : "Automorphism group C2 x S4, curve y^2 = x^8 + 14*x^4 + 1\n";
-	aut := SmallGroup(48, 48);
+        aut := sub<Sym(48)|
+            (1, 25)(2, 26)(3, 27)(4, 28)(5, 29)(6, 30)(7, 31)(8, 32)(9, 33)(10, 34)(11, 35)(12, 36)(13,
+            37)(14, 38)(15, 39)(16, 40)(17, 41)(18, 42)(19, 43)(20, 44)(21, 45)(22, 46)(23, 47)(24, 48),
+            (1, 13)(2, 14)(3, 15)(4, 16)(5, 17)(6, 18)(7, 19)(8, 20)(9, 21)(10, 22)(11, 23)(12, 24)(25,
+            37)(26, 38)(27, 39)(28, 40)(29, 41)(30, 42)(31, 43)(32, 44)(33, 45)(34, 46)(35, 47)(36, 48),
+            (1, 9, 5)(2, 10, 6)(3, 11, 7)(4, 12, 8)(13, 21, 17)(14, 22, 18)(15, 23, 19)(16, 24, 20)(25, 29,
+            33)(26, 30, 34)(27, 31, 35)(28, 32, 36)(37, 41, 45)(38, 42, 46)(39, 43, 47)(40, 44, 48),
+            (1, 3)(2, 4)(5, 6)(7, 8)(9, 12)(10, 11)(13, 15)(14, 16)(17, 18)(19, 20)(21, 24)(22, 23)(25,
+            26)(27, 28)(29, 32)(30, 31)(33, 35)(34, 36)(37, 38)(39, 40)(41, 44)(42, 43)(45, 47)(46, 48)
+            >; /* SmallGroup(48, 48) */
 	if models then twists := G3ModelsInCharFF_G48_48(JI : geometric := geometric); end if;
 	return twists, aut;
     end if;
@@ -532,7 +538,12 @@ function G3Models(JI: geometric := false, models := true, RationalModel := true,
     if J3 eq 0 and J2^2-6*J4 eq 0  and J5 eq 0 and J2^3+36*J6 eq 0 and
 	J7 eq 0 and J2^4+420*J8 eq 0 and J9 eq 0 and 2520*J10 - J2^5 eq 0 then
 	vprintf Hyperelliptic, 1 : "Automorphism group V8, curve y^2 =  x^8 - 1\n";
-	aut := SmallGroup(32, 9);
+	aut := sub<Sym(32)|
+             (1, 19, 3, 17)(2, 20, 4, 18)(5, 23, 7, 21)(6, 24, 8, 22)
+             (9, 27, 11, 25)(10, 28, 12, 26)(13, 31, 15, 29)(14, 32, 16, 30),
+             (1, 9)(2, 10)(3, 11)(4, 12)(5, 13)(6, 14)(7, 15)(8, 16)(17, 29)
+             (18, 30)(19, 31)(20, 32)(21, 26)(22, 25)(23, 28)(24, 27)
+             >;/* SmallGroup(32, 9) */
 	if models then twists := G3ModelsInCharFF_G32_9(JI : geometric := geometric); end if;
 	return twists, aut;
     end if;
@@ -541,7 +552,11 @@ function G3Models(JI: geometric := false, models := true, RationalModel := true,
     if J3 eq 0 and J2^2-96*J4 eq 0  and J5 eq 0 and J2^3+2304*J6 eq 0 and
 	J7 eq 0 and J2^4-17920*J8 eq 0  and J9 eq 0 and 430080*J10+J2^5 eq 0 then
 	vprintf Hyperelliptic, 1 : "Automorphism group U6, curve y^2 = x (x^6 - 1)\n";
-	aut := SmallGroup(24, 5);
+        aut := sub<Sym(24)|
+            (1, 13)(2, 14)(3, 15)(4, 16)(5, 17)(6, 18)(7, 19)(8, 20)(9, 21)(10, 22)(11, 23)(12, 24),
+            (1, 10, 4, 7)(2, 11, 5, 8)(3, 12, 6, 9)(13, 22, 16, 19)(14, 23, 17, 20)(15, 24, 18, 21),
+            (1, 3, 2)(4, 6, 5)(7, 9, 8)(10, 12, 11)(13, 14, 15)(16, 17, 18)(19, 20, 21)(22, 23, 24)
+            >; /* SmallGroup(24, 5); */
 	if models then twists := G3ModelsInCharFF_G24_5(JI : geometric := geometric); end if;
 	return twists, aut;
     end if;
@@ -550,7 +565,7 @@ function G3Models(JI: geometric := false, models := true, RationalModel := true,
     if J2 eq 0 and J3 eq 0 and J4 eq 0 and J5 eq 0 and J6 eq 0 and
 	J8 eq 0 and J9 eq 0 and J10 eq 0 then
 	vprintf Hyperelliptic, 1 : "Automorphism group C14, curve y^2 = x^7 - 1\n";
-	aut := CyclicGroup(14); /* SmallGroup(14, 2) */
+	aut := DirectProduct(CyclicGroup(2), CyclicGroup(7)); /* SmallGroup(14, 2) */
 	if models then twists := G3ModelsInCharFF_C14(JI : geometric :=	geometric); end if;
 	return twists, aut;
     end if;
@@ -570,7 +585,11 @@ function G3Models(JI: geometric := false, models := true, RationalModel := true,
 	J10 - 1/42*J4^2*J2 - 1/21*J4*J3^2 + 1/630*J4*J2^3 eq 0
 	then
 	vprintf Hyperelliptic, 1 : "Automorphism group C2xD8, curve y^2 = x^8 + a*x^4 + 1\n";
-	aut := SmallGroup(16, 11);
+	aut := sub<Sym(16) |
+             (1, 3)(2, 4)(5, 7)(6, 8)(9, 11)(10, 12)(13, 15)(14, 16),
+             (1, 5)(2, 6)(3, 7)(4, 8)(9, 14)(10, 13)(11, 16)(12, 15),
+             (1, 9)(2, 10)(3, 11)(4, 12)(5, 13)(6, 14)(7, 15)(8, 16)
+             >; /* SmallGroup(16, 11) */
 	if models then twists := G3ModelsInCharFF_G16_11(JI : geometric := geometric); end if;
 	return twists, aut;
     end if;
@@ -588,7 +607,11 @@ function G3Models(JI: geometric := false, models := true, RationalModel := true,
 	J9 - 1/144*J5*J2^2 - 5/144*J4*J3*J2 - 5/576*J3^3 + 1/3456*J3*J2^3 eq 0
 	then
 	vprintf Hyperelliptic, 1 : "Automorphism group D12, curve y^2 * (x^6 + a*x^3 + 1)\n";
-	aut := SmallGroup(12, 4);
+        aut := sub<Sym(12)|
+            (1, 3, 2)(4, 6, 5)(7, 8, 9)(10, 11, 12),
+            (1, 4)(2, 5)(3, 6)(7, 10)(8, 11)(9, 12),
+            (1, 7)(2, 8)(3, 9)(4, 10)(5, 11)(6, 12)
+            >; /* SmallGroup(12, 4) */
 	if models then twists := G3ModelsInCharFF_D12(JI : geometric := geometric); end if;
 	return twists, aut;
     end if;
@@ -643,7 +666,7 @@ function G3Models(JI: geometric := false, models := true, RationalModel := true,
 
 	then
 	vprintf Hyperelliptic, 1 : "Automorphism group C2xC2xC2, curve y^2 = a0*x^8 + a2*x^6 + a4*x^4 + a2*x^2 + a0\n";
-	aut := SmallGroup(8, 5);
+	aut := DirectProduct([CyclicGroup(2): i in [1..3]]); /* SmallGroup(8, 5) */
 	if models then twists := G3ModelsInCharFF_G8_5(JI : geometric := geometric); end if;
 	return twists, aut;
     end if;
@@ -664,14 +687,14 @@ function G3Models(JI: geometric := false, models := true, RationalModel := true,
 
 	then
 	vprintf Hyperelliptic, 1 : "Automorphism group C4, curve y^2 = x*(x^2-1)*(x^4+a*x^2+b)\n";
-	aut := SmallGroup(4, 1);
+	aut := CyclicGroup(4);
 	if models then
 	    f := Genus3ConicAndQuarticForC4(JI : models := models);
 	    error if Type(f) eq BoolElt, "[Hyperelliptic] None C4-model found at JI =", JI;
 	    twists := [f];
 	end if;
 	if geometric or not models then return twists, aut; end if;
-	return HyperellipticPolynomialTwists(f, 8), aut;
+	return TwistsOfHyperellipticPolynomials(f, 8), aut;
     end if;
 
     /*** Three dimensional case ***/
@@ -1469,7 +1492,7 @@ function G3Models(JI: geometric := false, models := true, RationalModel := true,
 	421/630*J3*J4*J7*J10 + J7^2*J10 eq 0
 	then
 	vprintf Hyperelliptic, 1 : "Automorphism group D4, curve y^2 = (x^2-1)*(x^6+a*x^4+b*x^2+c)\n";
-	aut := SmallGroup(4, 2);
+	aut := DirectProduct(CyclicGroup(2), CyclicGroup(2));
 	if models then twists := G3ModelsInCharFF_D4(JI: geometric := geometric, RationalModel := RationalModel); end if;
 	return twists, aut;
     end if;
@@ -1487,108 +1510,6 @@ function G3Models(JI: geometric := false, models := true, RationalModel := true,
     return [f, PrimitiveElement(FF)*f], aut;
 
 end function;
-
-intrinsic DiscriminantFromShiodaInvariants(JI::SeqEnum) -> BoolElt
-    {Compute the discriminant of a genus 3 hyperelliptic curve  with the given
-    Shioda Invariants}
-
-    FF := Universe(JI);
-    p:= Characteristic(FF);
-
-    /* Not yet implemented */
-    if p in {5} then
-	error "[Hyperelliptic] currently, no computation done in fields of char. 5, sorry";
-	return 0;
-    end if;
-
-
-    /* Rings of small characteristic */
-    case p:
-
-    when 2:
-	require #JI eq 10 or #JI eq 7 or #JI eq 6 or #JI eq 5
-	    : "JI must be of size 5, 6, 7 or 10";
-
-	case #JI:
-
-	when 5:
-	    if JI[1] eq 0 and JI[2] eq 0 then /* Type (7) */
-		j2, j3, N7, N32, N40 := Explode(JI);
-		return N7;
-	    elif JI[1] ne 0 and JI[2] eq 0 then /* Type (3,3) */
-		j2, j3, L0, L1, L2 := Explode(JI);
-		return j2*L0;
-	    else
-		"Type (3, 3) inconsistent with Type 7";
-	    end if;
-
-	when 6:
-	    j2, j3, M1, M3, M4, M5 := Explode(JI);    /* Type (1,5) */
-	    return M1*M5;
-
-	when 7:
-	    j2, j3, K0, K1, K2, K3, K4 := Explode(JI); /* Type (1,1,3) */
-	    return j2*K0*K2;
-
-	when 10:
-	    j2, j3, J2, J4, J5, J6, J8, J9, J11, J12 := Explode(JI); /* Type (1,1,1,1) */
-	    return j3*J8;
-
-	end case;
-
-    when 3:
-	require #JI eq 10 : "Argument must be a sequence of ten Shioda invariants (characteristic 3) : J2, ..., J10, J12.";
-	J2, J3, J4, J5, J6, J7, J8, J9, J10, J12 := Explode(JI);
-
-	/* Discriminant */
-	D14 :=  2*J2^4*J3^2 + J2^3*J4^2 + 2*J3^2*J4^2 + 2*J2*J4^3 +
-		J2^3*J3*J5 + J3^3*J5 + J2*J3*J4*J5 + J2^4*J6 +
-		2*J2*J3^2*J6 + J4^2*J6 + J3*J5*J6 + J2*J6^2 + 2*J2*J5*J7 +
-		2*J7^2 + 2*J3^2*J8 + J2*J4*J8 + J2^2*J10 + J4*J10;
-
-	return D14;
-
-    when 7:
-	require #JI eq 13 : "Argument must be a sequence of thirteen Shioda invariants (characteristic 7) : J2, ..., J10, J11, J13, J14, J15.";
-	J2, J3, J4, J5, J6, J7, J8, J9, J10, J11, J13, J14, J15 := Explode(JI);
-
-	/* Discriminant */
-	D14 :=  5*J2^7 + 3*J2^5*J4 + 3*J2^2*J3^2*J4 + 5*J2^3*J4^2 +
-		4*J3^2*J4^2 + 3*J2*J4^3 + 2*J2^3*J3*J5 + 4*J3^3*J5 +
-		2*J2*J3*J4*J5 + 3*J2^2*J5^2 + 3*J2^4*J6 + 2*J2*J3^2*J6 +
-		4*J2^2*J4*J6 + 3*J4^2*J6 + 5*J3*J5*J6 + 4*J2*J6^2 + 3*J3*J4*J7 +
-		3*J2*J5*J7 + 2*J2^3*J8 + 5*J2*J4*J8 + 2*J6*J8 + J2*J3*J9 +
-		4*J5*J9 + 4*J2^2*J10 + 2*J4*J10 + J3*J11 + 6*J14;
-
-	return D14;
-
-    end case;
-
-    /* Other rings (p = 0 or p > 7) */
-    require #JI eq 9 : "Argument must be a sequence of nine Shioda invariants J2, ..., J10.";
-    J2, J3, J4, J5, J6, J7, J8, J9, J10 := Explode(JI);
-
-    /* Discriminant */
-    D14 :=
-	369994358063104/492075*J2^7 - 364395343642624/10935*J2^5*J4 +
-	683055942467584/32805*J2^4*J3^2 - 10428636769288192/54675*J2^4*J6 -
-	163430755991552/1215*J2^3*J3*J5 + 773557223161856/1215*J2^3*J4^2 +
-	1930310469025792/405*J2^3*J8 + 16530764988416/243*J2^2*J3^2*J4 -
-	70934252748800/27*J2^2*J3*J7 + 3128790930685952/1215*J2^2*J4*J6 -
-	27296194379776/15*J2^2*J5^2 + 335549856481280/9*J2^2*J10 +
-	1727094849536/27*J2*J3^4 - 8473127331823616/3645*J2*J3^2*J6 +
-	6422633971712/9*J2*J3*J4*J5 - 138167587962880/9*J2*J3*J9 +
-	1328382667128832/675*J2*J4^3 + 2908427726618624/45*J2*J4*J8 -
-	89916875603968/5*J2*J5*J7 + 12048213670363136/1215*J2*J6^2 +
-	431773712384*J3^3*J5 + 27887955673088/81*J3^2*J4^2 +
-	5181284548608*J3^2*J8 - 469985685929984/45*J3*J4*J7 +
-	1257325050462208/135*J3*J5*J6 + 3773948974071808/675*J4^2*J6 +
-	884272562962432/15*J4*J10 - 221068140740608/5*J5*J9 -
-	55267035185152/9*J6*J8 - 215886856192*J7^2;
-
-    return D14;
-
-end intrinsic;
 
 intrinsic HyperellipticCurveFromShiodaInvariants(JI::SeqEnum: RationalModel := true, Deterministic := false) -> CrvHyp, GrpPerm
     {Compute a genus 3 hyperelliptic curve and its automorphism group from given
@@ -1743,7 +1664,7 @@ end intrinsic;
   * Twists
   *
   ********************************************************************/
-intrinsic TwistedHyperellipticPolynomialsFromShiodaInvariants(JI::SeqEnum[FldFinElt] : RationalModel := true, Deterministic := false) -> SeqEnum[CrvHyp], GrpPerm
+intrinsic TwistedHyperellipticPolynomialsFromShiodaInvariants(JI::SeqEnum[FldFinElt] : RationalModel := true, Deterministic := false) -> SeqEnum, GrpPerm
     {Compute twisted  hyperelliptic polynomials and their automorphism groups from
     Shioda invariants.}
 
@@ -1784,28 +1705,17 @@ intrinsic TwistsFromShiodaInvariants(JI::SeqEnum[FldFinElt]) -> SeqEnum[CrvHyp],
     {Compute twisted  hyperelliptic curves and their automorphism groups from
     Shioda invariants.}
 
+    K := Universe(JI);
+
+    require (not IsUnit(K!2)) or (DiscriminantFromShiodaInvariants(JI) ne 0) :
+        "Argument must define a smooth hyperelliptic curve";
+
+    require Type(Universe(JI)) eq FldFin :
+	"Twist computations only available in finite fields";
+
     twists, aut := TwistedHyperellipticPolynomialsFromShiodaInvariants(JI);
 
     return [HyperellipticCurve(fh) : fh in twists], aut;
-
-end intrinsic;
-
-intrinsic TwistsOfGenus3HyperellipticPolynomials(f::RngUPolElt) -> SeqEnum[RngUPolElt], GrpPerm
-    {Compute twisted  hyperelliptic polynomials and their automorphism groups from
-    a degree 8 hyperelliptic polynomial.}
-
-    twists, aut := TwistedHyperellipticPolynomialsFromShiodaInvariants(ShiodaInvariants(f));
-
-    return [HyperellipticCurve(f) : f in twists], aut;
-
-
-end intrinsic;
-
-intrinsic TwistsOfGenus3HyperellipticPolynomials(fh::SeqEnum[RngUPolElt]) -> SeqEnum[CrvHyp], GrpPerm
-    {Compute twisted hyperelliptic polynomials and their automorphism groups from
-    a list [f, h] of two polynomials that defines the curve y^2 + h(x) * y = f(x).}
-
-    return TwistedHyperellipticPolynomialsFromShiodaInvariants(ShiodaInvariants(fh));
 
 end intrinsic;
 
@@ -1855,67 +1765,7 @@ intrinsic GeometricAutomorphismGroupFromShiodaInvariants(JI::SeqEnum) -> GrpPerm
 
 end intrinsic;
 
-intrinsic GeometricAutomorphismGroupFromGenus3HyperellipticPolynomials(fh::SeqEnum) -> GrpPerm
-    {Compute the automorphism group of the hyperelliptic curve y^2 + h(x) * y = f(x).}
-
-    f, h := Explode(fh);
-    FF := CoefficientRing(Parent(f));
-
-    p := Characteristic(FF);
-
-    /* Not yet implemented */
-    if p eq 5 then
-	error "[Hyperelliptic] currently, no computation done in fields of char. 5, sorry";
-	return [], <>;
-    end if;
-
-    _, aut := G3Models(ShiodaInvariants(fh) : models := false);
-    return aut;
-
-end intrinsic;
-
-intrinsic GeometricAutomorphismGroupFromGenus3HyperellipticPolynomials(f::RngUPolElt) -> GrpPerm
-    {Compute the automorphism group of the curve y^2 = f(x) where the
-    polynomial f, of degree at most 8, is considered as a binary form of degree 8.}
-
-
-    FF := CoefficientRing(f);
-    p := Characteristic(FF);
-
-    require p ne 2 : "2 must be invertible in the base ring.";
-
-    /* Not yet implemented */
-    if p in {5} then
-	error "[Hyperelliptic] currently, no computation done in fields of char. 5, sorry";
-	return [], <>;
-    end if;
-
-    /* Other rings (p = 0, 3 or p > 5) */
-    _, aut := G3Models(ShiodaInvariants(f) : models := false);
-    return aut;
-
-end intrinsic;
-
-
-intrinsic GeometricAutomorphismGroupFromGenus3HyperellipticCurve(H::CrvHyp) -> GrpPerm
-    {Compute the automorphism group of a genus 3 hyperelliptic curve H.}
-
-    FF := CoefficientRing(H);
-    p := Characteristic(FF);
-
-    /* Not yet implemented */
-    if p eq 5 then
-	error "[Hyperelliptic] currently, no computation done in fields of char. 5, sorry";
-	return <>;
-    end if;
-
-    /* Other rings (p = 0, 2, 3 or p > 5) */
-    _, aut := G3Models(ShiodaInvariants(H) : models := false);
-    return aut;
-
-end intrinsic;
-
-intrinsic GeometricAutomorphismGroupClassificationForGenus3HyperellipticCurve(FF::FldFin) -> SeqEnum, SeqEnum
+intrinsic GeometricAutomorphismGroupGenus3Classification(FF::FldFin) -> SeqEnum, SeqEnum
     {Give all possible automorphism groups of a genus 3 hyperelliptic curve,
     and the corresponding number of curves (up to isomorphism and twists) with
     this group, defined over the finite field given in input.}
@@ -1941,22 +1791,26 @@ intrinsic GeometricAutomorphismGroupClassificationForGenus3HyperellipticCurve(FF
 
 	Grps := [**]; Nmbs := [];
 	if C2C7 ne 0 then
-	    Grps cat:= [*SmallGroup(14, 2)*]; Nmbs cat:= [C2C7];
+	    Grps cat:= [* DirectProduct(CyclicGroup(2), CyclicGroup(7)) *]; Nmbs cat:= [C2C7];
 	end if;
 	if C2S3 ne 0 then
-	    Grps cat:= [*SmallGroup(12, 4)*]; Nmbs cat:= [C2S3];
-	end if;
+	    Grps cat:= [*sub<Sym(12)|
+                (1, 3, 2)(4, 6, 5)(7, 8, 9)(10, 11, 12),
+                (1, 4)(2, 5)(3, 6)(7, 10)(8, 11)(9, 12),
+                (1, 7)(2, 8)(3, 9)(4, 10)(5, 11)(6, 12)
+                > /* SmallGroup(12, 4) */ *]; Nmbs cat:= [C2S3];
+        end if;
 	if C2p3 ne 0 then
-	    Grps cat:= [*SmallGroup(8, 5)*]; Nmbs cat:= [C2p3];
+	    Grps cat:= [* DirectProduct([CyclicGroup(2): i in [1..3]]) /* SmallGroup(8, 5) */*]; Nmbs cat:= [C2p3];
 	end if;
 	if C4 ne 0 then
-	    Grps cat:= [*SmallGroup(4, 1)*]; Nmbs cat:= [C4];
+	    Grps cat:= [* CyclicGroup(4) *]; Nmbs cat:= [C4];
 	end if;
 	if C2p2 ne 0 then
-	    Grps cat:= [*SmallGroup(4, 2)*]; Nmbs cat:= [C2p2];
+	    Grps cat:= [* DirectProduct(CyclicGroup(2), CyclicGroup(2)) *]; Nmbs cat:= [C2p2];
 	end if;
 	if C2 ne 0 then
-	    Grps cat:= [*SmallGroup(2, 1)*]; Nmbs cat:= [C2];
+	    Grps cat:= [* CyclicGroup(2) *]; Nmbs cat:= [C2];
 	end if;
 
 	return Grps, Nmbs;
@@ -1970,7 +1824,93 @@ intrinsic GeometricAutomorphismGroupClassificationForGenus3HyperellipticCurve(FF
 
 	Grps := [**]; Nmbs := [];
 	if G672 ne 0 then
-	    Grps cat:= [*SmallGroup(672, 1043)*]; Nmbs cat:= [G672];
+	    Grps cat:= [*sub<Sym(672)|
+             (1, 85, 337, 427, 595, 550, 213, 253)(2, 86, 338, 428, 596, 549, 214, 254)(3, 87, 339,
+             431, 599, 546, 209, 255)(4, 88, 340, 432, 600, 545, 210, 256)(5, 89, 341, 423,
+             591, 551, 216, 257)(6, 90, 342, 424, 592, 552, 215, 258)(7, 91, 343, 430, 598,
+             542, 205, 259)(8, 92, 344, 429, 597, 541, 206, 260)(9, 93, 345, 421, 589, 547,
+             212, 261)(10, 94, 346, 422, 590, 548, 211, 262)(11, 95, 347, 426, 594, 544, 207,
+             263)(12, 96, 348, 425, 593, 543, 208, 264)(13, 97, 349, 478, 646, 559, 224,
+             265)(14, 98, 350, 477, 645, 560, 223, 266)(15, 99, 351, 474, 642, 563, 228,
+             267)(16, 100, 352, 473, 641, 564, 227, 268)(17, 101, 353, 479, 647, 555, 220,
+             269)(18, 102, 354, 480, 648, 556, 219, 270)(19, 103, 355, 470, 638, 562, 225,
+             271)(20, 104, 356, 469, 637, 561, 226, 272)(21, 105, 357, 475, 643, 553, 218,
+             273)(22, 106, 358, 476, 644, 554, 217, 274)(23, 107, 359, 472, 640, 558, 221,
+             275)(24, 108, 360, 471, 639, 557, 222, 276)(25, 109, 361, 466, 634, 577, 242,
+             277)(26, 110, 362, 465, 633, 578, 241, 278)(27, 111, 363, 462, 630, 579, 244,
+             279)(28, 112, 364, 461, 629, 580, 243, 280)(29, 113, 365, 467, 635, 581, 246,
+             281)(30, 114, 366, 468, 636, 582, 245, 282)(31, 115, 367, 458, 626, 583, 248,
+             283)(32, 116, 368, 457, 625, 584, 247, 284)(33, 117, 369, 463, 631, 585, 250,
+             285)(34, 118, 370, 464, 632, 586, 249, 286)(35, 119, 371, 460, 628, 587, 252,
+             287)(36, 120, 372, 459, 627, 588, 251, 288)(37, 121, 373, 490, 658, 537, 202,
+             289)(38, 122, 374, 489, 657, 538, 201, 290)(39, 123, 375, 486, 654, 533, 198,
+             291)(40, 124, 376, 485, 653, 534, 197, 292)(41, 125, 377, 491, 659, 540, 203,
+             293)(42, 126, 378, 492, 660, 539, 204, 294)(43, 127, 379, 482, 650, 529, 194,
+             295)(44, 128, 380, 481, 649, 530, 193, 296)(45, 129, 381, 487, 655, 536, 199,
+             297)(46, 130, 382, 488, 656, 535, 200, 298)(47, 131, 383, 484, 652, 531, 196,
+             299)(48, 132, 384, 483, 651, 532, 195, 300)(49, 133, 385, 494, 662, 511, 176,
+             301)(50, 134, 386, 493, 661, 512, 175, 302)(51, 135, 387, 496, 664, 515, 180,
+             303)(52, 136, 388, 495, 663, 516, 179, 304)(53, 137, 389, 498, 666, 507, 172,
+             305)(54, 138, 390, 497, 665, 508, 171, 306)(55, 139, 391, 500, 668, 514, 177,
+             307)(56, 140, 392, 499, 667, 513, 178, 308)(57, 141, 393, 502, 670, 505, 170,
+             309)(58, 142, 394, 501, 669, 506, 169, 310)(59, 143, 395, 504, 672, 510, 173,
+             311)(60, 144, 396, 503, 671, 509, 174, 312)(61, 145, 397, 453, 621, 523, 188,
+             313)(62, 146, 398, 454, 622, 524, 187, 314)(63, 147, 399, 449, 617, 527, 192,
+             315)(64, 148, 400, 450, 618, 528, 191, 316)(65, 149, 401, 456, 624, 519, 184,
+             317)(66, 150, 402, 455, 623, 520, 183, 318)(67, 151, 403, 445, 613, 526, 189,
+             319)(68, 152, 404, 446, 614, 525, 190, 320)(69, 153, 405, 452, 620, 517, 182,
+             321)(70, 154, 406, 451, 619, 518, 181, 322)(71, 155, 407, 447, 615, 522, 185,
+             323)(72, 156, 408, 448, 616, 521, 186, 324)(73, 157, 409, 440, 608, 574, 237,
+             325)(74, 158, 410, 439, 607, 573, 238, 326)(75, 159, 411, 444, 612, 570, 233,
+             327)(76, 160, 412, 443, 611, 569, 234, 328)(77, 161, 413, 436, 604, 575, 240,
+             329)(78, 162, 414, 435, 603, 576, 239, 330)(79, 163, 415, 441, 609, 566, 229,
+             331)(80, 164, 416, 442, 610, 565, 230, 332)(81, 165, 417, 434, 602, 571, 236,
+             333)(82, 166, 418, 433, 601, 572, 235, 334)(83, 167, 419, 437, 605, 568, 231,
+             335)(84, 168, 420, 438, 606, 567, 232, 336),
+             (1, 169, 281)(2, 170, 282)(3, 171, 277)(4, 172, 278)(5, 173, 285)(6, 174, 286)(7, 175,
+             279)(8, 176, 280)(9, 177, 288)(10, 178, 287)(11, 179, 283)(12, 180, 284)(13, 181,
+             316)(14, 182, 315)(15, 183, 320)(16, 184, 319)(17, 185, 314)(18, 186, 313)(19,
+             187, 324)(20, 188, 323)(21, 189, 318)(22, 190, 317)(23, 191, 321)(24, 192,
+             322)(25, 193, 256)(26, 194, 255)(27, 195, 260)(28, 196, 259)(29, 197, 254)(30,
+             198, 253)(31, 199, 264)(32, 200, 263)(33, 201, 258)(34, 202, 257)(35, 203,
+             261)(36, 204, 262)(37, 205, 300)(38, 206, 299)(39, 207, 297)(40, 208, 298)(41,
+             209, 296)(42, 210, 295)(43, 211, 293)(44, 212, 294)(45, 213, 292)(46, 214,
+             291)(47, 215, 289)(48, 216, 290)(49, 217, 327)(50, 218, 328)(51, 219, 331)(52,
+             220, 332)(53, 221, 325)(54, 222, 326)(55, 223, 335)(56, 224, 336)(57, 225,
+             329)(58, 226, 330)(59, 227, 334)(60, 228, 333)(61, 229, 269)(62, 230, 270)(63,
+             231, 265)(64, 232, 266)(65, 233, 273)(66, 234, 274)(67, 235, 267)(68, 236,
+             268)(69, 237, 276)(70, 238, 275)(71, 239, 271)(72, 240, 272)(73, 241, 306)(74,
+             242, 305)(75, 243, 302)(76, 244, 301)(77, 245, 310)(78, 246, 309)(79, 247,
+             304)(80, 248, 303)(81, 249, 311)(82, 250, 312)(83, 251, 308)(84, 252, 307)(85,
+             421, 505)(86, 422, 506)(87, 423, 507)(88, 424, 508)(89, 425, 509)(90, 426,
+             510)(91, 427, 511)(92, 428, 512)(93, 429, 513)(94, 430, 514)(95, 431, 515)(96,
+             432, 516)(97, 433, 517)(98, 434, 518)(99, 435, 519)(100, 436, 520)(101, 437,
+             521)(102, 438, 522)(103, 439, 523)(104, 440, 524)(105, 441, 525)(106, 442,
+             526)(107, 443, 527)(108, 444, 528)(109, 445, 529)(110, 446, 530)(111, 447,
+             531)(112, 448, 532)(113, 449, 533)(114, 450, 534)(115, 451, 535)(116, 452,
+             536)(117, 453, 537)(118, 454, 538)(119, 455, 539)(120, 456, 540)(121, 457,
+             541)(122, 458, 542)(123, 459, 543)(124, 460, 544)(125, 461, 545)(126, 462,
+             546)(127, 463, 547)(128, 464, 548)(129, 465, 549)(130, 466, 550)(131, 467,
+             551)(132, 468, 552)(133, 469, 553)(134, 470, 554)(135, 471, 555)(136, 472,
+             556)(137, 473, 557)(138, 474, 558)(139, 475, 559)(140, 476, 560)(141, 477,
+             561)(142, 478, 562)(143, 479, 563)(144, 480, 564)(145, 481, 565)(146, 482,
+             566)(147, 483, 567)(148, 484, 568)(149, 485, 569)(150, 486, 570)(151, 487,
+             571)(152, 488, 572)(153, 489, 573)(154, 490, 574)(155, 491, 575)(156, 492,
+             576)(157, 493, 577)(158, 494, 578)(159, 495, 579)(160, 496, 580)(161, 497,
+             581)(162, 498, 582)(163, 499, 583)(164, 500, 584)(165, 501, 585)(166, 502,
+             586)(167, 503, 587)(168, 504, 588)(337, 344, 346)(338, 343, 345)(339, 348,
+             342)(340, 347, 341)(349, 393, 417)(350, 394, 418)(351, 389, 413)(352, 390,
+             414)(353, 396, 420)(354, 395, 419)(355, 385, 409)(356, 386, 410)(357, 392,
+             416)(358, 391, 415)(359, 387, 411)(360, 388, 412)(361, 381, 404)(362, 382,
+             403)(363, 377, 408)(364, 378, 407)(365, 384, 400)(366, 383, 399)(367, 373,
+             405)(368, 374, 406)(369, 380, 398)(370, 379, 397)(371, 375, 401)(372, 376,
+             402)(589, 632, 669)(590, 631, 670)(591, 636, 665)(592, 635, 666)(593, 628,
+             672)(594, 627, 671)(595, 633, 661)(596, 634, 662)(597, 626, 668)(598, 625,
+             667)(599, 629, 663)(600, 630, 664)(601, 655, 619)(602, 656, 620)(603, 659,
+             623)(604, 660, 624)(605, 651, 615)(606, 652, 616)(607, 658, 622)(608, 657,
+             621)(609, 649, 613)(610, 650, 614)(611, 654, 618)(612, 653, 617)(637, 646,
+             644)(638, 645, 643)(639, 642, 648)(640, 641, 647)
+             > /* SmallGroup(672, 1043) */ *]; Nmbs cat:= [G672];
 	end if;
 	if C2C4 ne 0 then
 	    Grps cat:= [*DirectProduct(CyclicGroup(2), CyclicGroup(4))*]; Nmbs cat:= [C2C4];
@@ -1985,7 +1925,7 @@ intrinsic GeometricAutomorphismGroupClassificationForGenus3HyperellipticCurve(FF
 	    Grps cat:= [*CyclicGroup(4)*]; Nmbs cat:= [C4];
 	end if;
 	if C2p3 ne 0 then
-	    Grps cat:= [*SmallGroup(8, 5)*]; Nmbs cat:= [C2p3];
+	    Grps cat:= [*DirectProduct([CyclicGroup(2): i in [1..3]])/* SmallGroup(8, 5) */*]; Nmbs cat:= [C2p3];
 	end if;
 	if D2 ne 0 then
 	    Grps cat:= [*DirectProduct(CyclicGroup(2), CyclicGroup(2))*]; Nmbs cat:= [D2];
@@ -2011,34 +1951,60 @@ intrinsic GeometricAutomorphismGroupClassificationForGenus3HyperellipticCurve(FF
 	Grps cat:= [*CyclicGroup(14)*]; Nmbs cat:= [C14];
     end if;
     if U6 ne 0 then
-	Grps cat:= [*SmallGroup(24, 5)*]; Nmbs cat:= [U6];
+	Grps cat:= [*sub<Sym(24)|
+            (1, 13)(2, 14)(3, 15)(4, 16)(5, 17)(6, 18)(7, 19)(8, 20)(9, 21)(10, 22)(11, 23)(12, 24),
+            (1, 10, 4, 7)(2, 11, 5, 8)(3, 12, 6, 9)(13, 22, 16, 19)(14, 23, 17, 20)(15, 24, 18, 21),
+            (1, 3, 2)(4, 6, 5)(7, 9, 8)(10, 12, 11)(13, 14, 15)(16, 17, 18)(19, 20, 21)(22, 23, 24)
+            > /* SmallGroup(24, 5) */ *]; Nmbs cat:= [U6];
     end if;
     if V8 ne 0 then
-	Grps cat:= [*SmallGroup(32, 9)*]; Nmbs cat:= [V8];
+        Grps cat:= [*sub<Sym(32)|
+            (1, 19, 3, 17)(2, 20, 4, 18)(5, 23, 7, 21)(6, 24, 8, 22)
+            (9, 27, 11, 25)(10, 28, 12, 26)(13, 31, 15, 29)(14, 32, 16, 30),
+            (1, 9)(2, 10)(3, 11)(4, 12)(5, 13)(6, 14)(7, 15)(8, 16)(17, 29)
+            (18, 30)(19, 31)(20, 32)(21, 26)(22, 25)(23, 28)(24, 27)
+            > /* SmallGroup(32, 9) */ *]; Nmbs cat:= [V8];
     end if;
     if C2S4 ne 0 then
-	Grps cat:= [*SmallGroup(48, 48)*]; Nmbs cat:= [C2S4];
+	Grps cat:= [*sub<Sym(48)|
+            (1, 25)(2, 26)(3, 27)(4, 28)(5, 29)(6, 30)(7, 31)(8, 32)(9, 33)(10, 34)(11, 35)(12, 36)(13,
+            37)(14, 38)(15, 39)(16, 40)(17, 41)(18, 42)(19, 43)(20, 44)(21, 45)(22, 46)(23, 47)(24, 48),
+            (1, 13)(2, 14)(3, 15)(4, 16)(5, 17)(6, 18)(7, 19)(8, 20)(9, 21)(10, 22)(11, 23)(12, 24)(25,
+            37)(26, 38)(27, 39)(28, 40)(29, 41)(30, 42)(31, 43)(32, 44)(33, 45)(34, 46)(35, 47)(36, 48),
+            (1, 9, 5)(2, 10, 6)(3, 11, 7)(4, 12, 8)(13, 21, 17)(14, 22, 18)(15, 23, 19)(16, 24, 20)(25, 29,
+            33)(26, 30, 34)(27, 31, 35)(28, 32, 36)(37, 41, 45)(38, 42, 46)(39, 43, 47)(40, 44, 48),
+            (1, 3)(2, 4)(5, 6)(7, 8)(9, 12)(10, 11)(13, 15)(14, 16)(17, 18)(19, 20)(21, 24)(22, 23)(25,
+            26)(27, 28)(29, 32)(30, 31)(33, 35)(34, 36)(37, 38)(39, 40)(41, 44)(42, 43)(45, 47)(46, 48)
+            > /* SmallGroup(48, 48) */ *]; Nmbs cat:= [C2S4];
     end if;
     if C2C4 ne 0 then
-	Grps cat:= [*DirectProduct(CyclicGroup(2), CyclicGroup(4))*]; Nmbs cat:= [C2C4];
+	Grps cat:= [* DirectProduct(CyclicGroup(2), CyclicGroup(4))*]; Nmbs cat:= [C2C4];
     end if;
     if D12 ne 0 then
-	Grps cat:= [*SmallGroup(12, 4)*]; Nmbs cat:= [D12];
+	Grps cat:= [* sub<Sym(12)|
+            (1, 3, 2)(4, 6, 5)(7, 8, 9)(10, 11, 12),
+            (1, 4)(2, 5)(3, 6)(7, 10)(8, 11)(9, 12),
+            (1, 7)(2, 8)(3, 9)(4, 10)(5, 11)(6, 12)
+            > /* SmallGroup(12, 4) */ *]; Nmbs cat:= [D12];
     end if;
     if C2D8 ne 0 then
-	Grps cat:= [*SmallGroup(16, 11)*]; Nmbs cat:= [C2D8];
+	Grps cat:= [* sub<Sym(16) |
+             (1, 3)(2, 4)(5, 7)(6, 8)(9, 11)(10, 12)(13, 15)(14, 16),
+             (1, 5)(2, 6)(3, 7)(4, 8)(9, 14)(10, 13)(11, 16)(12, 15),
+             (1, 9)(2, 10)(3, 11)(4, 12)(5, 13)(6, 14)(7, 15)(8, 16)
+             > /* SmallGroup(16, 11) */ *]; Nmbs cat:= [C2D8];
     end if;
     if C4  ne 0 then
-	Grps cat:= [*SmallGroup(4, 1)*]; Nmbs cat:= [C4];
+	Grps cat:= [* CyclicGroup(4) *]; Nmbs cat:= [C4];
     end if;
     if C2p3 ne 0 then
-	Grps cat:= [*SmallGroup(8, 5)*]; Nmbs cat:= [C2p3];
+	Grps cat:= [* DirectProduct([CyclicGroup(2): i in [1..3]]) /* SmallGroup(8, 5) */ *]; Nmbs cat:= [C2p3];
     end if;
     if D4 ne 0 then
-	Grps cat:= [*SmallGroup(4, 2)*]; Nmbs cat:= [D4];
+	Grps cat:= [* DirectProduct(CyclicGroup(2), CyclicGroup(2)) *]; Nmbs cat:= [D4];
     end if;
     if C2 ne 0 then
-	Grps cat:= [*CyclicGroup(2)*]; Nmbs cat:= [C2];
+	Grps cat:= [* CyclicGroup(2) *]; Nmbs cat:= [C2];
     end if;
 
     return Grps, Nmbs;

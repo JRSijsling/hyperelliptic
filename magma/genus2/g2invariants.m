@@ -1099,8 +1099,9 @@ intrinsic IgusaInvariantsEqual(V1::SeqEnum, V2::SeqEnum) -> BoolElt
 
 end intrinsic;
 
-intrinsic IgusaAlgebraicRelations(JI::SeqEnum) -> SeqEnum
-    {}
+intrinsic DiscriminantFromIgusaInvariants(JI::SeqEnum) -> .
+    {Compute the discriminant of a genus 2 hyperelliptic curve from the given
+    Igusa Invariants}
 
     K := Universe(JI);
 
@@ -1110,22 +1111,6 @@ intrinsic IgusaAlgebraicRelations(JI::SeqEnum) -> SeqEnum
    require #JI eq 6 or #JI eq 5
         : "JI must be of size 5 or 6";
 
-   if #JI eq 5 then
-       I2,I4,I6,I8,I10 := Explode(JI);
-       return [ 4*I8-(I2*I6-I4^2) ];
-   end if;
-
-   I2,I4,I6,I8,I10,I15 := Explode(JI);
-   return [
-       4*I8-(I2*I6-I4^2),
-       I15^2 - 2^22 * (
-       I2^6*I6^3-2*I2^5*I4^2*I6^2+I2^4*I4^4*I6-72*I10*I2^5*I4*I6+8*I10*I2^4*I4^3-72*I2^4*I4*I6^3+
-       136*I2^3*I4^3*I6^2-64*I2^2*I4^5*I6-432*I10^2*I2^5-48*I10*I2^4*I6^2+4816*I10*I2^3*I4^2*I6-
-       512*I10*I2^2*I4^4+216*I2^3*I6^4+1080*I2^2*I4^2*I6^3-2304*I2*I4^4*I6^2+1024*I4^6*I6+
-       28800*I10^2*I2^3*I4-12960*I10*I2^2*I4*I6^2-84480*I10*I2*I4^3*I6+8192*I10*I4^5-
-       7776*I2*I4*I6^4+6912*I4^3*I6^3-96000*I10^2*I2^2*I6-512000*I10^2*I2*I4^2-129600*I10*I2*I6^3+
-       691200*I10*I4^2*I6^2+11664*I6^5+11520000*I10^2*I4*I6+51200000*I10^3
-       )
-       ];
+    return JI[5];
 
 end intrinsic;

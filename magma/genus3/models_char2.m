@@ -473,7 +473,7 @@ function G3Char2Models(JI: geometric:= false, models:= true, descent:= true)
 	    J9 eq 0 and J11 eq 0 and J12 eq 0 then
 	    vprintf Hyperelliptic, 1 : "Type 1111 - Automorphism group C2xC2xC2\n";
 	    if models then twists:= G3Char2Models_T1111_C2xC2xC2(JI : geometric:= geometric); end if;
-	    return twists, SmallGroup(8, 5); /* C2 x C2 x C2 */
+            return twists, DirectProduct([ CyclicGroup(2) : i in [1..3]]); /* C2 x C2 x C2 */
 	end if;
 
 	if J2 eq 0 and J9 eq 0 and
@@ -484,12 +484,12 @@ function G3Char2Models(JI: geometric:= false, models:= true, descent:= true)
 	    J4*J8 + J12  eq 0 then
 	    vprintf Hyperelliptic, 1 : "Type 1111 - Automorphism group C2xC2\n";
 	    if models then twists:= G3Char2Models_T1111_C2xC2(JI : geometric:= geometric); end if;
-	    return twists, SmallGroup(4, 2); /* C2 x C2 */
+	    return twists, DirectProduct(CyclicGroup(2), CyclicGroup(2)); /* C2 x C2 */
 	end if;
 
 	if models then twists:= G3Char2Models_T1111_C2(JI : geometric:= geometric); end if;
 	vprintf Hyperelliptic, 1 : "Type 1111 - Automorphism group C2\n";
-	return twists, SmallGroup(2, 1); /* C2 */
+	return twists, CyclicGroup(2); /* C2 */
 
     end if;
 
@@ -503,12 +503,12 @@ function G3Char2Models(JI: geometric:= false, models:= true, descent:= true)
 	if K0 eq j2 and K1 eq 0 and K3 eq 0 then
 	    vprintf Hyperelliptic, 1 : "Type 113 - Automorphism group C4\n";
 	    if models then twists:= G3Char2Models_T113_C4(JI : geometric:= geometric); end if;
-	    return twists, SmallGroup(4, 1); /* C4 */
+	    return twists, CyclicGroup(4); /* C4 */
 	end if;
 
 	vprintf Hyperelliptic, 1 : "Type 113 - Automorphism group C2\n";
 	if models then twists:= G3Char2Models_T113_C2(JI : geometric:= geometric); end if;
-	return twists, SmallGroup(2, 1);
+	return twists, CyclicGroup(2);
     end if;
 
     /* Case (3, 3) */
@@ -520,19 +520,19 @@ function G3Char2Models(JI: geometric:= false, models:= true, descent:= true)
 	if L1 + L0^2 eq 0 and L2 + L0^3 + L0^2 eq 0  then
 	    vprintf Hyperelliptic, 1 : "Type 33 - Automorphism group C2xS3\n";
 	    if models then twists:= G3Char2Models_T33_C2xS3(JI : geometric:= geometric); end if;
-	    return twists, SmallGroup(12, 4); /* C2 x S3 */
+	    return twists, DirectProduct(CyclicGroup(2), SymmetricGroup(3)); /* C2 x S3 */
 	end if;
 
 	if L2 + L1*L0 + L0^2 eq 0 then
 	    vprintf Hyperelliptic, 1 : "Type 33 - Automorphism group C2xC2\n";
 	    if models then twists:= G3Char2Models_T33_C2xC2(JI : geometric:= geometric); end if;
-	    return twists, SmallGroup(4, 2); /* C2 x C2 */
+	    return twists, DirectProduct(CyclicGroup(2), CyclicGroup(2)); /* C2 x C2 */
 	end if;
 
 	vprintf Hyperelliptic, 1 : "Type 33 - Automorphism group C2\n";
 	if models then twists:= G3Char2Models_T33_C2(JI : geometric:= geometric); end if;
 
-	return twists, SmallGroup(2, 1); /* C2 */
+	return twists, CyclicGroup(2); /* C2 */
 
     end if;
 
@@ -543,7 +543,7 @@ function G3Char2Models(JI: geometric:= false, models:= true, descent:= true)
     if #JI eq 6 then
 	vprintf Hyperelliptic, 1 : "Type 15 - Automorphism group C2\n";
 	if models then twists:= G3Char2Models_T15_C2(JI : geometric:= geometric); end if;
-	return twists, SmallGroup(2, 1); /* C2 */
+	return twists, CyclicGroup(2); /* C2 */
     end if;
 
     /* Case (7) */
@@ -553,12 +553,12 @@ function G3Char2Models(JI: geometric:= false, models:= true, descent:= true)
 	if N32 eq 0 and N40 eq 0  then
 	    vprintf Hyperelliptic, 1 : "Type 7 - Automorphism group C2xC7\n";
 	    if models then twists:= G3Char2Models_T7_C2xC7(JI : geometric:= geometric); end if;
-	    return twists, SmallGroup(14, 2);	    /* C2 x C7 */
+	    return twists, DirectProduct(CyclicGroup(2), CyclicGroup(7));	    /* C2 x C7 */
 	end if;
 
 	vprintf Hyperelliptic, 1 : "Type 7 - Automorphism group C2\n";
 	if models then twists:= G3Char2Models_T7_C2(JI : geometric:= geometric); end if;
-	return twists, SmallGroup(2, 1); /* C2 */
+	return twists, CyclicGroup(2); /* C2 */
     end if;
 
     vprintf Hyperelliptic, 1 : "Point at infinity\n";

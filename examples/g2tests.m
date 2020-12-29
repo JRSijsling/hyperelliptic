@@ -206,7 +206,7 @@ end if;
  *****************************/
 CheckThatEverythingIsOK := procedure(FF)
 
-     Grps, NbGrps := GeometricAutomorphismGroupClassification(FF);
+     Grps, NbGrps := GeometricAutomorphismGroupGenus2Classification(FF);
      AllCurves := G2Enumerate(FF);
 
      errors := false;

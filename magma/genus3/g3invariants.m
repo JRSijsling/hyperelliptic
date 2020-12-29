@@ -270,6 +270,108 @@ intrinsic ShiodaInvariants(C::CrvHyp :
 
 end intrinsic;
 
+intrinsic DiscriminantFromShiodaInvariants(JI::SeqEnum) -> .
+    {Compute the discriminant of a genus 3 hyperelliptic curve from the given
+    Shioda Invariants}
+
+    FF := Universe(JI);
+    p:= Characteristic(FF);
+
+    /* Not yet implemented */
+    if p in {5} then
+	error "[Hyperelliptic] currently, no computation done in fields of char. 5, sorry";
+	return 0;
+    end if;
+
+
+    /* Rings of small characteristic */
+    case p:
+
+    when 2:
+	require #JI eq 10 or #JI eq 7 or #JI eq 6 or #JI eq 5
+	    : "JI must be of size 5, 6, 7 or 10";
+
+	case #JI:
+
+	when 5:
+	    if JI[1] eq 0 and JI[2] eq 0 then /* Type (7) */
+		j2, j3, N7, N32, N40 := Explode(JI);
+		return N7;
+	    elif JI[1] ne 0 and JI[2] eq 0 then /* Type (3,3) */
+		j2, j3, L0, L1, L2 := Explode(JI);
+		return j2*L0;
+	    else
+		"Type (3, 3) inconsistent with Type 7";
+	    end if;
+
+	when 6:
+	    j2, j3, M1, M3, M4, M5 := Explode(JI);    /* Type (1,5) */
+	    return M1*M5;
+
+	when 7:
+	    j2, j3, K0, K1, K2, K3, K4 := Explode(JI); /* Type (1,1,3) */
+	    return j2*K0*K2;
+
+	when 10:
+	    j2, j3, J2, J4, J5, J6, J8, J9, J11, J12 := Explode(JI); /* Type (1,1,1,1) */
+	    return j3*J8;
+
+	end case;
+
+    when 3:
+	require #JI eq 10 : "Argument must be a sequence of ten Shioda invariants (characteristic 3) : J2, ..., J10, J12.";
+	J2, J3, J4, J5, J6, J7, J8, J9, J10, J12 := Explode(JI);
+
+	/* Discriminant */
+	D14 :=  2*J2^4*J3^2 + J2^3*J4^2 + 2*J3^2*J4^2 + 2*J2*J4^3 +
+		J2^3*J3*J5 + J3^3*J5 + J2*J3*J4*J5 + J2^4*J6 +
+		2*J2*J3^2*J6 + J4^2*J6 + J3*J5*J6 + J2*J6^2 + 2*J2*J5*J7 +
+		2*J7^2 + 2*J3^2*J8 + J2*J4*J8 + J2^2*J10 + J4*J10;
+
+	return D14;
+
+    when 7:
+	require #JI eq 13 : "Argument must be a sequence of thirteen Shioda invariants (characteristic 7) : J2, ..., J10, J11, J13, J14, J15.";
+	J2, J3, J4, J5, J6, J7, J8, J9, J10, J11, J13, J14, J15 := Explode(JI);
+
+	/* Discriminant */
+	D14 :=  5*J2^7 + 3*J2^5*J4 + 3*J2^2*J3^2*J4 + 5*J2^3*J4^2 +
+		4*J3^2*J4^2 + 3*J2*J4^3 + 2*J2^3*J3*J5 + 4*J3^3*J5 +
+		2*J2*J3*J4*J5 + 3*J2^2*J5^2 + 3*J2^4*J6 + 2*J2*J3^2*J6 +
+		4*J2^2*J4*J6 + 3*J4^2*J6 + 5*J3*J5*J6 + 4*J2*J6^2 + 3*J3*J4*J7 +
+		3*J2*J5*J7 + 2*J2^3*J8 + 5*J2*J4*J8 + 2*J6*J8 + J2*J3*J9 +
+		4*J5*J9 + 4*J2^2*J10 + 2*J4*J10 + J3*J11 + 6*J14;
+
+	return D14;
+
+    end case;
+
+    /* Other rings (p = 0 or p > 7) */
+    require #JI eq 9 : "Argument must be a sequence of nine Shioda invariants J2, ..., J10.";
+    J2, J3, J4, J5, J6, J7, J8, J9, J10 := Explode(JI);
+
+    /* Discriminant */
+    D14 :=
+	369994358063104/492075*J2^7 - 364395343642624/10935*J2^5*J4 +
+	683055942467584/32805*J2^4*J3^2 - 10428636769288192/54675*J2^4*J6 -
+	163430755991552/1215*J2^3*J3*J5 + 773557223161856/1215*J2^3*J4^2 +
+	1930310469025792/405*J2^3*J8 + 16530764988416/243*J2^2*J3^2*J4 -
+	70934252748800/27*J2^2*J3*J7 + 3128790930685952/1215*J2^2*J4*J6 -
+	27296194379776/15*J2^2*J5^2 + 335549856481280/9*J2^2*J10 +
+	1727094849536/27*J2*J3^4 - 8473127331823616/3645*J2*J3^2*J6 +
+	6422633971712/9*J2*J3*J4*J5 - 138167587962880/9*J2*J3*J9 +
+	1328382667128832/675*J2*J4^3 + 2908427726618624/45*J2*J4*J8 -
+	89916875603968/5*J2*J5*J7 + 12048213670363136/1215*J2*J6^2 +
+	431773712384*J3^3*J5 + 27887955673088/81*J3^2*J4^2 +
+	5181284548608*J3^2*J8 - 469985685929984/45*J3*J4*J7 +
+	1257325050462208/135*J3*J5*J6 + 3773948974071808/675*J4^2*J6 +
+	884272562962432/15*J4*J10 - 221068140740608/5*J5*J9 -
+	55267035185152/9*J6*J8 - 215886856192*J7^2;
+
+    return D14;
+
+end intrinsic;
+
 intrinsic ShiodaInvariantsEqual(V1::SeqEnum, V2::SeqEnum) -> BoolElt
     {Check whether Shioda Invariants V1 and V2 of two genus 3 hyperelliptic curves or of
      two binary forms of degree 8 are equivalent.}

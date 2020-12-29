@@ -41,8 +41,8 @@
   *
   *********************************************************************/
 
-import "../g2twists/g2twists.m" : G2Models;
-import "../g3twists/g3twists.m" : G3Models;
+import "../genus2/g2twists.m" : G2Models;
+import "../genus3/g3twists.m" : G3Models;
 
 /* return f.M when f is seen as a form of degree n
    (M lives in an extension of the field of definition of f)
@@ -250,7 +250,8 @@ end function;
 */
 
 intrinsic TwistsOverFiniteField(C::Crv, Aut::.) -> SeqEnum[Crv]
-    {Determines the twists of C using the known automorphisms in Aut.}
+    {Determines the twists of C using the known automorphisms in Aut
+    (given by a list of N x N matrices).}
 
     F := BaseRing(C);
 
@@ -261,39 +262,18 @@ intrinsic TwistsOverFiniteField(C::Crv, Aut::.) -> SeqEnum[Crv]
 
     ishyper, H :=  IsHyperelliptic(C);
     if ishyper then
-        t := PrimitiveElement(F);
-        f := HyperellipticPolynomials(H);
-        P := Parent(f);
+        return TwistsOfHyperellipticPolynomials(HyperellipticPolynomials(H));
     end if;
 
     Coh := CohomologyClass(Aut, F);
+
     T := [C];
-
-    if ishyper then
-        boo := IsSelfDual(Aut,f,Identity(Parent(Coh[1])), g);
-        if boo eq false then
-            Append(~T,HyperellipticCurve(t*f));
-        end if;
-    end if;
-
     for M in Coh do
         if M ne Identity(Parent(M)) then
             A := ComputationCobord(M^(-1),F);
-            F2 := BaseRing(A);
-            C2 := ChangeRing(C,F2);
-
-            if ishyper then
-                ft := P!TransformForm(A^(-1), f, 2*g+2);
-                boo := IsSelfDual(Aut, f, A^(-1), g);
-                Append(~T, HyperellipticCurve(ft));
-                if boo eq false then
-                    Append(~T,HyperellipticCurve(t*ft));
-                end if;
-            else
-                X2 := Automorphism(AmbientSpace(C2), A^(-1));
-                Append(~T, ChangeRing(X2(C2), F));
-            end if;
-
+            C2 := ChangeRing(C, BaseRing(A));
+            X2 := Automorphism(AmbientSpace(C2), A^(-1));
+            Append(~T, ChangeRing(X2(C2), F));
         end if;
     end for;
 
@@ -304,11 +284,19 @@ intrinsic Twists(H::CrvHyp : AutomorphismGroup := false) -> SeqEnum[CrvHyp], Grp
     {Compute twisted  hyperelliptic curves and their automorphism groups}
 
     F := CoefficientRing(H);
+    p := Characteristic(F);
 
     require Type(F) eq FldFin :
 	"Twist computations only available in finite fields";
 
     g := Genus(H);
+
+    if g eq 1 then
+        Ec := EllipticCurve(H);
+        twists := Twists(Ec);
+        if not AutomorphismGroup then return twists; end if;
+        return twists, GeometricAutomorphismGroup(Ec);
+    end if;
 
     if g eq 2 then
         twists, aut := G2Models(IgusaInvariants(H));
@@ -316,13 +304,13 @@ intrinsic Twists(H::CrvHyp : AutomorphismGroup := false) -> SeqEnum[CrvHyp], Grp
         return twists;
     end if;
 
-    if g eq 3 then
+    if g eq 3 and p ne 5 then
         twists, aut := G3Models(ShiodaInvariants(H));
         if AutomorphismGroup then return twists, aut; end if;
         return twists;
     end if;
 
-    require Characteristic(F) ge 3 :
+    require IsUnit(F!2) :
         "2 must be invertible in the base ring.";
 
     f, h := HyperellipticPolynomials(H);
@@ -338,14 +326,168 @@ intrinsic Twists(H::CrvHyp : AutomorphismGroup := false) -> SeqEnum[CrvHyp], Grp
 
 end intrinsic;
 
-intrinsic HyperellipticPolynomialTwists(f::RngUPolElt, n::RngIntElt) -> SeqEnum[RngUPolElt]
-    {Found polynomials fp s.t. the curves y^2 = f(x) and y^2 = fp(x) are
-    twisted each other.}
+intrinsic TwistsOfHyperellipticPolynomials(f::RngUPolElt, d::RngIntElt : AutomorphismGroup := false) -> SeqEnum, GrpPerm
+    {Compute twisted  hyperelliptic polynomials from
+    a polynomial that defines the curve y^2 = f(x).}
 
-    _, Aut := IsGL2EquivalentExtended(f, f, n : geometric := true, commonfield := true);
+    F := CoefficientRing(f);
 
-    Twists := TwistsOverFiniteField(HyperellipticCurve(f), [ Normalize22Column(A) : A in Aut ]);
+    require Type(F) eq FldFin :
+	"Twist computations only available in finite fields";
 
-    return [HyperellipticPolynomials(g) : g in Twists];
+    require IsUnit(F!2) :
+        "2 must be invertible in the base ring.";
+
+    g := (d - 1) div 2;
+
+    t := PrimitiveElement(F);
+    P := Parent(f);
+
+    _, Aut := IsGL2EquivalentExtended(f, f, 2*g+2 : geometric := true, commonfield := true);
+    Aut := [ Normalize22Column(A) : A in Aut ];
+
+    Coh := CohomologyClass(Aut, F);
+
+    T := [f];
+    if not IsSelfDual(Aut, f, Identity(Parent(Coh[1])), g) then Append(~T, t*f); end if;
+
+    for M in Coh do
+        if M ne Identity(Parent(M)) then
+            A := ComputationCobord(M^(-1),F);
+
+            ft := P!TransformForm(A^(-1), f, 2*g+2); Append(~T, ft);
+            if not IsSelfDual(Aut, f, A^(-1), g) then Append(~T,t*ft); end if;
+        end if;
+    end for;
+
+    if AutomorphismGroup then return T, ProjectiveMatrixGroup(Aut); end if;
+    return T;
+
+end intrinsic;
+
+intrinsic TwistsOfHyperellipticPolynomials(f::RngUPolElt : AutomorphismGroup := false) -> SeqEnum, GrpPerm
+    {Compute twisted  hyperelliptic polynomials from
+    a polynomial that defines the curve y^2 = f(x).}
+
+    F := CoefficientRing(f);
+    p := Characteristic(F);
+
+    require Type(F) eq FldFin :
+        "Twist computations only available in finite fields";
+
+    require IsUnit(F!2) :
+        "2 must be invertible in the base ring.";
+
+    g := (Degree(f) - 1) div 2;
+
+    require g gt 1 :
+        "Degree(f) > 4 is required";
+
+    if g eq 2 then
+        twists, aut := G2Models(IgusaInvariants(f));
+        if AutomorphismGroup then return twists, aut; end if;
+        return twists;
+    end if;
+
+    if g eq 3 and p ne 5 then
+        twists, aut := G3Models(ShiodaInvariants(f));
+        if AutomorphismGroup then return twists, aut; end if;
+        return twists;
+    end if;
+
+    return TwistsOfHyperellipticPolynomials(f, 2*g+2: AutomorphismGroup := AutomorphismGroup);
+
+end intrinsic;
+
+intrinsic TwistsOfHyperellipticPolynomials(fh::SeqEnum[RngUPolElt] : AutomorphismGroup := false) -> SeqEnum, GrpPerm
+    {Compute twisted hyperelliptic polynomials and their automorphism groups from
+    a list [f, h] of two polynomials that defines the curve y^2 + h(x) * y = f(x).}
+
+    F := CoefficientRing(fh[1]);
+    p := Characteristic(F);
+
+    require Type(F) eq FldFin :
+	"Twist computations only available in finite fields";
+
+    f, h := Explode(fh);
+
+    if not IsUnit(F!2) then
+        g := Genus(HyperellipticCurve(fh));
+
+        require g in {2,3} :
+            "The argument must define an hyperelliptic curve of genus <= 3";
+
+        if g eq 2 then
+            twists, aut := G2Models(IgusaInvariants(f));
+            if AutomorphismGroup then return twists, aut; end if;
+            return twists;
+        end if;
+
+        if g eq 3 and p ne 5 then
+            twists, aut := G3Models(ShiodaInvariants(f));
+            if AutomorphismGroup then return twists, aut; end if;
+            return twists;
+        end if;
+
+        return fh;
+    end if;
+
+    if h eq 0 then g := f; else g := 4*f+h^2; end if;
+
+    return TwistsOfHyperellipticPolynomials(g : AutomorphismGroup := AutomorphismGroup);
+
+end intrinsic;
+
+
+intrinsic GeometricAutomorphismGroup(Ec::CrvEll) -> GrpPerm
+    {Compute the automorphism group of an elliptic curve.}
+
+    p := Characteristic(BaseRing(Ec));
+    j := jInvariant(Ec);
+
+    if j ne 0 and j ne 12^3 then
+        Aut := CyclicGroup(2);
+    elif p eq 2 then
+        Aut := sub<Sym(24) |
+            (1, 17, 9)(2, 18, 10)(3, 19, 11)(4, 20, 12)(5, 21, 13)(6, 22, 14)(7, 23, 15)(8, 24, 16),
+            (1, 6, 2, 5)(3, 8, 4, 7)(9, 12, 10, 11)(13, 15, 14, 16)(17, 24, 18, 23)(19, 21, 20, 22)>;
+    elif p eq 3 then
+        Aut := sub<Sym(12) |
+            (1, 3, 2)(4, 6, 5)(7, 8, 9)(10, 11, 12),
+            (1, 10, 4, 7)(2, 11, 5, 8)(3, 12, 6, 9)>;
+    elif j eq 0 then
+        Aut := CyclicGroup(6);
+    elif j eq 12^3 then
+        Aut := CyclicGroup(4);
+    end if;
+
+    return Aut;
+
+end intrinsic;
+
+intrinsic GeometricAutomorphismGroup(H::CrvHyp) -> GrpPerm
+    {Compute the automorphism group of an hyperelliptic curve.}
+
+    F := CoefficientRing(H);
+    p := Characteristic(F);
+
+    g := Genus(H);
+
+    if g eq 1 then
+        return GeometricAutomorphismGroup(EllipticCurve(H));
+    end if;
+
+    if g eq 2 then
+        _, aut := G2Models(IgusaInvariants(H) : models := false);
+        return aut;
+    end if;
+
+    if g eq 3 and p ne 5 then
+        _, aut := G3Models(ShiodaInvariants(H) : models := false);
+        return aut;
+    end if;
+
+    _, aut := TwistsOfHyperellipticPolynomials(HyperellipticPolynomials(H) : AutomorphismGroup := true);
+    return aut;
 
 end intrinsic;

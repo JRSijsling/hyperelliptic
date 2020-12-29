@@ -1114,7 +1114,7 @@ return #pairs ne 0, pairs;
 end intrinsic;
 
 
-intrinsic AutomorphismGroupBinary(f::RngUPolElt, deg::RngIntElt: geometric := false, covariant := true, commonfield := false) -> List
+intrinsic AutomorphismGroupHyperellipticPolynomial(f::RngUPolElt, deg::RngIntElt: geometric := false, covariant := true, commonfield := false) -> List
 {Returns a full list of matrices T.}
 
 test, pairs := IsGL2EquivalentExtended(f, f, deg : geometric := geometric, covariant := covariant, commonfield := commonfield);
