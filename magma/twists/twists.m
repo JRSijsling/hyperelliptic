@@ -282,7 +282,8 @@ intrinsic TwistsOverFiniteField(C::Crv, Aut::.) -> SeqEnum[Crv]
 
     ishyper, H :=  IsHyperelliptic(C);
     if ishyper then
-        return TwistsOfHyperellipticPolynomials(HyperellipticPolynomials(H));
+        twists :=  TwistsOfHyperellipticPolynomials(HyperellipticPolynomials(H));
+        return [ HyperellipticCurve(f) : f in twists];
     end if;
 
     Coh := CohomologyClass(Aut, F);
@@ -326,6 +327,7 @@ intrinsic Twists(H::CrvHyp : AutomorphismGroup := false) -> SeqEnum[CrvHyp], Grp
 
     if g eq 3 and p ne 5 then
         twists, aut := G3Models(ShiodaInvariants(H));
+        twists := [ HyperellipticCurve(f) : f in twists];
         if AutomorphismGroup then return twists, aut; end if;
         return twists;
     end if;
@@ -405,6 +407,7 @@ intrinsic TwistsOfHyperellipticPolynomials(f::RngUPolElt : AutomorphismGroup := 
 
     if g eq 2 then
         twists, aut := G2Models(IgusaInvariants(f));
+        twists := [HyperellipticPolynomials(H) : H in twists];
         if AutomorphismGroup then return twists, aut; end if;
         return twists;
     end if;
@@ -439,8 +442,12 @@ intrinsic TwistsOfHyperellipticPolynomials(fh::SeqEnum[RngUPolElt] : Automorphis
 
         if g eq 2 then
             twists, aut := G2Models(IgusaInvariants(f));
-            if AutomorphismGroup then return twists, aut; end if;
-            return twists;
+            Twists := []; for H in twists do
+                f, h := HyperellipticPolynomials(H);
+                Append(~Twists, [f, h]);
+            end for;
+            if AutomorphismGroup then return Twists, aut; end if;
+            return Twists;
         end if;
 
         if g eq 3 and p ne 5 then
