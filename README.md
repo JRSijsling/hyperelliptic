@@ -19,7 +19,8 @@ AttachSpec("~/Programs/hyperelliptic/magma/spec");
 Usage
 --
 
-Examples that test the routines in this package can be found in the directory `examples`.
+Examples that test the routines in this package can be found in the directory
+`examples`. A full list of the provided intrinsics is [here](intrinsics.md).
 
 Verbose comments are enabled by
 ```
@@ -66,6 +67,6 @@ Citing this code
 
 Please cite the following preprint if this code has been helpful in your research:
 
-Reynald Lercier and Christophe Ritzenthaler,  
-*Hyperelliptic curves and their invariants: Geometric, arithmetic and algorithmic aspects*,  
+Reynald Lercier and Christophe Ritzenthaler,
+*Hyperelliptic curves and their invariants: Geometric, arithmetic and algorithmic aspects*,
 [Journal of Algebra 372 (2012) 595–636](http://dx.doi.org/10.1016/j.jalgebra.2012.07.054)

@@ -1,7 +1,7 @@
 // freeze
 
 /***
- *  Twists of Genus 2 Curves.
+ *  Reconstruction and twists of Genus 2 Curves.
  *
  *  Distributed under the terms of the GNU Lesser General Public License (L-GPL)
  *                  http://www.gnu.org/licenses/
@@ -97,10 +97,19 @@
 /***
  * Exported intrinsics.
  *
- * intrinsic HyperellipticCurveFromG2Invariants(GI::SeqEnum : RationalModel := false) -> CrvHyp, GrpPerm
- * intrinsic HyperellipticCurveFromIgusaInvariants(JI::SeqEnum : RationalModel := false) -> CrvHyp, GrpPerm
- * intrinsic GeometricAutomorphismGroupFromIgusaInvariants(GI:SeqEnum) -> GrpPerm
- * intrinsic GeometricAutomorphismGroupGenus2Classification(FF::FldFin) -> SeqEnum,SeqEnum
+ * intrinsic HyperellipticCurveFromIgusaInvariants(II::SeqEnum :
+ *     RationalModel := false) -> CrvHyp, GrpPerm
+ *
+ * intrinsic HyperellipticCurveFromG2Invariants(GI::SeqEnum :
+ *     RationalModel := false) -> CrvHyp, GrpPerm
+ *
+ * intrinsic TwistsFromG2Invariants(II::SeqEnum[FldFinElt]) -> SeqEnum[CrvHyp], GrpPerm
+ *
+ * intrinsic TwistsFromIgusaInvariants(JI::SeqEnum[FldFinElt]) -> SeqEnum[CrvHyp], GrpPerm
+ *
+ * intrinsic GeometricAutomorphismGroupFromIgusaInvariants(II::SeqEnum) -> GrpPerm
+ *
+ * intrinsic GeometricAutomorphismGroupGenus2Classification(FF::FldFin) -> SeqEnum, SeqEnum
  *
  ********************************************************************/
 

@@ -21,7 +21,7 @@
  *  Copyright 2020, R. Lercier & C. Ritzenthaler & J. Sijsling
  */
 
- /* An early-abort front-end for the Factorization magma routine.
+ /* An early-abort front-end for the magma factorization routine.
   */
 function LimitedFactorization(N : ECMLimit := 20000, MPQSLimit := 60, Proof := false)
 
@@ -93,7 +93,7 @@ function ConicParametrization(L : RationalPoint := true, RandomLine := true, Leg
 
 end function;
 
-/* Bezout for rational couples */
+/* Bezout for rational pairs */
 function MinimizeLinearEquationOverRationals(LE)
 
     u := Parent(LE).1; v := Parent(LE).2;

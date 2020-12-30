@@ -1,7 +1,7 @@
 //freeze;
 
 /***
- *  Equations of the conic and the quartic for the covariants [1, 2, 5].
+ *  Equations of the conic and the quartic for the covariants [1, 2, 4].
  *
  *  Distributed under the terms of the GNU Lesser General Public License (L-GPL)
  *                  http://www.gnu.org/licenses/

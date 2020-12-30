@@ -20,19 +20,20 @@
  *  along with this program; if not, write to the Free Software
  *  Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA  02110-1301  USA
  *
- *  Copyright 2011, R. Lercier & C. Ritzenthaler
+ *  Copyright 2011-2020, R. Lercier, C. Ritzenthaler & J.R. Sijsling
  */
 
  /***
  * Exported intrinsics.
  *
- * intrinsic Transvectant(f::RngMPolElt,g::RngMPolElt,r::RngIntElt) -> RngMPolElt
  * intrinsic WPSEnumInit(FF::FldFin, Wght::SeqEnum) -> Rec
  * intrinsic WPSEnumNext(~V, ~WPSCtxt::Rec)
  * intrinsic WPSEqual(Wght::SeqEnum, V1::SeqEnum, V2::SeqEnum) -> BoolElt
  * intrinsic WPSNormalize(Wght::SeqEnum, V::SeqEnum) -> SeqEnuminsic;
  * intrinsic WPSMultiply(Wght::SeqEnum, V::SeqEnum, lambda::.) -> SeqEnum
  * intrinsic WPSMinimize(Wght::SeqEnum, V::SeqEnum) -> SeqEnum
+ *
+ * intrinsic Transvectant(f::RngMPolElt, g::RngMPolElt, r::RngIntElt) -> RngMPolElt
  *
  ********************************************************************/
 
@@ -59,8 +60,8 @@ function DerivativeSequence(f,n)
     return S;
 end function;
 
-intrinsic Transvectant(f::RngMPolElt,g::RngMPolElt,r::RngIntElt) -> RngMPolElt
-    {}
+intrinsic Transvectant(f::RngMPolElt, g::RngMPolElt, r::RngIntElt) -> RngMPolElt
+    {Given two covariants f and g given as two homogeneous polynomials, return their transvectant of level r}
     P := Parent(f);
     require P eq Parent(f) : "Arguments 1 and 2 must be have the same parent.";
     require IsHomogeneous(f) and IsHomogeneous(g) : "Arguments 1 and 2 must be homogeneous.";

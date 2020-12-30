@@ -23,6 +23,26 @@
  *  Copyright 2020, R. Lercier, C. Ritzenthaler & J. Sijsling
  */
 
+/***
+ * Exported intrinsics.
+ *
+ * intrinsic Twists(H::CrvHyp :
+ *     AutomorphismGroup := false) -> SeqEnum[CrvHyp], GrpPerm
+ *
+ * intrinsic TwistsOfHyperellipticPolynomials(f::RngUPolElt, d::RngIntElt :
+ *     AutomorphismGroup := false) -> SeqEnum, GrpPerm
+ * intrinsic TwistsOfHyperellipticPolynomials(f::RngUPolElt :
+ *     AutomorphismGroup := false) -> SeqEnum, GrpPerm
+ * intrinsic TwistsOfHyperellipticPolynomials(fh::SeqEnum[RngUPolElt] :
+ *     AutomorphismGroup := false) -> SeqEnum, GrpPerm
+ *
+ * intrinsic TwistsOverFiniteField(C::Crv, Aut::.) -> SeqEnum[Crv]
+ *
+ * intrinsic GeometricAutomorphismGroup(Ec::CrvEll) -> GrpPerm
+ * intrinsic GeometricAutomorphismGroup(H::CrvHyp) -> GrpPerm
+ *
+ ********************************************************************/
+
  /***
   *
   * Given a finite field Fq and a curve C, either hyperelliptic or a plane smooth quartic

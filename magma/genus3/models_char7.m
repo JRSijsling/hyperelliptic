@@ -30,9 +30,6 @@ import "g3d4_char7.m"            : G3Char7Models_D2;
 import "conic_char7.m"           : Genus3Char7ConicAndQuartic, Genus3Char7ConicAndQuarticForC4;
 import "../toolbox/hilbert90.m"  : MActOnC, Glasby;
 
-declare verbose Hyperelliptic, 3;
-
-
 /*************** Some useful quartics ***************/
 
  function InvariantsQuarticChar7(f)

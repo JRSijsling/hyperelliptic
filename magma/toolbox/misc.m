@@ -1,7 +1,7 @@
 //freeze;
 
 /***
- *  Miscellaneous stuff
+ *  Lifts over the p-adics, or the rationals
  *
  *  Distributed under the terms of the GNU Lesser General Public License (L-GPL)
  *                  http://www.gnu.org/licenses/

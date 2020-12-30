@@ -1,7 +1,7 @@
 //freeze;
 
 /***
- *  Invariants of Genus 3 Curves.
+ *  Invariants of hyperelliptic genus 3 Curves.
  *
  *  Distributed under the terms of the GNU Lesser General Public License (L-GPL)
  *                  http://www.gnu.org/licenses/
@@ -26,10 +26,41 @@
 /***
  * Exported intrinsics.
  *
- * intrinsic ShiodaInvariants(f::RngUPolElt : normalize := false) -> SeqEnum, SeqEnum
- * intrinsic ShiodaInvariants(fh::SeqEnum : normalize := false) -> SeqEnum, SeqEnum
- * intrinsic ShiodaInvariants(C::CrvHyp : normalize := false) -> SeqEnum, SeqEnum
+ * intrinsic ShiodaInvariants(f::RngUPolElt, p::RngIntElt :
+ *     normalize := false,
+ *     PrimaryOnly := false,
+ *     IntegralNormalization := false,
+ *     degmax := Infinity(), degmin := 1) -> SeqEnum, SeqEnum
+ * intrinsic ShiodaInvariants(f::RngMPolElt, p::RngIntElt :
+ *     normalize := false,
+ *     PrimaryOnly := false,
+ *     IntegralNormalization := false,
+ *     degmax := Infinity(), degmin := 1) -> SeqEnum, SeqEnum
+ * intrinsic ShiodaInvariants(f::RngUPolElt :
+ *     normalize := false,
+ *     PrimaryOnly := false,
+ *     IntegralNormalization := false,
+ *     degmax := Infinity(), degmin := 1) -> SeqEnum, SeqEnum
+ * intrinsic ShiodaInvariants(f::RngMPolElt :
+ *     normalize := false,
+ *     PrimaryOnly := false,
+ *     IntegralNormalization := false,
+ *     degmax := Infinity(), degmin := 1) -> SeqEnum, SeqEnum
+ * intrinsic ShiodaInvariants(fh::SeqEnum :
+ *     normalize := false,
+ *     PrimaryOnly := false,
+ *     IntegralNormalization := false,
+ *     degmax := Infinity(), degmin := 1) -> SeqEnum, SeqEnum
+ * intrinsic ShiodaInvariants(C::CrvHyp :
+ *     normalize := false,
+ *     PrimaryOnly := false,
+ *     IntegralNormalization := false,
+ *     degmax := Infinity(), degmin := 1) -> SeqEnum, SeqEnum
+ *
  * intrinsic ShiodaInvariantsEqual(V1::SeqEnum, V2::SeqEnum) -> BoolElt
+ *
+ * intrinsic DiscriminantFromShiodaInvariants(JI::SeqEnum) -> .
+ *
  * intrinsic ShiodaAlgebraicInvariants(PrimaryInvariants::SeqEnum : ratsolve := true) -> SeqEnum
  *
  * intrinsic MaedaInvariants(f::RngUPolElt) -> SeqEnum
