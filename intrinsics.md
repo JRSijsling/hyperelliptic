@@ -19,7 +19,7 @@ intrinsic IgusaInvariants(f::RngMPolElt, p::RngIntElt :
 intrinsic IgusaInvariants(C::CrvHyp :
     Quick := false, extend := false, normalize := false) -> SeqEnum, SeqEnum
 
-intrinsic IgusaInvariantsEqual(V1::SeqEnum, V2::SeqEnum) -> BoolElt
+intrinsic IgusaInvariantsEqual(JI1::SeqEnum, JI2::SeqEnum) -> BoolElt
 intrinsic DiscriminantFromIgusaInvariants(JI::SeqEnum) -> .
 intrinsic IgusaAlgebraicRelations(JI::SeqEnum) -> SeqEnum
 
@@ -44,7 +44,7 @@ intrinsic ShiodaInvariants(fh::SeqEnum :
 intrinsic ShiodaInvariants(C::CrvHyp :
     normalize := false, PrimaryOnly := false, IntegralNormalization := false, degmax := Infinity(), degmin := 1) -> SeqEnum, SeqEnum
 
-intrinsic ShiodaInvariantsEqual(V1::SeqEnum, V2::SeqEnum) -> BoolElt
+intrinsic ShiodaInvariantsEqual(JI1::SeqEnum, JI2::SeqEnum) -> BoolElt
 intrinsic DiscriminantFromShiodaInvariants(JI::SeqEnum) -> .
 intrinsic ShiodaAlgebraicInvariants(PrimaryInvariants::SeqEnum :
     ratsolve := true) -> SeqEnum
