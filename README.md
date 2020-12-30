@@ -20,7 +20,7 @@ Usage
 --
 
 Examples that test the routines in this package can be found in the directory
-`examples` (a full list of intrinsics is [here](intrinsics.md)).
+[`examples`](examples) (a full list of intrinsics is [here](intrinsics.md)).
 
 Verbose comments are enabled by
 ```
