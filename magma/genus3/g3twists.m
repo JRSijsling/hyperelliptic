@@ -86,15 +86,17 @@
  /***
  * Exported intrinsics.
  *
- * intrinsic HyperellipticCurveFromShiodaInvariants(JI::SeqEnum: RationalModel := true) -> CrvHyp, GrpPerm
- * intrinsic HyperellipticPolynomialFromShiodaInvariants(JI::SeqEnum: RationalModel := true) -> SeqEnum, GrpPerm
- * intrinsic HyperellipticPolynomialsFromShiodaInvariants(JI::SeqEnum: RationalModel := true) -> SeqEnum, GrpPerm
+ * intrinsic HyperellipticCurveFromShiodaInvariants(JI::SeqEnum :
+ *     RationalModel := true, Deterministic := false) -> CrvHyp, GrpPerm
+ * intrinsic HyperellipticPolynomialsFromShiodaInvariants(JI::SeqEnum :
+ *     RationalModel := true, Deterministic := false) -> SeqEnum, GrpPerm
+ * intrinsic HyperellipticPolynomialsFromShiodaInvariants(JI::SeqEnum[FldFinElt]) -> SeqEnum[CrvHyp], GrpPerm
+ * intrinsic HyperellipticPolynomialFromShiodaInvariants(JI::SeqEnum :
+ *     RationalModel := true, Deterministic := false) -> RngUPolElt, GrpPerm
  *
- * intrinsic TwistedHyperellipticPolynomialsFromShiodaInvariants(JI::SeqEnum[FldFinElt]) -> SeqEnum, GrpPerm
+ * intrinsic TwistedHyperellipticPolynomialsFromShiodaInvariants(JI::SeqEnum[FldFinElt] :
+ *     RationalModel := true, Deterministic := false) -> SeqEnum, GrpPerm
  * intrinsic TwistsFromShiodaInvariants(JI::SeqEnum[FldFinElt]) -> SeqEnum[CrvHyp], GrpPerm
- *
- * intrinsic TwistsOfGenus3HyperellipticPolynomials(f::RngUPolElt) -> SeqEnum[RngUPolElt], GrpPerm
- * intrinsic TwistsOfGenus3HyperellipticPolynomials(fh::SeqEnum[RngUPolElt]) -> SeqEnum[CRngUPolElt], GrpPerm
  *
  * intrinsic GeometricAutomorphismGroupFromShiodaInvariants(JI::SeqEnum) -> GrpPerm
  * intrinsic GeometricAutomorphismGroupGenus3Classification(FF::FldFin) -> SeqEnum, SeqEnum
@@ -1511,7 +1513,8 @@ function G3Models(JI: geometric := false, models := true, RationalModel := true,
 
 end function;
 
-intrinsic HyperellipticCurveFromShiodaInvariants(JI::SeqEnum: RationalModel := true, Deterministic := false) -> CrvHyp, GrpPerm
+intrinsic HyperellipticCurveFromShiodaInvariants(JI::SeqEnum :
+    RationalModel := true, Deterministic := false) -> CrvHyp, GrpPerm
     {Compute a genus 3 hyperelliptic curve and its automorphism group from given
     Shioda invariants if they are non-singular, "[], <>" is returned
     otherwise. For singular Shioda invariants, see the function
@@ -1588,7 +1591,8 @@ function HyperellipticPolynomialsFromShiodaInvariantsFct(JI : RationalModel := t
 end function;
 
 
-intrinsic HyperellipticPolynomialsFromShiodaInvariants(JI::SeqEnum : RationalModel := true, Deterministic := false) -> SeqEnum, GrpPerm
+intrinsic HyperellipticPolynomialsFromShiodaInvariants(JI::SeqEnum :
+    RationalModel := true, Deterministic := false) -> SeqEnum, GrpPerm
     {Compute from given Shioda invariants a list [f(x)], or [h(x),f(x)]
     depending on the characteristic of the based field, with f(x) of degree 7
     or 8.
@@ -1642,7 +1646,8 @@ intrinsic HyperellipticPolynomialsFromShiodaInvariants(JI::SeqEnum[FldFinElt]) -
 
 end intrinsic;
 
-intrinsic HyperellipticPolynomialFromShiodaInvariants(JI::SeqEnum : RationalModel := true, Deterministic := false) -> RngUPolElt, GrpPerm
+intrinsic HyperellipticPolynomialFromShiodaInvariants(JI::SeqEnum :
+    RationalModel := true, Deterministic := false) -> RngUPolElt, GrpPerm
     {Compute from given Shioda invariants a univariate polynomial f(x) with f of degree 8.
     The characteristic of the field must not be even
     (see HyperellipticPolynomialsFromShiodaInvariants for that case).
@@ -1664,7 +1669,8 @@ end intrinsic;
   * Twists
   *
   ********************************************************************/
-intrinsic TwistedHyperellipticPolynomialsFromShiodaInvariants(JI::SeqEnum[FldFinElt] : RationalModel := true, Deterministic := false) -> SeqEnum, GrpPerm
+intrinsic TwistedHyperellipticPolynomialsFromShiodaInvariants(JI::SeqEnum[FldFinElt] :
+    RationalModel := true, Deterministic := false) -> SeqEnum, GrpPerm
     {Compute twisted  hyperelliptic polynomials and their automorphism groups from
     Shioda invariants.}
 
