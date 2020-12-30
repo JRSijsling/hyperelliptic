@@ -22,3 +22,4 @@
  */
 
 declare verbose Hyperelliptic, 2;
+declare verbose IsGL2Equiv, 2;

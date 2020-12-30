@@ -92,8 +92,6 @@
 
 */
 
-declare verbose IsGL2Equiv, 2;
-
 function HomFromRoot(K, L, rt)
 
     if IsPrimeField(K) then
