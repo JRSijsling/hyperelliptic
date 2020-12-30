@@ -53,7 +53,7 @@ intrinsic MaedaInvariants(f::RngUPolElt) -> SeqEnum
 intrinsic MaedaInvariants(C::CrvHyp) -> SeqEnum
 ```
 
-### Reconstruct curve models from invariants
+### Reconstruct curve from invariants
 
 #### Genus 2
 
