@@ -301,7 +301,8 @@ intrinsic TwistsOverFiniteField(C::Crv, Aut::.) -> SeqEnum[Crv]
     return T;
 end intrinsic;
 
-intrinsic Twists(H::CrvHyp : AutomorphismGroup := false) -> SeqEnum[CrvHyp], GrpPerm
+intrinsic Twists(H::CrvHyp :
+    AutomorphismGroup := false) -> SeqEnum[CrvHyp], GrpPerm
     {Compute twisted  hyperelliptic curves and their automorphism groups}
 
     F := CoefficientRing(H);

@@ -28,7 +28,7 @@
 
    y^2 = a8 * x^8 + a6 * x^6 + a4 * x^4 + a2 * x^2 + a0;
 */
-function G3ModelsInCharFF_D4(JI : geometric := false, RationalModel := true)
+function G3ModelsInCharFF_D4(JI : geometric := false, RationalModel := true, minimize := true)
 
     vprintf Hyperelliptic, 2 : "\n[Hyperelliptic] D4: JI = %o\n", JI;
 
@@ -69,7 +69,9 @@ function G3ModelsInCharFF_D4(JI : geometric := false, RationalModel := true)
 	A8 := I2b/I3;
 
 	f := A8*x^8 + A6*x^6 + A4*x^4 + A2*x^2 + A0;
-
+        if minimize and Type(BaseRing(Parent(f))) in {RngInt, FldRat} then
+            f := MinRedBinaryForm(f : degree := 8);
+        end if;
 	vprintf Hyperelliptic, 2 : "[Hyperelliptic] D4: *** f = %o\n", f;
 	if geometric then return [f]; end if;
 	return TwistsOfHyperellipticPolynomials(f, 8);
@@ -84,7 +86,9 @@ function G3ModelsInCharFF_D4(JI : geometric := false, RationalModel := true)
 	A8 := I3;
 
 	f := A8*x^8 + A6*x^6 + A4*x^4 + A2*x^2 + A0;
-
+        if minimize and Type(BaseRing(Parent(f))) in {RngInt, FldRat} then
+            f := MinRedBinaryForm(f : degree := 8);
+        end if;
 	vprintf Hyperelliptic, 2 : "[Hyperelliptic] D4: *** f = %o\n", f;
 	if geometric then return [f]; end if;
 	return TwistsOfHyperellipticPolynomials(f, 8);
@@ -119,7 +123,9 @@ function G3ModelsInCharFF_D4(JI : geometric := false, RationalModel := true)
 	A8 := I2b/A0;
 
 	f := A8*x^8 + A6*x^6 + A4*x^4 + A2*x^2 + A0;
-
+        if minimize and Type(BaseRing(Parent(f))) in {RngInt, FldRat} then
+            f := MinRedBinaryForm(f : degree := 8);
+        end if;
 	vprintf Hyperelliptic, 2 : "[Hyperelliptic] D4: *** f = %o\n", f;
 	if geometric then return [f]; end if;
 	return TwistsOfHyperellipticPolynomials(f, 8);
@@ -156,6 +162,9 @@ function G3ModelsInCharFF_D4(JI : geometric := false, RationalModel := true)
 	K!phi(a0)*X^8+K!phi(a1)*X^7+K!phi(a2)*X^6+K!phi(a3)*X^5+K!phi(a4)*X^4+
 	d*K!phi(a3)*X^3+d^2*K!phi(a2)*X^2+d^3*K!phi(a1)*X+d^4*K!phi(a0);
 
+    if minimize and Type(BaseRing(Parent(f))) in {RngInt, FldRat} then
+        f := MinRedBinaryForm(f : degree := 8);
+    end if;
     vprintf Hyperelliptic, 2 : "[Hyperelliptic] D4: *** f = %o\n", f;
     if geometric then return [f]; end if;
     return TwistsOfHyperellipticPolynomials(f, 8);

@@ -59,20 +59,20 @@ intrinsic MaedaInvariants(C::CrvHyp) -> SeqEnum
 
 ```
 intrinsic HyperellipticCurveFromIgusaInvariants(II::SeqEnum :
-    RationalModel := false) -> CrvHyp, GrpPerm
+    RationalModel := false, minimize := true) -> CrvHyp, GrpPerm
 intrinsic HyperellipticCurveFromG2Invariants(GI::SeqEnum :
-    RationalModel := false) -> CrvHyp, GrpPerm
+    RationalModel := false, minimize := true) -> CrvHyp, GrpPerm
 ```
 
 #### Genus 3
 
 ```
 intrinsic HyperellipticCurveFromShiodaInvariants(JI::SeqEnum :
-    RationalModel := true) -> CrvHyp, GrpPerm
+    RationalModel := true, minimize := true) -> CrvHyp, GrpPerm
 intrinsic HyperellipticPolynomialFromShiodaInvariants(JI::SeqEnum :
-    RationalModel := true) -> SeqEnum, GrpPerm
+    RationalModel := true, minimize := true) -> SeqEnum, GrpPerm
 intrinsic HyperellipticPolynomialsFromShiodaInvariants(JI::SeqEnum :
-    RationalModel := true) -> SeqEnum, GrpPerm
+    RationalModel := true, minimize := true) -> SeqEnum, GrpPerm
 ```
 
 ### Compute twists

@@ -87,16 +87,17 @@
  * Exported intrinsics.
  *
  * intrinsic HyperellipticCurveFromShiodaInvariants(JI::SeqEnum :
- *     RationalModel := true, Deterministic := false) -> CrvHyp, GrpPerm
- * intrinsic HyperellipticPolynomialsFromShiodaInvariants(JI::SeqEnum :
- *     RationalModel := true, Deterministic := false) -> SeqEnum, GrpPerm
- * intrinsic HyperellipticPolynomialsFromShiodaInvariants(JI::SeqEnum[FldFinElt]) -> SeqEnum[CrvHyp], GrpPerm
+ *     RationalModel := true, minimize := true) -> CrvHyp, GrpPerm
  * intrinsic HyperellipticPolynomialFromShiodaInvariants(JI::SeqEnum :
- *     RationalModel := true, Deterministic := false) -> RngUPolElt, GrpPerm
+ *     RationalModel := true, minimize := true) -> SeqEnum, GrpPerm
+ * intrinsic HyperellipticPolynomialsFromShiodaInvariants(JI::SeqEnum :
+ *     RationalModel := true, minimize := true) -> SeqEnum, GrpPerm
  *
- * intrinsic TwistedHyperellipticPolynomialsFromShiodaInvariants(JI::SeqEnum[FldFinElt] :
- *     RationalModel := true, Deterministic := false) -> SeqEnum, GrpPerm
+ * intrinsic TwistedHyperellipticPolynomialsFromShiodaInvariants(JI::SeqEnum[FldFinElt]) -> SeqEnum, GrpPerm
  * intrinsic TwistsFromShiodaInvariants(JI::SeqEnum[FldFinElt]) -> SeqEnum[CrvHyp], GrpPerm
+ *
+ * intrinsic TwistsOfGenus3HyperellipticPolynomials(f::RngUPolElt) -> SeqEnum[RngUPolElt], GrpPerm
+ * intrinsic TwistsOfGenus3HyperellipticPolynomials(fh::SeqEnum[RngUPolElt]) -> SeqEnum[CRngUPolElt], GrpPerm
  *
  * intrinsic GeometricAutomorphismGroupFromShiodaInvariants(JI::SeqEnum) -> GrpPerm
  * intrinsic GeometricAutomorphismGroupGenus3Classification(FF::FldFin) -> SeqEnum, SeqEnum
@@ -201,7 +202,7 @@ end function;
 
    see [MaShShVo2002].
 */
-function G3ModelsInCharFF_G16_11(JI : geometric := false)
+function G3ModelsInCharFF_G16_11(JI : geometric := false, minimize := true)
 
     FF := Universe(JI); x := PolynomialRing(FF).1;
     J2, J3, J4, J5, J6, J7, J8 := Explode(JI);
@@ -219,6 +220,9 @@ function G3ModelsInCharFF_G16_11(JI : geometric := false)
     a0 := -1/140*a4^2+1/2*J2;
 
     f := x^8 + a4*x^4 + a0;
+    if minimize and Type(BaseRing(Parent(f))) in {RngInt, FldRat} then
+        f := MinRedBinaryForm(f : degree := 8);
+    end if;
     if geometric then return [f]; end if;
     return TwistsOfHyperellipticPolynomials(f, 8);
 
@@ -232,7 +236,7 @@ end function;
 
    see [MaShShVo2002].
 */
-function G3ModelsInCharFF_D12(JI : geometric := false)
+function G3ModelsInCharFF_D12(JI : geometric := false, minimize := true)
 
     FF := Universe(JI); x := PolynomialRing(FF).1;
     J2, J3, J4, J5, J6, J7, J8 := Explode(JI);
@@ -250,6 +254,9 @@ function G3ModelsInCharFF_D12(JI : geometric := false)
     a1 := 2/35*a4^2-4*J2;
 
     f := x * (x^6 + a4*x^3 + a1);
+    if minimize and Type(BaseRing(Parent(f))) in {RngInt, FldRat} then
+        f := MinRedBinaryForm(f : degree := 8);
+    end if;
     if geometric then return [f]; end if;
     return TwistsOfHyperellipticPolynomials(f, 8);
 
@@ -263,7 +270,7 @@ end function;
 
    see [MaShShVo2002].
 */
-function G3ModelsInCharFF_C2xC4(JI : geometric := false)
+function G3ModelsInCharFF_C2xC4(JI : geometric := false, minimize := true)
 
     FF := Universe(JI); x := PolynomialRing(FF).1;
     J2, J3, J4, J5, J6, J7, J8 := Explode(JI);
@@ -290,6 +297,9 @@ function G3ModelsInCharFF_C2xC4(JI : geometric := false)
     end if;
 
     f := a^2*x^8+2*a^2*x^6+8*a*x^2-16;
+    if minimize and Type(BaseRing(Parent(f))) in {RngInt, FldRat} then
+        f := MinRedBinaryForm(f : degree := 8);
+    end if;
     if geometric then return [f]; end if;
     return TwistsOfHyperellipticPolynomials(f, 8);
 
@@ -310,7 +320,7 @@ end function ;
 
    see [MaShShVo2002].
 */
-function G3ModelsInCharFF_G8_5(JI : geometric := false)
+function G3ModelsInCharFF_G8_5(JI : geometric := false, minimize := true)
 
     FF := Universe(JI); x := PolynomialRing(FF).1;
     J2, J3, J4, J5, J6, J7, J8 := Explode(JI);
@@ -335,6 +345,9 @@ function G3ModelsInCharFF_G8_5(JI : geometric := false)
 	l := 1/a6; a8 := a6*la8;
 
 	f := a8*x^8 + a6*x^6 + a4*x^4 + l*a6*x^2 + l^2*a8;
+        if minimize and Type(BaseRing(Parent(f))) in {RngInt, FldRat} then
+            f := MinRedBinaryForm(f : degree := 8);
+        end if;
 	if geometric then return [f]; end if;
 	return TwistsOfHyperellipticPolynomials(f, 8);
     end if;
@@ -383,7 +396,9 @@ function G3ModelsInCharFF_G8_5(JI : geometric := false)
 	f2 := f2/LeadingCoefficient(f2);
 
 	f2  := PolynomialRing(FF)!Eltseq(f2);
-
+        if minimize and Type(BaseRing(Parent(f2))) in {RngInt, FldRat} then
+            f := MinRedBinaryForm(f : degree := 8);
+        end if;
 	if geometric then return [f2]; end if;
 
 	error "[Hyperelliptic] currently, no twists computation done over an infinite field, sorry";
@@ -464,7 +479,8 @@ function G3ModelsInCharFF_G8_5(JI : geometric := false)
 end function;
 
 
-function G3Models(JI: geometric := false, models := true, RationalModel := true, Deterministic := false)
+function G3Models(JI:
+    geometric := false, models := true, RationalModel := true, Deterministic := false, minimize := true)
 
     FF := Universe(JI);
     p := Characteristic(FF);
@@ -592,7 +608,7 @@ function G3Models(JI: geometric := false, models := true, RationalModel := true,
              (1, 5)(2, 6)(3, 7)(4, 8)(9, 14)(10, 13)(11, 16)(12, 15),
              (1, 9)(2, 10)(3, 11)(4, 12)(5, 13)(6, 14)(7, 15)(8, 16)
              >; /* SmallGroup(16, 11) */
-	if models then twists := G3ModelsInCharFF_G16_11(JI : geometric := geometric); end if;
+	if models then twists := G3ModelsInCharFF_G16_11(JI : geometric := geometric, minimize := minimize); end if;
 	return twists, aut;
     end if;
 
@@ -614,7 +630,7 @@ function G3Models(JI: geometric := false, models := true, RationalModel := true,
             (1, 4)(2, 5)(3, 6)(7, 10)(8, 11)(9, 12),
             (1, 7)(2, 8)(3, 9)(4, 10)(5, 11)(6, 12)
             >; /* SmallGroup(12, 4) */
-	if models then twists := G3ModelsInCharFF_D12(JI : geometric := geometric); end if;
+	if models then twists := G3ModelsInCharFF_D12(JI : geometric := geometric, minimize := minimize); end if;
 	return twists, aut;
     end if;
 
@@ -629,7 +645,7 @@ function G3Models(JI: geometric := false, models := true, RationalModel := true,
 	then
 	vprintf Hyperelliptic, 1 : "Automorphism group C2xC4, curve y^2 = x * (x^2 - 1) * (x^4 + a * x^2 + 1)\n";
 	aut := DirectProduct(CyclicGroup(2), CyclicGroup(4));	/* SmallGroup(8, 2) */
-	if models then twists := G3ModelsInCharFF_C2xC4(JI : geometric := geometric); end if;
+	if models then twists := G3ModelsInCharFF_C2xC4(JI : geometric := geometric, minimize := minimize); end if;
 	return twists, aut;
     end if;
 
@@ -669,7 +685,7 @@ function G3Models(JI: geometric := false, models := true, RationalModel := true,
 	then
 	vprintf Hyperelliptic, 1 : "Automorphism group C2xC2xC2, curve y^2 = a0*x^8 + a2*x^6 + a4*x^4 + a2*x^2 + a0\n";
 	aut := DirectProduct([CyclicGroup(2): i in [1..3]]); /* SmallGroup(8, 5) */
-	if models then twists := G3ModelsInCharFF_G8_5(JI : geometric := geometric); end if;
+	if models then twists := G3ModelsInCharFF_G8_5(JI : geometric := geometric, minimize := minimize); end if;
 	return twists, aut;
     end if;
 
@@ -691,7 +707,7 @@ function G3Models(JI: geometric := false, models := true, RationalModel := true,
 	vprintf Hyperelliptic, 1 : "Automorphism group C4, curve y^2 = x*(x^2-1)*(x^4+a*x^2+b)\n";
 	aut := CyclicGroup(4);
 	if models then
-	    f := Genus3ConicAndQuarticForC4(JI : models := models);
+	    f := Genus3ConicAndQuarticForC4(JI : models := models, minimize := minimize);
 	    error if Type(f) eq BoolElt, "[Hyperelliptic] None C4-model found at JI =", JI;
 	    twists := [f];
 	end if;
@@ -1495,14 +1511,14 @@ function G3Models(JI: geometric := false, models := true, RationalModel := true,
 	then
 	vprintf Hyperelliptic, 1 : "Automorphism group D4, curve y^2 = (x^2-1)*(x^6+a*x^4+b*x^2+c)\n";
 	aut := DirectProduct(CyclicGroup(2), CyclicGroup(2));
-	if models then twists := G3ModelsInCharFF_D4(JI: geometric := geometric, RationalModel := RationalModel); end if;
+	if models then twists := G3ModelsInCharFF_D4(JI: geometric := geometric, RationalModel := RationalModel, minimize := minimize); end if;
 	return twists, aut;
     end if;
 
     /*** General case ***/
     vprintf Hyperelliptic, 1 : "Automorphism group C2 \n";
     aut := CyclicGroup(2);
-    f := Genus3ConicAndQuartic(JI : models := models, RationalModel := RationalModel, Deterministic := Deterministic);
+    f := Genus3ConicAndQuartic(JI : models := models, RationalModel := RationalModel, Deterministic := Deterministic, minimize := minimize);
     if models then
 	error if Type(f) eq BoolElt, "[Hyperelliptic] None C2-model found !\n(do J8, J9 and J10 satisfy Shioda algebraic relations ?)";
 	twists := [f];
@@ -1514,7 +1530,7 @@ function G3Models(JI: geometric := false, models := true, RationalModel := true,
 end function;
 
 intrinsic HyperellipticCurveFromShiodaInvariants(JI::SeqEnum :
-    RationalModel := true, Deterministic := false) -> CrvHyp, GrpPerm
+    RationalModel := true, Deterministic := false, minimize := true) -> CrvHyp, GrpPerm
     {Compute a genus 3 hyperelliptic curve and its automorphism group from given
     Shioda invariants if they are non-singular, "[], <>" is returned
     otherwise. For singular Shioda invariants, see the function
@@ -1570,13 +1586,15 @@ intrinsic HyperellipticCurveFromShiodaInvariants(JI::SeqEnum :
 
     if DiscriminantFromShiodaInvariants(JI) eq 0 then return [], <>; end if;
 
-    twists, aut := G3Models(JI : geometric := true, RationalModel := RationalModel, Deterministic := Deterministic);
+    twists, aut := G3Models(JI :
+        geometric := true, RationalModel := RationalModel, Deterministic := Deterministic, minimize := minimize);
     error if Type(twists[1]) eq BoolElt, "Hyperelliptic error: none hyperelliptic curve found at JI = ", JI;
 
     return HyperellipticCurve(twists[1]), aut;
 end intrinsic;
 
-function HyperellipticPolynomialsFromShiodaInvariantsFct(JI : RationalModel := true, Deterministic := false)
+function HyperellipticPolynomialsFromShiodaInvariantsFct(JI :
+    RationalModel := true, Deterministic := false, minimize := true)
 
     FF := Universe(JI); p := Characteristic(FF);
 
@@ -1585,14 +1603,15 @@ function HyperellipticPolynomialsFromShiodaInvariantsFct(JI : RationalModel := t
         JI := ChangeUniverse(JI,Rationals());
     end if;
 
-    twists, aut := G3Models(JI : geometric := true, RationalModel := RationalModel, Deterministic := Deterministic);
+    twists, aut := G3Models(JI :
+        geometric := true, RationalModel := RationalModel, Deterministic := Deterministic, minimize := minimize);
 
     return twists, aut;
 end function;
 
 
 intrinsic HyperellipticPolynomialsFromShiodaInvariants(JI::SeqEnum :
-    RationalModel := true, Deterministic := false) -> SeqEnum, GrpPerm
+    RationalModel := true, Deterministic := false, minimize := true) -> SeqEnum, GrpPerm
     {Compute from given Shioda invariants a list [f(x)], or [h(x),f(x)]
     depending on the characteristic of the based field, with f(x) of degree 7
     or 8.
@@ -1615,13 +1634,13 @@ intrinsic HyperellipticPolynomialsFromShiodaInvariants(JI::SeqEnum :
     end case;
 
     return HyperellipticPolynomialsFromShiodaInvariantsFct(JI :
-        RationalModel := RationalModel, Deterministic := Deterministic);
+        RationalModel := RationalModel, Deterministic := Deterministic, minimize := minimize);
 
 end intrinsic;
 
 /* Temporary, to overload magma default function */
 intrinsic HyperellipticPolynomialsFromShiodaInvariants(JI::SeqEnum[FldFinElt]) -> SeqEnum[CrvHyp], GrpPerm
-{Compute from given Shioda invariants a list [f(x)], or [h(x),f(x)]
+    {Compute from given Shioda invariants a list [f(x)], or [h(x),f(x)]
     depending on the characteristic of the based field, with f(x) of degree 7
     or 8.
     This function returns the automorphism group of the curve y^2 = f(x),
@@ -1647,7 +1666,7 @@ intrinsic HyperellipticPolynomialsFromShiodaInvariants(JI::SeqEnum[FldFinElt]) -
 end intrinsic;
 
 intrinsic HyperellipticPolynomialFromShiodaInvariants(JI::SeqEnum :
-    RationalModel := true, Deterministic := false) -> RngUPolElt, GrpPerm
+    RationalModel := true, Deterministic := false, minimize := true) -> RngUPolElt, GrpPerm
     {Compute from given Shioda invariants a univariate polynomial f(x) with f of degree 8.
     The characteristic of the field must not be even
     (see HyperellipticPolynomialsFromShiodaInvariants for that case).
@@ -1657,7 +1676,7 @@ intrinsic HyperellipticPolynomialFromShiodaInvariants(JI::SeqEnum :
     require not Characteristic(FF) in {2} : "2 must be invertible in the base field.";
 
     if Characteristic(FF) eq 0 then
-        twists, aut := HyperellipticPolynomialsFromShiodaInvariants(JI: RationalModel := RationalModel);
+        twists, aut := HyperellipticPolynomialsFromShiodaInvariants(JI: RationalModel := RationalModel, minimize := minimize);
     else
         twists, aut := HyperellipticPolynomialsFromShiodaInvariants(JI);
     end if;
@@ -1669,8 +1688,7 @@ end intrinsic;
   * Twists
   *
   ********************************************************************/
-intrinsic TwistedHyperellipticPolynomialsFromShiodaInvariants(JI::SeqEnum[FldFinElt] :
-    RationalModel := true, Deterministic := false) -> SeqEnum, GrpPerm
+intrinsic TwistedHyperellipticPolynomialsFromShiodaInvariants(JI::SeqEnum[FldFinElt] : RationalModel := true, Deterministic := false) -> SeqEnum, GrpPerm
     {Compute twisted  hyperelliptic polynomials and their automorphism groups from
     Shioda invariants.}
 

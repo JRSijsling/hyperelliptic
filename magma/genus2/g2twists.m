@@ -98,10 +98,10 @@
  * Exported intrinsics.
  *
  * intrinsic HyperellipticCurveFromIgusaInvariants(II::SeqEnum :
- *     RationalModel := false) -> CrvHyp, GrpPerm
+ *     RationalModel := false, minimize := true) -> CrvHyp, GrpPerm
  *
  * intrinsic HyperellipticCurveFromG2Invariants(GI::SeqEnum :
- *     RationalModel := false) -> CrvHyp, GrpPerm
+ *     RationalModel := false, minimize := true) -> CrvHyp, GrpPerm
  *
  * intrinsic TwistsFromG2Invariants(II::SeqEnum[FldFinElt]) -> SeqEnum[CrvHyp], GrpPerm
  *
@@ -365,7 +365,7 @@ function G2NonIsomorphic(Ecs)
   return crvs;
 end function;
 
-function ClebschMestreConicAndCubic(JI : RationalModel := false)
+function ClebschMestreConicAndCubic(JI : RationalModel := false, minimize := true)
 
     FF := Universe(JI);
     J2,J4,J6,_,J10 := Explode(JI);
@@ -419,12 +419,18 @@ function ClebschMestreConicAndCubic(JI : RationalModel := false)
         phi := ConicParametrization(L : RationalPoint := RationalModel);
 
         f := Evaluate(M, DefiningPolynomials(phi));
+        f := UnivariatePolynomial(Evaluate(f, Parent(f).2, 1));
 
-        return HyperellipticCurve(UnivariatePolynomial(Evaluate(f, Parent(f).2, 1)));
+        return HyperellipticCurve(f);
 
     end if;
 
     f := Genus2ConicAndCubic(JI);
+
+    if minimize and Type(BaseRing(Parent(f))) in {RngInt, FldRat} then
+        f := MinRedBinaryForm(f : degree := 6);
+    end if;
+
     return HyperellipticCurve(f);
 
 end function;
@@ -709,7 +715,7 @@ end function;
    y^2 = x^6 + x^3 + t in char <> 3,
    see [CaNa2007].
 */
-function G2ModelsInFF_D12(JI : geometric := false)
+function G2ModelsInFF_D12(JI : geometric := false, minimize := true)
 
     FF := Universe(JI);
     x := PolynomialRing(FF).1;
@@ -724,8 +730,12 @@ function G2ModelsInFF_D12(JI : geometric := false)
 	a := (3*C4*C6-C10)/50/C10;
     end if;
 
-    H := HyperellipticCurve(x^6+x^3+a);
-    twists := [H];
+    f := x^6+x^3+a;
+    if minimize and Type(BaseRing(Parent(f))) in {RngInt, FldRat} then
+        f := MinRedBinaryForm(f : degree := 6);
+    end if;
+
+    H := HyperellipticCurve(f); twists := [ H ];
     if geometric then return twists; end if;
 
     n := Degree(FF);
@@ -845,7 +855,7 @@ end function;
    y^2 = x^5 + x^3 + t*x,
    see [CaNa2007].
 */
-function G2ModelsInFF_D8(JI : geometric := false)
+function G2ModelsInFF_D8(JI : geometric := false, minimize := true)
 
     FF := Universe(JI);
     x := PolynomialRing(FF).1;
@@ -863,7 +873,12 @@ function G2ModelsInFF_D8(JI : geometric := false)
 	t := (8*C6*(6*C4-C2^2)+9*C10)/900/C10;
     end if;
 
-    if geometric then return [HyperellipticCurve(x^5+x^3+t*x)]; end if;
+    f := x^5+x^3+t*x;
+    if minimize and Type(BaseRing(Parent(f))) in {RngInt, FldRat} then
+        f := MinRedBinaryForm(f : degree := 6);
+    end if;
+
+    if geometric then return [HyperellipticCurve(f)]; end if;
 
     if IsSquare(t) then
 	/* 1-z0^2*t = s0^2*t*v */
@@ -935,7 +950,7 @@ end function;
 
 /* V4 case,
    see [ShVo2004], [CaQu2005] */
-function G2ModelsInFF_V4(JI : geometric := false)
+function G2ModelsInFF_V4(JI : geometric := false, minimize := true)
 
     FF := Universe(JI);
 
@@ -972,7 +987,13 @@ function G2ModelsInFF_V4(JI : geometric := false)
 	a3:=4*(5-4*v);
     end if;
 
-    H1 := HyperellipticCurve(a0*x^6+a1*x^5+a2*x^4+a3*x^3+t*a2*x^2+t^2*a1*x+t^3*a0);
+    f := a0*x^6+a1*x^5+a2*x^4+a3*x^3+t*a2*x^2+t^2*a1*x+t^3*a0;
+    if minimize and Type(BaseRing(Parent(f))) in {RngInt, FldRat} then
+        f := MinRedBinaryForm(f : degree := 6);
+    end if;
+    if geometric then return [HyperellipticCurve(f)]; end if;
+
+    H1 := HyperellipticCurve(f);
     if geometric then return [H1]; end if;
 
     q := #FF;
@@ -1016,7 +1037,7 @@ end function;
    This yields new conics and cubics that we use here.
 
  */
-function G2ModelsInFF_C2(JI : geometric := false, RationalModel := false)
+function G2ModelsInFF_C2(JI : geometric := false, RationalModel := false, minimize := true)
 
     FF := Universe(JI);
     x := PolynomialRing(FF).1;
@@ -1029,9 +1050,14 @@ function G2ModelsInFF_C2(JI : geometric := false, RationalModel := false)
 	    c := Random(FF);
 	    ret, a := IsPower(3*c^2/g3, 3);
 	until c ne 0 and ret;
-	H := HyperellipticCurve(x^5+c*x^2+a*c);
+        f := x^5+c*x^2+a*c;
+
+        if minimize and Type(BaseRing(Parent(f))) in {RngInt, FldRat} then
+            f := MinRedBinaryForm(f : degree := 6);
+        end if;
+        H := HyperellipticCurve(f);
     else
-	H := ClebschMestreConicAndCubic(JI : RationalModel := RationalModel);
+	H := ClebschMestreConicAndCubic(JI : RationalModel := RationalModel, minimize := minimize);
     end if;
     if geometric then return [H]; end if;
 
@@ -1040,7 +1066,7 @@ end function;
 
 /* Switching routine
  *******************/
-function G2Models(JI : geometric := false, models := true, RationalModel := false)
+function G2Models(JI : geometric := false, models := true, RationalModel := false, minimize := true)
 
     FF := Universe(JI); p := Characteristic(FF);
 
@@ -1171,7 +1197,7 @@ function G2Models(JI : geometric := false, models := true, RationalModel := fals
         if 750*J10+90*J6*J4-3*J6*J2^2-J4^2*J2 eq 0 and
             2700*J6^2+540*J6*J4*J2-27*J6*J2^3+160*J4^3-9*J4^2*J2^2 eq 0 then
             if models then
-                twists := G2ModelsInFF_D12(JI : geometric := geometric);
+                twists := G2ModelsInFF_D12(JI : geometric := geometric, minimize := minimize);
             end if;
             return twists, DihedralGroup(6);
         end if;
@@ -1182,7 +1208,7 @@ function G2Models(JI : geometric := false, models := true, RationalModel := fals
         if 172800*J6^2-23040*J6*J4*J2+592*J6*J2^3-40960*J4^3+3584*J4^2*J2^2-104*J4*J2^4+J2^6 eq 0
             and 128000*J10+5760*J6*J4-192*J6*J2^2-1024*J4^2*J2+64*J4*J2^3-J2^5 eq 0 then
             if models then
-                twists := G2ModelsInFF_D8(JI : geometric := geometric);
+                twists := G2ModelsInFF_D8(JI : geometric := geometric, minimize := minimize);
             end if;
             return twists, DihedralGroup(4);
         end if;
@@ -1214,19 +1240,20 @@ function G2Models(JI : geometric := false, models := true, RationalModel := fals
 
     if R eq 0 then
         if models then
-            twists := G2ModelsInFF_V4(JI : geometric := geometric);
+            twists := G2ModelsInFF_V4(JI : geometric := geometric, minimize := minimize);
         end if;
         return twists, DirectProduct(CyclicGroup(2),CyclicGroup(2));
     end if;
 
     if models then
-        twists := G2ModelsInFF_C2(JI : geometric := geometric, RationalModel := RationalModel);
+        twists := G2ModelsInFF_C2(JI : geometric := geometric, RationalModel := RationalModel, minimize := minimize);
     end if;
     return twists, CyclicGroup(2);
 
 end function;
 
-intrinsic HyperellipticCurveFromIgusaInvariants(II::SeqEnum : RationalModel := false) -> CrvHyp, GrpPerm
+intrinsic HyperellipticCurveFromIgusaInvariants(II::SeqEnum :
+    RationalModel := false, minimize := true) -> CrvHyp, GrpPerm
     {Compute a hyperelliptic curve and its automorphism group from given
     Igusa invariants J2, J4, J6, J8 and J10. This function behaves slightly
     better over the rationals when J15 is also given in input (see IgusaInvariantsWithR).}
@@ -1237,19 +1264,20 @@ intrinsic HyperellipticCurveFromIgusaInvariants(II::SeqEnum : RationalModel := f
         II := ChangeUniverse(II,Rationals());
     end if;
 
-    twists, aut := G2Models(II : geometric := true, RationalModel := RationalModel);
+    twists, aut := G2Models(II : geometric := true, RationalModel := RationalModel, minimize := minimize);
     return twists[1], aut;
 
 end intrinsic;
 
-intrinsic HyperellipticCurveFromG2Invariants(GI::SeqEnum : RationalModel := false) -> CrvHyp, GrpPerm
+intrinsic HyperellipticCurveFromG2Invariants(GI::SeqEnum :
+    RationalModel := false, minimize := true) -> CrvHyp, GrpPerm
     {Compute a hyperelliptic curve and its automorphism group from given
     Cardona-Quer-Nart-Pujolas absolute invariants.}
 
     require #GI eq 3 :
 	"Argument must be a sequence of three absolute invariants.";
 
-    H, aut := HyperellipticCurveFromIgusaInvariants(G2ToIgusaInvariants(GI) : RationalModel := RationalModel);
+    H, aut := HyperellipticCurveFromIgusaInvariants(G2ToIgusaInvariants(GI) : RationalModel := RationalModel, minimize := minimize);
     return H, aut;
 
 end intrinsic;
@@ -1305,7 +1333,7 @@ intrinsic GeometricAutomorphismGroupFromIgusaInvariants(II::SeqEnum) -> GrpPerm
         JI := ChangeUniverse(JI,Rationals());
     end if;
 
-    _, aut := G2Models(JI : models := false);
+    _, aut := G2Models(JI : models := false, minimize := false);
     return aut;
 
 end intrinsic;

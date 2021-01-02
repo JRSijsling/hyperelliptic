@@ -48,7 +48,7 @@ import "conic_uv.m" : Genus3ConicAndQuarticUV;
 
 import "../toolbox/diophantine.m" : ConicParametrization, MinimizeLinearEquationOverRationals;
 
-function Genus3ConicAndQuartic(JI : models := true, RationalModel := true, Deterministic := false)
+function Genus3ConicAndQuartic(JI : models := true, RationalModel := true, Deterministic := false, minimize := true)
 
     FF := Universe(JI);
 
@@ -141,10 +141,14 @@ function Genus3ConicAndQuartic(JI : models := true, RationalModel := true, Deter
 
         f := Evaluate(Q, DefiningPolynomials(phi));
 
-        g := UnivariatePolynomial(Evaluate(f, Parent(f).2, 1));
+        f := UnivariatePolynomial(Evaluate(f, Parent(f).2, 1));
 
-        vprintf Hyperelliptic, 1 :  "Hyperelliptic polynomial: %o\n", g;
-	return g;
+        if minimize and Type(BaseRing(Parent(f))) in {RngInt, FldRat} then
+            f := MinRedBinaryForm(f : degree := 8);
+        end if;
+
+        vprintf Hyperelliptic, 1 :  "Hyperelliptic polynomial: %o\n", f;
+	return f;
 
     end if;
 
@@ -152,7 +156,7 @@ function Genus3ConicAndQuartic(JI : models := true, RationalModel := true, Deter
 
 end function;
 
-function Genus3ConicAndQuarticForC4(JI : models := true)
+function Genus3ConicAndQuarticForC4(JI : models := true, minimize := true)
 
     FF := Universe(JI);
     J2, J3, J4, J5, J6, J7, J8, J9, J10 := Explode(JI);
@@ -226,7 +230,12 @@ function Genus3ConicAndQuarticForC4(JI : models := true)
 	/* "param is", [xi*A-x2*B,A*eta-B,A]; */
 	f := UnivariatePolynomial(Evaluate(Q,[xi*A-x2*B,A*eta-B,A]));
 
-	if c11 eq 0 then return f; end if;
+        if c11 eq 0 then
+            if minimize and Type(BaseRing(Parent(f))) in {RngInt, FldRat} then
+                f := MinRedBinaryForm(f : degree := 8);
+            end if;
+            return f;
+        end if;
 
 	F := [Eltseq(c) : c in Eltseq(Evaluate(f, a*Parent(f).1))];
 	if Seqset([F[1+i, 1] : i in [0..Degree(f)] | #F[1+i] ne 0]) ne {0} then
@@ -236,6 +245,9 @@ function Genus3ConicAndQuarticForC4(JI : models := true)
 	FFx := PolynomialRing(FF); x := FFx.1;
 	fr :=  &+[(FF!F[1+i, 2])*x^(i) : i in [0..Degree(f)] | #F[1+i] ne 0];
 
+        if minimize and Type(BaseRing(Parent(f))) in {RngInt, FldRat} then
+            fr := MinRedBinaryForm(fr : degree := 8);
+        end if;
 	return fr;
     end if;
 

@@ -38,7 +38,7 @@ CheckRationalCurves := procedure(Deg, CoeffBound)
         if ret then
              // ""; "*** Pol :", Pol;
 	    SI := ShiodaInvariants(H);
-	    _H := HyperellipticCurveFromShiodaInvariants(SI);
+	    _H := HyperellipticCurveFromShiodaInvariants(SI : minimize := false);
             if not ShiodaInvariantsEqual(ShiodaInvariants(_H), SI) then
 		"\nARGHH, unconsistent Shioda invariants at H =", H;
 		errors := true;
@@ -68,7 +68,7 @@ for k := 1 to 100 do
     if ret then
         "H :", H;
         SI := ShiodaInvariants(H);
-        _H := HyperellipticCurveFromShiodaInvariants(SI);
+        _H := HyperellipticCurveFromShiodaInvariants(SI : minimize := false);
         if not ShiodaInvariantsEqual(ShiodaInvariants(_H), SI) then
             "\nARGHH, unconsistent invariants at H =", H;
             allok := false;
