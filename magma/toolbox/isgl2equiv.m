@@ -902,9 +902,31 @@ function CheckNormalizeToCommonBase(ret, MFL, Q1L, _f, _F, deg : geometric := tr
 end function;
 
 
-function IsGL2GeometricEquivalentCandidates(_f, _F, deg : geometric := false, covariant := true, commonfield := false)
+function IsGL2GeometricEquivalentCandidates(_f, _F, deg :
+    geometric := false, covariant := true, commonfield := false)
 
     Q := BaseRing(Parent(_f));
+
+/* To be improved
+    if  not IsInvertible(Q!deg) then
+        f0 := Sort([ PF[1] : PF in Factorization(_f) ], func<a,b|Degree(a)-Degree(b)>)[1];
+        F0 := Sort([ PF[1] : PF in Factorization(_F) ], func<a,b|Degree(a)-Degree(b)>)[1];
+        L := Q;
+        if Degree(f0) gt 1 or Degree(F0) gt 1 then
+            L := SplittingField(f0*F0);
+        end if;
+        f := PolynomialRing(L)!_f;
+        r := Roots(f)[1, 1];
+        f := TransformPolynomial(f, deg, [r, r, 1, 0]);
+
+
+        F := PolynomialRing(L)!_F;
+        R := Roots(F)[1, 1];
+        F := TransformPolynomial(F, deg, [R, R, 1, 0]);
+
+        ret, ML := IsGL2GeometricEquivalentCandidates(f, F, deg-1);
+    end if;
+*/
 
     if covariant then
 
@@ -934,7 +956,7 @@ function IsGL2GeometricEquivalentCandidates(_f, _F, deg : geometric := false, co
 
     /* Main algorithm */
     nbtry := 0; ret := true; MFL := [* *];
-    while ret eq true and #MFL eq 0 and nbtry lt 20 do
+    while IsInvertible(Q!deg) and ret eq true and #MFL eq 0 and nbtry lt 20 do
         nbtry +:= 1; f := _f; F := _F; ML := IdentityMatrix(Q, 2);
 
         if nbtry ne 1 then
@@ -984,6 +1006,10 @@ function IsGL2GeometricEquivalentCandidates(_f, _F, deg : geometric := false, co
         end if;
     end while;
 
+    if not IsInvertible(Q!deg) then
+       vprintf IsGL2Equiv, 1 : "Unable to invert the degree of the form in the field, I give up\n";
+    end if;
+
     /* Classical one in the very rare cases where nothing else was possible
    (this may happen by accident and over small finite fields) */
    if not geometric then
@@ -991,6 +1017,7 @@ function IsGL2GeometricEquivalentCandidates(_f, _F, deg : geometric := false, co
        MFL := [* MF *]; Q1L := [* Q.1 *];
        return ret, MFL, Q1L;
    end if;
+
    if Type(Q) eq FldFin then
        L := SplittingField(_f*_F);
    else

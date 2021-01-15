@@ -96,14 +96,14 @@ intrinsic TwistedHyperellipticPolynomialsFromShiodaInvariants(JI::SeqEnum[FldFin
 
 ```
 intrinsic Twists(H::CrvHyp :
-    AutomorphismGroup := false) -> SeqEnum[CrvHyp], GrpPerm
+    AutomorphismGroup := false) -> SeqEnum[CrvHyp], GrpPerm, Map
 
 intrinsic TwistsOfHyperellipticPolynomials(f::RngUPolElt, d::RngIntElt :
-    AutomorphismGroup := false) -> SeqEnum, GrpPerm
+    AutomorphismGroup := false) -> SeqEnum, GrpPerm, Map
 intrinsic TwistsOfHyperellipticPolynomials(f::RngUPolElt :
-    AutomorphismGroup := false) -> SeqEnum, GrpPerm
+    AutomorphismGroup := false) -> SeqEnum, GrpPerm, Map
 intrinsic TwistsOfHyperellipticPolynomials(fh::SeqEnum[RngUPolElt] :
-    AutomorphismGroup := false) -> SeqEnum, GrpPerm
+    AutomorphismGroup := false) -> SeqEnum, GrpPerm, Map
 
 intrinsic TwistsOverFiniteField(C::Crv, Aut::.) -> SeqEnum[Crv]
 ```
@@ -143,7 +143,7 @@ intrinsic AutomorphismGroupHyperellipticPolynomial(f::RngUPolElt, deg::RngIntElt
 intrinsic AutomorphismGroupHyperelliptic(X::CrvHyp :
     geometric := false, covariant := true, commonfield := false) -> List
 
-intrinsic GeometricAutomorphismGroup(H::CrvHyp) -> GrpPerm
+intrinsic GeometricReducedAutomorphismGroup(H::CrvHyp) -> GrpPerm, Map
 ```
 
 ### Weighted projective space toolbox
