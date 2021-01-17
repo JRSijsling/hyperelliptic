@@ -565,11 +565,7 @@ function G3Models(JI:
     if J3 eq 0 and J2^2-96*J4 eq 0  and J5 eq 0 and J2^3+2304*J6 eq 0 and
 	J7 eq 0 and J2^4-17920*J8 eq 0  and J9 eq 0 and 430080*J10+J2^5 eq 0 then
 	vprintf Hyperelliptic, 1 : "Automorphism group U6, curve y^2 = x (x^6 - 1)\n";
-        aut := sub<Sym(24)|
-            (1, 13)(2, 14)(3, 15)(4, 16)(5, 17)(6, 18)(7, 19)(8, 20)(9, 21)(10, 22)(11, 23)(12, 24),
-            (1, 10, 4, 7)(2, 11, 5, 8)(3, 12, 6, 9)(13, 22, 16, 19)(14, 23, 17, 20)(15, 24, 18, 21),
-            (1, 3, 2)(4, 6, 5)(7, 9, 8)(10, 12, 11)(13, 14, 15)(16, 17, 18)(19, 20, 21)(22, 23, 24)
-            >;
+        aut := sub<Sym(7)| (2, 3, 7, 6), (1, 4), (1, 4, 5) >;
         autred := DihedralGroup(6);
 	if models then twists := G3ModelsInCharFF_G24_5(JI : geometric := geometric); end if;
 	return twists, aut, autred;
@@ -1964,14 +1960,10 @@ intrinsic GeometricAutomorphismGroupGenus3Classification(FF::FldFin) -> SeqEnum,
 
     Grps := [**]; Nmbs := [];
     if C14 ne 0 then
-	Grps cat:= [*DirectProduct(CyclicGroup(2), CyclicGroup(14))*]; Nmbs cat:= [C14];
+	Grps cat:= [* DirectProduct(CyclicGroup(2), CyclicGroup(14)) *]; Nmbs cat:= [C14];
     end if;
     if U6 ne 0 then
-	Grps cat:= [*sub<Sym(24)|
-            (1, 13)(2, 14)(3, 15)(4, 16)(5, 17)(6, 18)(7, 19)(8, 20)(9, 21)(10, 22)(11, 23)(12, 24),
-            (1, 10, 4, 7)(2, 11, 5, 8)(3, 12, 6, 9)(13, 22, 16, 19)(14, 23, 17, 20)(15, 24, 18, 21),
-            (1, 3, 2)(4, 6, 5)(7, 9, 8)(10, 12, 11)(13, 14, 15)(16, 17, 18)(19, 20, 21)(22, 23, 24)
-            > /* SmallGroup(24, 5) */ *]; Nmbs cat:= [U6];
+	Grps cat:= [* sub<Sym(7)| (2, 3, 7, 6), (1, 4), (1, 4, 5) > *]; Nmbs cat:= [U6];
     end if;
     if V8 ne 0 then
         Grps cat:= [*sub<Sym(32)|

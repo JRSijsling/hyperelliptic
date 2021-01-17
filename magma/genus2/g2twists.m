@@ -1109,9 +1109,8 @@ function G2Models(JI : geometric := false, models := true, RationalModel := fals
             if models then
                 twists := G2ModelsInChar2FF_M160(GI : geometric := geometric);
             end if;
-            aut := DirectProduct(CyclicGroup(2),
-                sub<SymmetricGroup(16)|[1,16,14,3,10,7,5,12,2,15,13,4,9,8,6,11],
-                [9,10,11,12,13,14,15,16,1,2,3,4,5,6,7,8]>);
+            aut := DirectProduct( CyclicGroup(2),
+                sub<Sym(10)| (1, 9, 3, 7, 5)(2, 10, 4, 8, 6), (1, 2)(9, 10), (5, 6)(9, 10), (7, 8)(9, 10)> );
         end if;
         return twists, aut;
     end if;
@@ -1122,8 +1121,7 @@ function G2Models(JI : geometric := false, models := true, RationalModel := fals
             twists := G2ModelsInFF_2D12(GI : geometric := geometric);
         end if;
         return twists,
-            sub<SymmetricGroup(12)|[1,3,2,4,6,5,10,12,11,7,9,8],
-            [9,8,7,12,11,10,6,5,4,3,2,1]>,
+            sub<Sym(7) | (3, 4), (1, 4)(2, 6)(3, 5), (2, 6, 7), (1, 5)(3, 4)>,
             DihedralGroup(6);
     end if;
 
@@ -1168,8 +1166,8 @@ function G2Models(JI : geometric := false, models := true, RationalModel := fals
             twists := G2ModelsInFF_G48(GI : geometric := geometric);
         end if;
         return twists,
-            sub<SymmetricGroup(8)|[2,1,3,4,7,8,5,6],[3,4,5,6,1,2,7,8]>,
-            sub<Sym(6)|(2, 4, 3, 6), (1, 2, 5, 3)>;
+            sub<Sym(8)|[2,1,3,4,7,8,5,6],[3,4,5,6,1,2,7,8]>,
+            sub<Sym(4)|(3, 4), (2, 3, 4), (1, 4)(2, 3)>;
     end if;
 
     /* y^2 = x^5-1, p <> 5 */
@@ -1413,20 +1411,18 @@ intrinsic GeometricAutomorphismGroupGenus2Classification(FF::FldFin) -> SeqEnum,
 	Grps cat:= [DihedralGroup(6)]; Nmbs cat:= [nbth_D12];
     end if;
     if nbth_2D12 ne 0 then
-	Grps cat:= [sub<SymmetricGroup(12)|
-	    [1,3,2,4,6,5,10,12,11,7,9,8],
-	    [9,8,7,12,11,10,6,5,4,3,2,1]>]; Nmbs cat:= [nbth_2D12];
+	Grps cat:= [sub<Sym(7) | (3, 4), (1, 4)(2, 6)(3, 5), (2, 6, 7), (1, 5)(3, 4)>]; Nmbs cat:= [nbth_2D12];
     end if;
     if nbth_M32 ne 0 then
 	Grps cat:= [DirectProduct([CyclicGroup(2): i in [1..5]])]; Nmbs cat:= [nbth_M32];
     end if;
     if nbth_G48 ne 0 then
-	Grps cat:= [sub<SymmetricGroup(8)|[2,1,3,4,7,8,5,6],[3,4,5,6,1,2,7,8]>]; Nmbs cat:= [nbth_G48];
+	Grps cat:= [sub<Sym(8)|[2,1,3,4,7,8,5,6],[3,4,5,6,1,2,7,8]>]; Nmbs cat:= [nbth_G48];
     end if;
     if nbth_M160 ne 0 then
-	Grps cat:= [DirectProduct( CyclicGroup(2),
-	    sub<SymmetricGroup(16)|[1,16,14,3,10,7,5,12,2,15,13,4,9,8,6,11],
-	    [9,10,11,12,13,14,15,16,1,2,3,4,5,6,7,8]>)]; Nmbs cat:= [nbth_M160];
+        Grps cat:= [ DirectProduct( CyclicGroup(2),
+            sub<Sym(10)| (1, 9, 3, 7, 5)(2, 10, 4, 8, 6), (1, 2)(9, 10), (5, 6)(9, 10), (7, 8)(9, 10)> ) ];
+        Nmbs cat:= [nbth_M160];
     end if;
     if nbth_G240 ne 0 then
 	Grps cat:= [sub<Sym(240)|
