@@ -28,7 +28,7 @@
 import "g3d4_char3.m"            : G3Char3Models_D2;
 import "conic_char3.m"           : Genus3Char3ConicAndQuartic, Genus3Char3ConicAndQuarticForC4;
 import "../toolbox/hilbert90.m"  : MActOnC, Glasby;
-
+import "../twists/twists.m"      : TwistsOfHyperellipticPolynomialsMain;
 
 /*************** Some useful quartics ***************/
 
@@ -105,7 +105,7 @@ function G3Char3Models_G32_9(JI : geometric:= false)
     FF:= Universe(JI); x:= PolynomialRing(FF).1;
     f:= x^8 - 1;
     if geometric then return [f]; end if;
-    return TwistsOfHyperellipticPolynomials(f);
+    return TwistsOfHyperellipticPolynomialsMain(f);
 
 end function;
 
@@ -119,7 +119,7 @@ function G3Char3Models_C14(JI : geometric:= false)
     FF:= Universe(JI); x:= PolynomialRing(FF).1;
     f:= x^7 - 1;
     if geometric then return [f]; end if;
-    return TwistsOfHyperellipticPolynomials(f);
+    return TwistsOfHyperellipticPolynomialsMain(f);
 
 end function;
 
@@ -160,7 +160,7 @@ function G3Char3Models_C2xD4(JI : geometric:= false)
 
     f:= x^8 + a*x^4 + b;
     if geometric then return [f]; end if;
-    return TwistsOfHyperellipticPolynomials(f);
+    return TwistsOfHyperellipticPolynomialsMain(f);
 
 end function;
 
@@ -187,7 +187,7 @@ function G3Char3Models_C2xC4(JI : geometric:= false)
 
     f:= a^2*x^8 + a^2*x^6 + a*x^2 + 2;
     if geometric then return [f]; end if;
-    return TwistsOfHyperellipticPolynomials(f);
+    return TwistsOfHyperellipticPolynomialsMain(f);
 
 end function;
 
@@ -223,7 +223,7 @@ function G3Char3Models_C2x3(JI : geometric:= false, descent:= true)
 	l:= 1/a6;
 	f:= a8*x^8 + a6*x^6 + a4*x^4 + l*a6*x^2 + l^2*a8;
 	if geometric then return [f]; end if;
-	return TwistsOfHyperellipticPolynomials(f);
+	return TwistsOfHyperellipticPolynomialsMain(f);
 
     else /* J3 <> 0, i.e. a4 <> 0, because 2*J3^2 + 2*J2*J4 + J6 <> 0 */
 
@@ -243,7 +243,7 @@ function G3Char3Models_C2x3(JI : geometric:= false, descent:= true)
 	    l:= 1/a6;
 	    f:= a8*x^8 + a6*x^6 + a4*x^4 + l*a6*x^2 + l^2*a8;
 	    if geometric then return [f]; end if;
-	    return TwistsOfHyperellipticPolynomials(f);
+	    return TwistsOfHyperellipticPolynomialsMain(f);
 
 	else /* Let's go in a degree 3 extension */
 
@@ -289,7 +289,7 @@ function G3Char3Models_C2x3(JI : geometric:= false, descent:= true)
 	       f:= fK3;
  	   end if;
 	   if geometric then return [f]; end if;
-	   return TwistsOfHyperellipticPolynomials(f);
+	   return TwistsOfHyperellipticPolynomialsMain(f);
 
 	end if;
     end if;
@@ -431,17 +431,17 @@ function G3Char3Models(JI: geometric:= true, models:= true, descent:= true)
 	J10*J6 + J12*J4 + J4^4 + J8*J6*J2 + 2*J10*J4*J2 + 2*J12*J2^2 + J4^3*J2^2 + J10*J2^3 + 2*J6*J4*J2^3 +
         J8*J2^4 + 2*J4^2*J2^4 + J6*J2^5 + 2*J4*J2^6 eq 0 and
 	J6^2 + J8*J4 + J10*J2 + J8*J2^2 + J4^2*J2^2 + J2^6 eq 0
-	then
+        then
 	 vprintf Hyperelliptic, 1 : "Automorphism group C4, curve y^2 = x*(x^2-1)*(x^4+a*x^2+b)\n";
 	 aut := CyclicGroup(4);
 	 autred := CyclicGroup(2);
 	 if models then
-	     f:= Genus3Char3ConicAndQuarticForC4(JI : models:= models);
+             f:= Genus3Char3ConicAndQuarticForC4(JI : models:= models);
 	     error if Type(f) eq BoolElt, "[Hyperelliptic] None C4-model found at JI =", JI;
 	     twists:= [f];
 	 end if;
 	 if geometric or not models then return twists, aut, autred; end if;
-	 return TwistsOfHyperellipticPolynomials(f), aut, autred;
+	 return TwistsOfHyperellipticPolynomialsMain(f), aut, autred;
      end if;
 
 

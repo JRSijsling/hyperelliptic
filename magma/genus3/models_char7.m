@@ -29,6 +29,7 @@ import "models_I6_char7.m"       : G3Char7Models_I6;
 import "g3d4_char7.m"            : G3Char7Models_D2;
 import "conic_char7.m"           : Genus3Char7ConicAndQuartic, Genus3Char7ConicAndQuarticForC4;
 import "../toolbox/hilbert90.m"  : MActOnC, Glasby;
+import "../twists/twists.m"      : TwistsOfHyperellipticPolynomialsMain;
 
 /*************** Some useful quartics ***************/
 
@@ -94,7 +95,7 @@ function G3Models_C2xPGL(JI : geometric:= false)
     FF:= Universe(JI); x:= PolynomialRing(FF).1;
     f:= x^7 - x;
     if geometric then return [f]; end if;
-    return TwistsOfHyperellipticPolynomials(f);
+    return TwistsOfHyperellipticPolynomialsMain(f);
 
 end function;
 
@@ -118,7 +119,7 @@ function G3Models_C2xD4(JI : geometric:= false)
 
     f:= x^8 + a*x^4 + b;
     if geometric then return [f]; end if;
-    return TwistsOfHyperellipticPolynomials(f);
+    return TwistsOfHyperellipticPolynomialsMain(f);
 
 end function;
 
@@ -143,7 +144,7 @@ function G3Models_D6(JI : geometric:= false)
 
     f:= x^7+ a*x^4 + b*x;
     if geometric then return [f]; end if;
-    return TwistsOfHyperellipticPolynomials(f);
+    return TwistsOfHyperellipticPolynomialsMain(f);
 
 end function;
 
@@ -168,7 +169,7 @@ function G3Models_C2xC4(JI : geometric:= false)
     end if;
 
     if geometric then return [f]; end if;
-    return TwistsOfHyperellipticPolynomials(f);
+    return TwistsOfHyperellipticPolynomialsMain(f);
 
 end function;
 
@@ -211,7 +212,7 @@ function G3Models_C2x3(JI : geometric:= false, descent:= true)
 	l:= 1/a2;
 	f:= a0*x^8 + a2*x^6 + a4*x^4 + l*a2*x^2 + l^2*a0;
 	if geometric then return [f]; end if;
-	return TwistsOfHyperellipticPolynomials(f);
+	return TwistsOfHyperellipticPolynomialsMain(f);
 
     else /* Let's go in a degree 3 extension */
 
@@ -266,7 +267,7 @@ function G3Models_C2x3(JI : geometric:= false, descent:= true)
  	end if;
 
 	if geometric then return [f]; end if;
-	return TwistsOfHyperellipticPolynomials(f);
+	return TwistsOfHyperellipticPolynomialsMain(f);
 
     end if;
 
@@ -853,7 +854,7 @@ function G3Char7Models(JI: geometric:= false, models:= true, descent:= true)
 	     twists:= [f];
 	 end if;
 	 if geometric or not models then return twists, aut, autred; end if;
-	 return TwistsOfHyperellipticPolynomials(f), aut, autred;
+	 return TwistsOfHyperellipticPolynomialsMain(f), aut, autred;
 
      end if;
 

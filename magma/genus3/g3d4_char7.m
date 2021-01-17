@@ -24,6 +24,7 @@
  *  Copyright 2013, R. Basson, R. Lercier, C. Ritzenthaler & J. Sijsling
  */
 
+import "../twists/twists.m"      : TwistsOfHyperellipticPolynomialsMain;
 
 /* Find an affine point (x,y,1) on the projective conic L. */
 function FindPointOnConic(L)
@@ -117,7 +118,7 @@ function G3Char7Models_D2(JI : geometric := false)
 
 	vprintf Hyperelliptic, 2 : "[Hyperelliptic] D2 : *** f = %o\n", f;
 	if geometric then return [f]; end if;
-	return TwistsOfHyperellipticPolynomials(f);
+	return TwistsOfHyperellipticPolynomialsMain(f);
     end if;
 
     if I2a eq 0 then
@@ -165,7 +166,7 @@ function G3Char7Models_D2(JI : geometric := false)
 
 	vprintf Hyperelliptic, 2 : "[Hyperelliptic] D2 : *** f = %o\n", f;
 	if geometric then return [f]; end if;
-	return TwistsOfHyperellipticPolynomials(f);
+	return TwistsOfHyperellipticPolynomialsMain(f);
 
     end if;
 
@@ -203,6 +204,6 @@ function G3Char7Models_D2(JI : geometric := false)
 
     vprintf Hyperelliptic, 2 : "[Hyperelliptic] D2 : *** f = %o\n", f;
     if geometric then return [f]; end if;
-    return TwistsOfHyperellipticPolynomials(f);
+    return TwistsOfHyperellipticPolynomialsMain(f);
 
 end function;

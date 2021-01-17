@@ -24,6 +24,8 @@
  *  Copyright 2011, R. Lercier & C. Ritzenthaler & J. Sijsling & J. Sijsling
  */
 
+import "../twists/twists.m"      : TwistsOfHyperellipticPolynomialsMain;
+
 /* Case D4
 
    y^2 = a8 * x^8 + a6 * x^6 + a4 * x^4 + a2 * x^2 + a0;
@@ -74,7 +76,7 @@ function G3ModelsInCharFF_D4(JI : geometric := false, RationalModel := true, min
         end if;
 	vprintf Hyperelliptic, 2 : "[Hyperelliptic] D4: *** f = %o\n", f;
 	if geometric then return [f]; end if;
-	return TwistsOfHyperellipticPolynomials(f);
+	return TwistsOfHyperellipticPolynomialsMain(f);
     end if;
 
     /* Some easy cases */
@@ -91,7 +93,7 @@ function G3ModelsInCharFF_D4(JI : geometric := false, RationalModel := true, min
         end if;
 	vprintf Hyperelliptic, 2 : "[Hyperelliptic] D4: *** f = %o\n", f;
 	if geometric then return [f]; end if;
-	return TwistsOfHyperellipticPolynomials(f);
+	return TwistsOfHyperellipticPolynomialsMain(f);
 
     end if;
 
@@ -128,7 +130,7 @@ function G3ModelsInCharFF_D4(JI : geometric := false, RationalModel := true, min
         end if;
 	vprintf Hyperelliptic, 2 : "[Hyperelliptic] D4: *** f = %o\n", f;
 	if geometric then return [f]; end if;
-	return TwistsOfHyperellipticPolynomials(f);
+	return TwistsOfHyperellipticPolynomialsMain(f);
 
     end if;
 
@@ -167,6 +169,6 @@ function G3ModelsInCharFF_D4(JI : geometric := false, RationalModel := true, min
     end if;
     vprintf Hyperelliptic, 2 : "[Hyperelliptic] D4: *** f = %o\n", f;
     if geometric then return [f]; end if;
-    return TwistsOfHyperellipticPolynomials(f);
+    return TwistsOfHyperellipticPolynomialsMain(f);
 
 end function;

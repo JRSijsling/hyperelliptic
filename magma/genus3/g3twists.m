@@ -136,6 +136,8 @@ import "models_char7.m"   : G3Char7Models;
 
 import "../toolbox/hilbert90.m" : MActOnC, Glasby;
 
+import "../twists/twists.m"      : TwistsOfHyperellipticPolynomialsMain;
+
  /***
   *
   * Reconstruction
@@ -152,7 +154,7 @@ function G3ModelsInCharFF_G48_48(JI : geometric := false)
     FF := Universe(JI); x := PolynomialRing(FF).1;
     f := x^8 + 14*x^4 + 1;
     if geometric then return [f]; end if;
-    return TwistsOfHyperellipticPolynomials(f);
+    return TwistsOfHyperellipticPolynomialsMain(f);
 end function;
 
 /* Case V8.
@@ -165,7 +167,7 @@ function G3ModelsInCharFF_G32_9(JI : geometric := false)
     FF := Universe(JI); x := PolynomialRing(FF).1;
     f := x^8 - 1;
     if geometric then return [f]; end if;
-    return TwistsOfHyperellipticPolynomials(f);
+    return TwistsOfHyperellipticPolynomialsMain(f);
 end function;
 
 /* Case U6.
@@ -178,7 +180,7 @@ function G3ModelsInCharFF_G24_5(JI : geometric := false)
     FF := Universe(JI); x := PolynomialRing(FF).1;
     f := x * (x^6 - 1);
     if geometric then return [f]; end if;
-    return TwistsOfHyperellipticPolynomials(f);
+    return TwistsOfHyperellipticPolynomialsMain(f);
 end function;
 
 /* Case C14.
@@ -191,7 +193,7 @@ function G3ModelsInCharFF_C14(JI : geometric := false)
     FF := Universe(JI); x := PolynomialRing(FF).1;
     f := x^7 - 1;
     if geometric then return [f]; end if;
-    return TwistsOfHyperellipticPolynomials(f);
+    return TwistsOfHyperellipticPolynomialsMain(f);
 end function;
 
 /* Case C2xD8
@@ -224,7 +226,7 @@ function G3ModelsInCharFF_G16_11(JI : geometric := false, minimize := true)
         f := MinRedBinaryForm(f : degree := 8);
     end if;
     if geometric then return [f]; end if;
-    return TwistsOfHyperellipticPolynomials(f);
+    return TwistsOfHyperellipticPolynomialsMain(f);
 
 end function;
 
@@ -258,7 +260,7 @@ function G3ModelsInCharFF_D12(JI : geometric := false, minimize := true)
         f := MinRedBinaryForm(f : degree := 8);
     end if;
     if geometric then return [f]; end if;
-    return TwistsOfHyperellipticPolynomials(f);
+    return TwistsOfHyperellipticPolynomialsMain(f);
 
 end function;
 
@@ -301,7 +303,7 @@ function G3ModelsInCharFF_C2xC4(JI : geometric := false, minimize := true)
         f := MinRedBinaryForm(f : degree := 8);
     end if;
     if geometric then return [f]; end if;
-    return TwistsOfHyperellipticPolynomials(f);
+    return TwistsOfHyperellipticPolynomialsMain(f);
 
 end function;
 
@@ -349,7 +351,7 @@ function G3ModelsInCharFF_G8_5(JI : geometric := false, minimize := true)
             f := MinRedBinaryForm(f : degree := 8);
         end if;
 	if geometric then return [f]; end if;
-	return TwistsOfHyperellipticPolynomials(f);
+	return TwistsOfHyperellipticPolynomialsMain(f);
     end if;
 
     /* Let's go in a degree 3 extension */
@@ -475,7 +477,7 @@ function G3ModelsInCharFF_G8_5(JI : geometric := false, minimize := true)
     ftilde  := PolynomialRing(FF)!Eltseq(ftilde);
 
     if geometric then return [ftilde]; end if;
-    return TwistsOfHyperellipticPolynomials(ftilde);
+    return TwistsOfHyperellipticPolynomialsMain(ftilde);
 end function;
 
 
@@ -704,7 +706,7 @@ function G3Models(JI:
 	    twists := [f];
 	end if;
 	if geometric or not models then return twists, aut, autred; end if;
-	return TwistsOfHyperellipticPolynomials(f), aut, autred;
+	return TwistsOfHyperellipticPolynomialsMain(f), aut, autred;
     end if;
 
     /*** Three dimensional case ***/

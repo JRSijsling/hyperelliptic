@@ -565,7 +565,7 @@ repeat
 	    end if;
 
             IG := <0,0>;
-            if G ne <> then IG :=  IdentifyGroup(G); end if;
+            if Type(G) eq GrpPerm then IG :=  IdentifyGroup(G); end if;
 	    WriteCurves(OutputFile, [* J, IG, singular, H *]);
 
 	elif reload then
@@ -596,6 +596,8 @@ repeat
 	    G672[idx] +:= 1;
 	when <12, 4>:
 	    D12[idx] +:= 1;
+	when <28, 4>:
+	    C14[idx] +:= 1;
 	when <14, 2>:
 	    C14[idx] +:= 1;
 	when <16, 11>:
@@ -625,6 +627,8 @@ repeat
 	    G672[3] +:= #H-1;
 	when <12, 4>:
 	    D12[3] +:= #H-1;
+	when <28, 4>:
+	    C14[3] +:= #H-1;
 	when <14, 2>:
 	    C14[3] +:= #H-1;
 	when <16, 11>:

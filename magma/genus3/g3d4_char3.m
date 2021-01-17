@@ -24,6 +24,8 @@
  *  Copyright 2013, R. Basson, R. Lercier, C. Ritzenthaler & J. Sijsling
  */
 
+import "../twists/twists.m"      : TwistsOfHyperellipticPolynomialsMain;
+
 /* Find an affine point (x,y,1) on the projective conic L. */
 function FindPointOnConic(L)
     K := BaseRing(Parent(L));
@@ -151,7 +153,7 @@ vprintf Hyperelliptic, 2 : "\n[Hyperelliptic] D2 : JI = %o\n", JI;
 
 	vprintf Hyperelliptic, 2 : "[Hyperelliptic] D2 : *** f = %o\n", f;
 	if geometric then return [f]; end if;
-	return TwistsOfHyperellipticPolynomials(f);
+	return TwistsOfHyperellipticPolynomialsMain(f);
     end if;
 
     d:= (I3^2 + 2*I2a*I2b^2);
@@ -182,7 +184,7 @@ vprintf Hyperelliptic, 2 : "\n[Hyperelliptic] D2 : JI = %o\n", JI;
 
 	vprintf Hyperelliptic, 2 : "[Hyperelliptic] D2 : *** f = %o\n", f;
 	if geometric then return [f]; end if;
-	return TwistsOfHyperellipticPolynomials(f);
+	return TwistsOfHyperellipticPolynomialsMain(f);
 
     end if;
 
@@ -220,6 +222,6 @@ vprintf Hyperelliptic, 2 : "\n[Hyperelliptic] D2 : JI = %o\n", JI;
 
     vprintf Hyperelliptic, 2 : "[Hyperelliptic] D2 : *** f = %o\n", f;
     if geometric then return [f]; end if;
-    return TwistsOfHyperellipticPolynomials(f);
+    return TwistsOfHyperellipticPolynomialsMain(f);
 
 end function;
