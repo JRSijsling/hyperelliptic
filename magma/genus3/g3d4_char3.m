@@ -151,7 +151,7 @@ vprintf Hyperelliptic, 2 : "\n[Hyperelliptic] D2 : JI = %o\n", JI;
 
 	vprintf Hyperelliptic, 2 : "[Hyperelliptic] D2 : *** f = %o\n", f;
 	if geometric then return [f]; end if;
-	return TwistsOfHyperellipticPolynomials(f, 8);
+	return TwistsOfHyperellipticPolynomials(f);
     end if;
 
     d:= (I3^2 + 2*I2a*I2b^2);
@@ -182,7 +182,7 @@ vprintf Hyperelliptic, 2 : "\n[Hyperelliptic] D2 : JI = %o\n", JI;
 
 	vprintf Hyperelliptic, 2 : "[Hyperelliptic] D2 : *** f = %o\n", f;
 	if geometric then return [f]; end if;
-	return TwistsOfHyperellipticPolynomials(f, 8);
+	return TwistsOfHyperellipticPolynomials(f);
 
     end if;
 
@@ -220,6 +220,6 @@ vprintf Hyperelliptic, 2 : "\n[Hyperelliptic] D2 : JI = %o\n", JI;
 
     vprintf Hyperelliptic, 2 : "[Hyperelliptic] D2 : *** f = %o\n", f;
     if geometric then return [f]; end if;
-    return TwistsOfHyperellipticPolynomials(f, 8);
+    return TwistsOfHyperellipticPolynomials(f);
 
 end function;

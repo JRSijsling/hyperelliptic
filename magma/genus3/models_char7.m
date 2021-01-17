@@ -94,7 +94,7 @@ function G3Models_C2xPGL(JI : geometric:= false)
     FF:= Universe(JI); x:= PolynomialRing(FF).1;
     f:= x^7 - x;
     if geometric then return [f]; end if;
-    return TwistsOfHyperellipticPolynomials(f, 8);
+    return TwistsOfHyperellipticPolynomials(f);
 
 end function;
 
@@ -118,7 +118,7 @@ function G3Models_C2xD4(JI : geometric:= false)
 
     f:= x^8 + a*x^4 + b;
     if geometric then return [f]; end if;
-    return TwistsOfHyperellipticPolynomials(f, 8);
+    return TwistsOfHyperellipticPolynomials(f);
 
 end function;
 
@@ -143,7 +143,7 @@ function G3Models_D6(JI : geometric:= false)
 
     f:= x^7+ a*x^4 + b*x;
     if geometric then return [f]; end if;
-    return TwistsOfHyperellipticPolynomials(f, 8);
+    return TwistsOfHyperellipticPolynomials(f);
 
 end function;
 
@@ -168,7 +168,7 @@ function G3Models_C2xC4(JI : geometric:= false)
     end if;
 
     if geometric then return [f]; end if;
-    return TwistsOfHyperellipticPolynomials(f, 8);
+    return TwistsOfHyperellipticPolynomials(f);
 
 end function;
 
@@ -211,7 +211,7 @@ function G3Models_C2x3(JI : geometric:= false, descent:= true)
 	l:= 1/a2;
 	f:= a0*x^8 + a2*x^6 + a4*x^4 + l*a2*x^2 + l^2*a0;
 	if geometric then return [f]; end if;
-	return TwistsOfHyperellipticPolynomials(f, 8);
+	return TwistsOfHyperellipticPolynomials(f);
 
     else /* Let's go in a degree 3 extension */
 
@@ -266,17 +266,13 @@ function G3Models_C2x3(JI : geometric:= false, descent:= true)
  	end if;
 
 	if geometric then return [f]; end if;
-	return TwistsOfHyperellipticPolynomials(f, 8);
+	return TwistsOfHyperellipticPolynomials(f);
 
     end if;
 
 end function;
 
-
-
-
-
-
+/* Model + possibly twists and reduced automorphism group */
 function G3Char7Models(JI: geometric:= false, models:= true, descent:= true)
 
     FF:= Universe(JI);
@@ -293,9 +289,9 @@ function G3Char7Models(JI: geometric:= false, models:= true, descent:= true)
        J13 eq 0 and J14 eq 0 and
        J15 eq 0 then
 
-	aut:= Sym(1);/* FixMe: <1,1> is not the good choice here */
+	aut:= <>; autred := <>;
 	if models then twists:= [PolynomialRing(FF).1^8]; end if;
-	if geometric or not models then return twists, aut; end if;
+	if geometric or not models then return twists, aut, autred; end if;
 	error "[models_char7] no possible twist computations for singular forms, sorry";
 	return [], <>;
     end if;
@@ -393,9 +389,10 @@ function G3Char7Models(JI: geometric:= false, models:= true, descent:= true)
              623)(604, 660, 624)(605, 651, 615)(606, 652, 616)(607, 658, 622)(608, 657,
              621)(609, 649, 613)(610, 650, 614)(611, 654, 618)(612, 653, 617)(637, 646,
              644)(638, 645, 643)(639, 642, 648)(640, 641, 647)
-             >; /* SmallGroup(672, 1043) */
-	 if models then twists:= G3Models_C2xPGL(JI : geometric:= geometric); end if;
-	 return twists, aut;
+             >;
+         autred := PGL(2, GF(7));
+         if models then twists:= G3Models_C2xPGL(JI : geometric:= geometric); end if;
+	 return twists, aut, autred;
      end if;
 
      /*** One dimensional cases ***/
@@ -468,13 +465,10 @@ function G3Char7Models(JI: geometric:= false, models:= true, descent:= true)
 	 3*J2^3 + J3^2 eq 0
 	 then
 	 vprintf Hyperelliptic, 1 : "Automorphism group C2xD4, curve y^2 = x^8 + a*x^4 + 1\n";
-         aut := sub<Sym(16) |
-             (1, 3)(2, 4)(5, 7)(6, 8)(9, 11)(10, 12)(13, 15)(14, 16),
-             (1, 5)(2, 6)(3, 7)(4, 8)(9, 14)(10, 13)(11, 16)(12, 15),
-             (1, 9)(2, 10)(3, 11)(4, 12)(5, 13)(6, 14)(7, 15)(8, 16)
-             >; /* SmallGroup(16, 11) */
+         aut := DirectProduct(CyclicGroup(2), DihedralGroup(4));
+         autred := DihedralGroup(4);
 	 if models then twists:= G3Models_C2xD4(JI : geometric:= geometric); end if;
-	 return twists, aut;
+	 return twists, aut, autred;
      end if;
 
 
@@ -548,14 +542,11 @@ function G3Char7Models(JI: geometric:= false, models:= true, descent:= true)
 	J2^2*J3 + J3*J4 + J2*J5 eq 0 and
 	3*J2^3 + J3^2 eq 0
 	then
-	 vprintf Hyperelliptic, 1 : "Automorphism group D6, curve y^2 = x * (x^6 + a * x^3 + 1)\n";
-         aut := sub<Sym(12)|
-             (1, 3, 2)(4, 6, 5)(7, 8, 9)(10, 11, 12),
-             (1, 4)(2, 5)(3, 6)(7, 10)(8, 11)(9, 12),
-             (1, 7)(2, 8)(3, 9)(4, 10)(5, 11)(6, 12)
-             >; /* SmallGroup(12, 4) */
-	 if models then twists:= G3Models_D6(JI : geometric:= geometric); end if;
-	 return twists, aut;
+        vprintf Hyperelliptic, 1 : "Automorphism group D6, curve y^2 = x * (x^6 + a * x^3 + 1)\n";
+        aut := DihedralGroup(6);
+        autred := DihedralGroup(3);
+        if models then twists:= G3Models_D6(JI : geometric:= geometric); end if;
+        return twists, aut, autred;
      end if;
 
 
@@ -571,9 +562,10 @@ function G3Char7Models(JI: geometric:= false, models:= true, descent:= true)
 	3*J2^4 + 4*J2^2*J4 + J4^2 + 3*J2*J6 eq 0
 	then
 	 vprintf Hyperelliptic, 1 : "Automorphism group C2xC4, curve y^2 = x * (x^2 - 1) * (x^4 + a * x^2 + 1)\n";
-	 aut:= DirectProduct(CyclicGroup(2), CyclicGroup(4));	/* SmallGroup(8, 2) */
+         aut:= DirectProduct(CyclicGroup(2), CyclicGroup(4));
+	 autred:= DirectProduct(CyclicGroup(2), CyclicGroup(2));
 	 if models then twists:= G3Models_C2xC4(JI : geometric:= geometric); end if;
-	 return twists, aut;
+	 return twists, aut, autred;
      end if;
 
 
@@ -784,9 +776,10 @@ function G3Char7Models(JI: geometric:= false, models:= true, descent:= true)
 	J2^4 + J2^2*J4 + J4^2 + 3*J3*J5 + 3*J2*J6 eq 0
 	then
 	 vprintf Hyperelliptic, 1 : "Automorphism group C2xC2xC2, curve y^2 = a0*x^8 + a2*x^6 + a4*x^4 + a2*x^2 + a0\n";
-	 aut:= DirectProduct([CyclicGroup(2): i in [1..3]]); /* SmallGroup(8, 5) */
+	 aut := DirectProduct([CyclicGroup(2): i in [1..3]]);
+	 autred := DirectProduct([CyclicGroup(2): i in [1..2]]);
 	 if models then twists:= G3Models_C2x3(JI : geometric:= geometric, descent:= descent); end if;
-	 return twists, aut;
+	 return twists, aut, autred;
      end if;
 
 
@@ -848,7 +841,8 @@ function G3Char7Models(JI: geometric:= false, models:= true, descent:= true)
         2*J2*J10 eq 0
 	then
 	 vprintf Hyperelliptic, 1 : "Automorphism group C4, curve y^2 = x*(x^2-1)*(x^4+a*x^2+b)\n";
-	 aut:= CyclicGroup(4);
+	 aut := CyclicGroup(4);
+	 autred := CyclicGroup(2);
 	 if models then
 	     /* if J2^3+5*J3^2 eq 0 then //I6 = 0 case */
 	     /* 	 f:= G3Char7Models_I6(JI : geometric:= geometric); */
@@ -858,8 +852,8 @@ function G3Char7Models(JI: geometric:= false, models:= true, descent:= true)
 	     /* end if; */
 	     twists:= [f];
 	 end if;
-	 if geometric or not models then return twists, aut; end if;
-	 return TwistsOfHyperellipticPolynomials(f, 8), aut;
+	 if geometric or not models then return twists, aut, autred; end if;
+	 return TwistsOfHyperellipticPolynomials(f), aut, autred;
 
      end if;
 
@@ -14704,7 +14698,8 @@ function G3Char7Models(JI: geometric:= false, models:= true, descent:= true)
         4*J2*J3*J6 + J5*J6 + 5*J2^2*J7 + 2*J4*J7 + 6*J3*J8 + 4*J2*J9 eq 0
 	then
 	 vprintf Hyperelliptic, 1 : "Automorphism group C2^2, curve y^2 = (x^2-1)*(x^6+a*x^4+b*x^2+c)\n";
-	 aut:= DirectProduct(CyclicGroup(2),CyclicGroup(2)); /* SmallGroup(4, 2) */
+	 aut := DirectProduct(CyclicGroup(2),CyclicGroup(2));
+	 autred := CyclicGroup(2);
 	 if models then
 	     if J2^3+5*J3^2 eq 0 and J2^2*J3 + J3*J4 + J2*J5 eq 0 then //I6 = I7 = 0
 		 /* "I6 = I7 = 0 in D2 case, for", JI; */
@@ -14714,12 +14709,13 @@ function G3Char7Models(JI: geometric:= false, models:= true, descent:= true)
 		 twists:= G3Char7Models_D2(JI : geometric:= geometric);
 	     end if;
 	 end if;
-	 return twists, aut;
+	 return twists, aut, autred;
      end if;
 
      /*** General case ***/
      vprintf Hyperelliptic, 1 : "Automorphism group C2 \n";
-     aut:= CyclicGroup(2);
+     aut := CyclicGroup(2);
+     autred := Sym(1);
      if models then
 	 if J2^3+5*J3^2 eq 0 then //I6 = 0
 	     f:= G3Char7Models_I6(JI : geometric:= geometric);
@@ -14730,7 +14726,7 @@ function G3Char7Models(JI: geometric:= false, models:= true, descent:= true)
 	 error if Type(f) eq BoolElt, "[Hyperelliptic] None C2-model found !\n(do J8 eq 0 and J9 and J10 satisfy Shioda algebraic relations ?)";
 	 twists:= [f];
      end if;
-     if geometric or not models then return twists, aut; end if;
-     return [f, PrimitiveElement(FF)*f], aut;
+     if geometric or not models then return twists, aut, autred; end if;
+     return [f, PrimitiveElement(FF)*f], aut, autred;
 
  end function;

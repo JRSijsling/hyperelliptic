@@ -152,7 +152,7 @@ function G3ModelsInCharFF_G48_48(JI : geometric := false)
     FF := Universe(JI); x := PolynomialRing(FF).1;
     f := x^8 + 14*x^4 + 1;
     if geometric then return [f]; end if;
-    return TwistsOfHyperellipticPolynomials(f, 8);
+    return TwistsOfHyperellipticPolynomials(f);
 end function;
 
 /* Case V8.
@@ -165,7 +165,7 @@ function G3ModelsInCharFF_G32_9(JI : geometric := false)
     FF := Universe(JI); x := PolynomialRing(FF).1;
     f := x^8 - 1;
     if geometric then return [f]; end if;
-    return TwistsOfHyperellipticPolynomials(f, 8);
+    return TwistsOfHyperellipticPolynomials(f);
 end function;
 
 /* Case U6.
@@ -178,7 +178,7 @@ function G3ModelsInCharFF_G24_5(JI : geometric := false)
     FF := Universe(JI); x := PolynomialRing(FF).1;
     f := x * (x^6 - 1);
     if geometric then return [f]; end if;
-    return TwistsOfHyperellipticPolynomials(f, 8);
+    return TwistsOfHyperellipticPolynomials(f);
 end function;
 
 /* Case C14.
@@ -191,7 +191,7 @@ function G3ModelsInCharFF_C14(JI : geometric := false)
     FF := Universe(JI); x := PolynomialRing(FF).1;
     f := x^7 - 1;
     if geometric then return [f]; end if;
-    return TwistsOfHyperellipticPolynomials(f, 8);
+    return TwistsOfHyperellipticPolynomials(f);
 end function;
 
 /* Case C2xD8
@@ -224,7 +224,7 @@ function G3ModelsInCharFF_G16_11(JI : geometric := false, minimize := true)
         f := MinRedBinaryForm(f : degree := 8);
     end if;
     if geometric then return [f]; end if;
-    return TwistsOfHyperellipticPolynomials(f, 8);
+    return TwistsOfHyperellipticPolynomials(f);
 
 end function;
 
@@ -258,7 +258,7 @@ function G3ModelsInCharFF_D12(JI : geometric := false, minimize := true)
         f := MinRedBinaryForm(f : degree := 8);
     end if;
     if geometric then return [f]; end if;
-    return TwistsOfHyperellipticPolynomials(f, 8);
+    return TwistsOfHyperellipticPolynomials(f);
 
 end function;
 
@@ -301,7 +301,7 @@ function G3ModelsInCharFF_C2xC4(JI : geometric := false, minimize := true)
         f := MinRedBinaryForm(f : degree := 8);
     end if;
     if geometric then return [f]; end if;
-    return TwistsOfHyperellipticPolynomials(f, 8);
+    return TwistsOfHyperellipticPolynomials(f);
 
 end function;
 
@@ -349,7 +349,7 @@ function G3ModelsInCharFF_G8_5(JI : geometric := false, minimize := true)
             f := MinRedBinaryForm(f : degree := 8);
         end if;
 	if geometric then return [f]; end if;
-	return TwistsOfHyperellipticPolynomials(f, 8);
+	return TwistsOfHyperellipticPolynomials(f);
     end if;
 
     /* Let's go in a degree 3 extension */
@@ -475,10 +475,11 @@ function G3ModelsInCharFF_G8_5(JI : geometric := false, minimize := true)
     ftilde  := PolynomialRing(FF)!Eltseq(ftilde);
 
     if geometric then return [ftilde]; end if;
-    return TwistsOfHyperellipticPolynomials(ftilde, 8);
+    return TwistsOfHyperellipticPolynomials(ftilde);
 end function;
 
 
+/* Model + possibly twists and (reduced) automorphism group */
 function G3Models(JI:
     geometric := false, models := true, RationalModel := true, Deterministic := false, minimize := true)
 
@@ -496,16 +497,16 @@ function G3Models(JI:
     case p:
 
     when 2:
-	twists, aut:= G3Char2Models(JI: geometric:= geometric, models:= models);
-	return twists, aut;
+	twists, aut := G3Char2Models(JI: geometric:= geometric, models:= models);
+	return twists, aut, aut;
 
     when 3:
-	twists, aut:= G3Char3Models(JI: geometric:= geometric, models:= models);
-	return twists, aut;
+	twists, aut, autred := G3Char3Models(JI: geometric:= geometric, models:= models);
+	return twists, aut, autred;
 
     when 7:
-	twists, aut:= G3Char7Models(JI: geometric:= geometric, models:= models);
-	return twists, aut;
+	twists, aut, autred := G3Char7Models(JI: geometric:= geometric, models:= models);
+	return twists, aut, autred;
 
     end case;
 
@@ -521,11 +522,11 @@ function G3Models(JI:
 	J8 eq 0 and J9 eq 0 and
 	J10 eq 0 then
 
-	aut := Sym(1);/* FixMe: <1,1> is not the good choice here */
+	aut := <>; autred := <>;
 	if models then twists := [PolynomialRing(FF).1^8]; end if;
-	if geometric or not models then return twists, aut; end if;
+	if geometric or not models then return twists, aut, autred; end if;
 	error "[Hyperelliptic] no possible twist computations for singular forms, sorry";
-	return [], <>;
+	return [], aut, autred;
     end if;
 
     /*
@@ -538,32 +539,24 @@ function G3Models(JI:
     if J2^3-30*J3^2 eq 0 and J4 eq 0 and J5 eq 0 and J6 eq 0
 	and J7 eq 0 and J8 eq 0 and J9 eq 0 and J10 eq 0 then
 	vprintf Hyperelliptic, 1 : "Automorphism group C2 x S4, curve y^2 = x^8 + 14*x^4 + 1\n";
-        aut := sub<Sym(48)|
-            (1, 25)(2, 26)(3, 27)(4, 28)(5, 29)(6, 30)(7, 31)(8, 32)(9, 33)(10, 34)(11, 35)(12, 36)(13,
-            37)(14, 38)(15, 39)(16, 40)(17, 41)(18, 42)(19, 43)(20, 44)(21, 45)(22, 46)(23, 47)(24, 48),
-            (1, 13)(2, 14)(3, 15)(4, 16)(5, 17)(6, 18)(7, 19)(8, 20)(9, 21)(10, 22)(11, 23)(12, 24)(25,
-            37)(26, 38)(27, 39)(28, 40)(29, 41)(30, 42)(31, 43)(32, 44)(33, 45)(34, 46)(35, 47)(36, 48),
-            (1, 9, 5)(2, 10, 6)(3, 11, 7)(4, 12, 8)(13, 21, 17)(14, 22, 18)(15, 23, 19)(16, 24, 20)(25, 29,
-            33)(26, 30, 34)(27, 31, 35)(28, 32, 36)(37, 41, 45)(38, 42, 46)(39, 43, 47)(40, 44, 48),
-            (1, 3)(2, 4)(5, 6)(7, 8)(9, 12)(10, 11)(13, 15)(14, 16)(17, 18)(19, 20)(21, 24)(22, 23)(25,
-            26)(27, 28)(29, 32)(30, 31)(33, 35)(34, 36)(37, 38)(39, 40)(41, 44)(42, 43)(45, 47)(46, 48)
-            >; /* SmallGroup(48, 48) */
+        aut := DirectProduct(CyclicGroup(2), Sym(4)); autred := Sym(4);
 	if models then twists := G3ModelsInCharFF_G48_48(JI : geometric := geometric); end if;
-	return twists, aut;
+	return twists, aut, autred;
     end if;
 
     /* V8 : y^2 = x^8 - 1  */
     if J3 eq 0 and J2^2-6*J4 eq 0  and J5 eq 0 and J2^3+36*J6 eq 0 and
 	J7 eq 0 and J2^4+420*J8 eq 0 and J9 eq 0 and 2520*J10 - J2^5 eq 0 then
 	vprintf Hyperelliptic, 1 : "Automorphism group V8, curve y^2 =  x^8 - 1\n";
-	aut := sub<Sym(32)|
+        aut := sub<Sym(32)|
              (1, 19, 3, 17)(2, 20, 4, 18)(5, 23, 7, 21)(6, 24, 8, 22)
              (9, 27, 11, 25)(10, 28, 12, 26)(13, 31, 15, 29)(14, 32, 16, 30),
              (1, 9)(2, 10)(3, 11)(4, 12)(5, 13)(6, 14)(7, 15)(8, 16)(17, 29)
              (18, 30)(19, 31)(20, 32)(21, 26)(22, 25)(23, 28)(24, 27)
-             >;/* SmallGroup(32, 9) */
+             >;
+         autred := DihedralGroup(8);
 	if models then twists := G3ModelsInCharFF_G32_9(JI : geometric := geometric); end if;
-	return twists, aut;
+	return twists, aut, autred;
     end if;
 
     /* U6 : y^2 = x (x^6 - 1) */
@@ -574,18 +567,20 @@ function G3Models(JI:
             (1, 13)(2, 14)(3, 15)(4, 16)(5, 17)(6, 18)(7, 19)(8, 20)(9, 21)(10, 22)(11, 23)(12, 24),
             (1, 10, 4, 7)(2, 11, 5, 8)(3, 12, 6, 9)(13, 22, 16, 19)(14, 23, 17, 20)(15, 24, 18, 21),
             (1, 3, 2)(4, 6, 5)(7, 9, 8)(10, 12, 11)(13, 14, 15)(16, 17, 18)(19, 20, 21)(22, 23, 24)
-            >; /* SmallGroup(24, 5); */
+            >;
+        autred := DihedralGroup(6);
 	if models then twists := G3ModelsInCharFF_G24_5(JI : geometric := geometric); end if;
-	return twists, aut;
+	return twists, aut, autred;
     end if;
 
-    /* C14 : y^2 = x^7 - 1 */
+    /* C2xC7 : y^2 = x^7 - 1 */
     if J2 eq 0 and J3 eq 0 and J4 eq 0 and J5 eq 0 and J6 eq 0 and
 	J8 eq 0 and J9 eq 0 and J10 eq 0 then
 	vprintf Hyperelliptic, 1 : "Automorphism group C14, curve y^2 = x^7 - 1\n";
-	aut := DirectProduct(CyclicGroup(2), CyclicGroup(7)); /* SmallGroup(14, 2) */
+        aut := DirectProduct(CyclicGroup(2), CyclicGroup(14));
+        autred := CyclicGroup(14);
 	if models then twists := G3ModelsInCharFF_C14(JI : geometric :=	geometric); end if;
-	return twists, aut;
+	return twists, aut, autred;
     end if;
 
     /*** One dimensional cases ***/
@@ -603,13 +598,10 @@ function G3Models(JI:
 	J10 - 1/42*J4^2*J2 - 1/21*J4*J3^2 + 1/630*J4*J2^3 eq 0
 	then
 	vprintf Hyperelliptic, 1 : "Automorphism group C2xD8, curve y^2 = x^8 + a*x^4 + 1\n";
-	aut := sub<Sym(16) |
-             (1, 3)(2, 4)(5, 7)(6, 8)(9, 11)(10, 12)(13, 15)(14, 16),
-             (1, 5)(2, 6)(3, 7)(4, 8)(9, 14)(10, 13)(11, 16)(12, 15),
-             (1, 9)(2, 10)(3, 11)(4, 12)(5, 13)(6, 14)(7, 15)(8, 16)
-             >; /* SmallGroup(16, 11) */
+        aut := DirectProduct(CyclicGroup(2), DihedralGroup(4));
+        autred := DihedralGroup(4);
 	if models then twists := G3ModelsInCharFF_G16_11(JI : geometric := geometric, minimize := minimize); end if;
-	return twists, aut;
+	return twists, aut, autred;
     end if;
 
     /* D12 : y^2 = x * (x^6+a*x^3+1) */
@@ -625,13 +617,10 @@ function G3Models(JI:
 	J9 - 1/144*J5*J2^2 - 5/144*J4*J3*J2 - 5/576*J3^3 + 1/3456*J3*J2^3 eq 0
 	then
 	vprintf Hyperelliptic, 1 : "Automorphism group D12, curve y^2 * (x^6 + a*x^3 + 1)\n";
-        aut := sub<Sym(12)|
-            (1, 3, 2)(4, 6, 5)(7, 8, 9)(10, 11, 12),
-            (1, 4)(2, 5)(3, 6)(7, 10)(8, 11)(9, 12),
-            (1, 7)(2, 8)(3, 9)(4, 10)(5, 11)(6, 12)
-            >; /* SmallGroup(12, 4) */
+        aut := DihedralGroup(6);
+        autred := DihedralGroup(3);
 	if models then twists := G3ModelsInCharFF_D12(JI : geometric := geometric, minimize := minimize); end if;
-	return twists, aut;
+	return twists, aut, autred;
     end if;
 
      /* C2 x C4 : y^2 = x * (x^2 - 1) * (x^4 + a * x^2 + 1) */
@@ -644,9 +633,10 @@ function G3Models(JI:
 	J10 + 173/630*J6*J4 + 7/6480*J6*J2^2 + 173/3600*J4^2*J2 - 89/32400*J4*J2^3 + 1/36450*J2^5 eq 0
 	then
 	vprintf Hyperelliptic, 1 : "Automorphism group C2xC4, curve y^2 = x * (x^2 - 1) * (x^4 + a * x^2 + 1)\n";
-	aut := DirectProduct(CyclicGroup(2), CyclicGroup(4));	/* SmallGroup(8, 2) */
+        aut := DirectProduct(CyclicGroup(2), CyclicGroup(4));
+        autred := DirectProduct(CyclicGroup(2), CyclicGroup(2));
 	if models then twists := G3ModelsInCharFF_C2xC4(JI : geometric := geometric, minimize := minimize); end if;
-	return twists, aut;
+	return twists, aut, autred;
     end if;
 
     /*** Two dimensional cases ***/
@@ -684,9 +674,10 @@ function G3Models(JI:
 
 	then
 	vprintf Hyperelliptic, 1 : "Automorphism group C2xC2xC2, curve y^2 = a0*x^8 + a2*x^6 + a4*x^4 + a2*x^2 + a0\n";
-	aut := DirectProduct([CyclicGroup(2): i in [1..3]]); /* SmallGroup(8, 5) */
+        aut := DirectProduct([CyclicGroup(2): i in [1..3]]);
+        autred := DirectProduct(CyclicGroup(2), CyclicGroup(2));
 	if models then twists := G3ModelsInCharFF_G8_5(JI : geometric := geometric, minimize := minimize); end if;
-	return twists, aut;
+	return twists, aut, autred;
     end if;
 
 
@@ -705,14 +696,15 @@ function G3Models(JI:
 
 	then
 	vprintf Hyperelliptic, 1 : "Automorphism group C4, curve y^2 = x*(x^2-1)*(x^4+a*x^2+b)\n";
-	aut := CyclicGroup(4);
+        aut := CyclicGroup(4);
+        autred := CyclicGroup(2);
 	if models then
 	    f := Genus3ConicAndQuarticForC4(JI : models := models, minimize := minimize);
 	    error if Type(f) eq BoolElt, "[Hyperelliptic] None C4-model found at JI =", JI;
 	    twists := [f];
 	end if;
-	if geometric or not models then return twists, aut; end if;
-	return TwistsOfHyperellipticPolynomials(f, 8), aut;
+	if geometric or not models then return twists, aut, autred; end if;
+	return TwistsOfHyperellipticPolynomials(f), aut, autred;
     end if;
 
     /*** Three dimensional case ***/
@@ -1510,22 +1502,24 @@ function G3Models(JI:
 	421/630*J3*J4*J7*J10 + J7^2*J10 eq 0
 	then
 	vprintf Hyperelliptic, 1 : "Automorphism group D4, curve y^2 = (x^2-1)*(x^6+a*x^4+b*x^2+c)\n";
-	aut := DirectProduct(CyclicGroup(2), CyclicGroup(2));
+        aut := DirectProduct(CyclicGroup(2), CyclicGroup(2));
+        autred := CyclicGroup(2);
 	if models then twists := G3ModelsInCharFF_D4(JI: geometric := geometric, RationalModel := RationalModel, minimize := minimize); end if;
-	return twists, aut;
+	return twists, aut, autred;
     end if;
 
     /*** General case ***/
     vprintf Hyperelliptic, 1 : "Automorphism group C2 \n";
     aut := CyclicGroup(2);
+    autred := Sym(1);
     f := Genus3ConicAndQuartic(JI : models := models, RationalModel := RationalModel, Deterministic := Deterministic, minimize := minimize);
     if models then
 	error if Type(f) eq BoolElt, "[Hyperelliptic] None C2-model found !\n(do J8, J9 and J10 satisfy Shioda algebraic relations ?)";
 	twists := [f];
     end if;
 
-    if geometric or not models then return twists, aut; end if;
-    return [f, PrimitiveElement(FF)*f], aut;
+    if geometric or not models then return twists, aut, autred; end if;
+    return [f, PrimitiveElement(FF)*f], aut, autred;
 
 end function;
 
@@ -1818,14 +1812,10 @@ intrinsic GeometricAutomorphismGroupGenus3Classification(FF::FldFin) -> SeqEnum,
 	    Grps cat:= [* DirectProduct(CyclicGroup(2), CyclicGroup(7)) *]; Nmbs cat:= [C2C7];
 	end if;
 	if C2S3 ne 0 then
-	    Grps cat:= [*sub<Sym(12)|
-                (1, 3, 2)(4, 6, 5)(7, 8, 9)(10, 11, 12),
-                (1, 4)(2, 5)(3, 6)(7, 10)(8, 11)(9, 12),
-                (1, 7)(2, 8)(3, 9)(4, 10)(5, 11)(6, 12)
-                > /* SmallGroup(12, 4) */ *]; Nmbs cat:= [C2S3];
+	    Grps cat:= [* DihedralGroup(6) *]; Nmbs cat:= [C2S3];
         end if;
 	if C2p3 ne 0 then
-	    Grps cat:= [* DirectProduct([CyclicGroup(2): i in [1..3]]) /* SmallGroup(8, 5) */*]; Nmbs cat:= [C2p3];
+	    Grps cat:= [* DirectProduct([CyclicGroup(2): i in [1..3]]) *]; Nmbs cat:= [C2p3];
 	end if;
 	if C4 ne 0 then
 	    Grps cat:= [* CyclicGroup(4) *]; Nmbs cat:= [C4];
@@ -1972,7 +1962,7 @@ intrinsic GeometricAutomorphismGroupGenus3Classification(FF::FldFin) -> SeqEnum,
 
     Grps := [**]; Nmbs := [];
     if C14 ne 0 then
-	Grps cat:= [*CyclicGroup(14)*]; Nmbs cat:= [C14];
+	Grps cat:= [*DirectProduct(CyclicGroup(2), CyclicGroup(14))*]; Nmbs cat:= [C14];
     end if;
     if U6 ne 0 then
 	Grps cat:= [*sub<Sym(24)|
@@ -1990,39 +1980,22 @@ intrinsic GeometricAutomorphismGroupGenus3Classification(FF::FldFin) -> SeqEnum,
             > /* SmallGroup(32, 9) */ *]; Nmbs cat:= [V8];
     end if;
     if C2S4 ne 0 then
-	Grps cat:= [*sub<Sym(48)|
-            (1, 25)(2, 26)(3, 27)(4, 28)(5, 29)(6, 30)(7, 31)(8, 32)(9, 33)(10, 34)(11, 35)(12, 36)(13,
-            37)(14, 38)(15, 39)(16, 40)(17, 41)(18, 42)(19, 43)(20, 44)(21, 45)(22, 46)(23, 47)(24, 48),
-            (1, 13)(2, 14)(3, 15)(4, 16)(5, 17)(6, 18)(7, 19)(8, 20)(9, 21)(10, 22)(11, 23)(12, 24)(25,
-            37)(26, 38)(27, 39)(28, 40)(29, 41)(30, 42)(31, 43)(32, 44)(33, 45)(34, 46)(35, 47)(36, 48),
-            (1, 9, 5)(2, 10, 6)(3, 11, 7)(4, 12, 8)(13, 21, 17)(14, 22, 18)(15, 23, 19)(16, 24, 20)(25, 29,
-            33)(26, 30, 34)(27, 31, 35)(28, 32, 36)(37, 41, 45)(38, 42, 46)(39, 43, 47)(40, 44, 48),
-            (1, 3)(2, 4)(5, 6)(7, 8)(9, 12)(10, 11)(13, 15)(14, 16)(17, 18)(19, 20)(21, 24)(22, 23)(25,
-            26)(27, 28)(29, 32)(30, 31)(33, 35)(34, 36)(37, 38)(39, 40)(41, 44)(42, 43)(45, 47)(46, 48)
-            > /* SmallGroup(48, 48) */ *]; Nmbs cat:= [C2S4];
+	Grps cat:= [* DirectProduct(CyclicGroup(2), Sym(4)) *]; Nmbs cat:= [C2S4];
     end if;
     if C2C4 ne 0 then
-	Grps cat:= [* DirectProduct(CyclicGroup(2), CyclicGroup(4))*]; Nmbs cat:= [C2C4];
+	Grps cat:= [* DirectProduct(CyclicGroup(2), CyclicGroup(4)) *]; Nmbs cat:= [C2C4];
     end if;
     if D12 ne 0 then
-	Grps cat:= [* sub<Sym(12)|
-            (1, 3, 2)(4, 6, 5)(7, 8, 9)(10, 11, 12),
-            (1, 4)(2, 5)(3, 6)(7, 10)(8, 11)(9, 12),
-            (1, 7)(2, 8)(3, 9)(4, 10)(5, 11)(6, 12)
-            > /* SmallGroup(12, 4) */ *]; Nmbs cat:= [D12];
+	Grps cat:= [* DihedralGroup(6) *]; Nmbs cat:= [D12];
     end if;
     if C2D8 ne 0 then
-	Grps cat:= [* sub<Sym(16) |
-             (1, 3)(2, 4)(5, 7)(6, 8)(9, 11)(10, 12)(13, 15)(14, 16),
-             (1, 5)(2, 6)(3, 7)(4, 8)(9, 14)(10, 13)(11, 16)(12, 15),
-             (1, 9)(2, 10)(3, 11)(4, 12)(5, 13)(6, 14)(7, 15)(8, 16)
-             > /* SmallGroup(16, 11) */ *]; Nmbs cat:= [C2D8];
+	Grps cat:= [*DirectProduct(CyclicGroup(2), DihedralGroup(4)) *]; Nmbs cat:= [C2D8];
     end if;
     if C4  ne 0 then
 	Grps cat:= [* CyclicGroup(4) *]; Nmbs cat:= [C4];
     end if;
     if C2p3 ne 0 then
-	Grps cat:= [* DirectProduct([CyclicGroup(2): i in [1..3]]) /* SmallGroup(8, 5) */ *]; Nmbs cat:= [C2p3];
+	Grps cat:= [* DirectProduct([CyclicGroup(2): i in [1..3]]) *]; Nmbs cat:= [C2p3];
     end if;
     if D4 ne 0 then
 	Grps cat:= [* DirectProduct(CyclicGroup(2), CyclicGroup(2)) *]; Nmbs cat:= [D4];

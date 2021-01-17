@@ -564,7 +564,8 @@ repeat
 		continue;
 	    end if;
 
-	    IG :=  IdentifyGroup(G);
+            IG := <0,0>;
+            if G ne <> then IG :=  IdentifyGroup(G); end if;
 	    WriteCurves(OutputFile, [* J, IG, singular, H *]);
 
 	elif reload then
@@ -589,7 +590,7 @@ repeat
 	if not singular then idx := 1; else idx := 2; end if;
 
 	case IG:
-	when <1, 1>:
+	when <0, 0>:
 	    S8[idx] +:= 1;
 	when <672, 1043>:
 	    G672[idx] +:= 1;
@@ -618,7 +619,7 @@ repeat
 	end case;
 
 	case IG:
-	when <1, 1>:
+	when <0, 0>:
 	    S8[3] +:= #H-1;
 	when <672, 1043>:
 	    G672[3] +:= #H-1;

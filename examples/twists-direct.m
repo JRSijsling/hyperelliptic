@@ -38,7 +38,7 @@ for M in Aut do Embed(BaseRing(M),F); end for;
 Aut:=[ChangeRing(M,GF(p^e)) : M in Aut];
 #Aut;
 
-T1:=TwistsOverFiniteField(C,Aut) ;
+T1:=Twists(C,Aut) ;
 #T1;
 [[[i,j] : j in [i+1..#T1], i in [1..#T1-1] | IsIsomorphicHyperelliptic(T1[i],T1[j])]];
 
@@ -67,7 +67,7 @@ while p le 30 do
         F2:=GF(p^e);
         for M in Aut do Embed(BaseRing(M),F2); end for;
         Aut:=[ChangeRing(M,GF(p^e)) : M in Aut];
-        T1:=TwistsOverFiniteField(H,Aut) ;
+        T1:=Twists(H,Aut) ;
         if #T1 ne #HL then print H,#T1,#HL,#Aut,
                 [[[i,j] : j in [i+1..#T1], i in [1..#T1-1] | IsIsomorphic(T1[i],T1[j])]]; end if;
         end for;
@@ -102,7 +102,7 @@ repeat
                         F2:=GF(p^e);
                         for M in Aut do Embed(BaseRing(M),F2); end for;
                         Aut:=[ChangeRing(M,GF(p^e)) : M in Aut];
-                        T1:=TwistsOverFiniteField(H,Aut) ;
+                        T1:=Twists(H,Aut) ;
                         if #T1 ne #HL then print H,#T1,#HL,#Aut,
                                 [[[i,j] : j in [i+1..#T1], i in [1..#T1-1] | IsIsomorphic(T1[i],T1[j])]]; end if;
                 end if;

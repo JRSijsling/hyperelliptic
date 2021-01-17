@@ -1066,6 +1066,8 @@ end function;
 
 /* Switching routine
  *******************/
+
+/* Model + possibly twists and reduced automorphism group */
 function G2Models(JI : geometric := false, models := true, RationalModel := false, minimize := true)
 
     FF := Universe(JI); p := Characteristic(FF);
@@ -1121,7 +1123,8 @@ function G2Models(JI : geometric := false, models := true, RationalModel := fals
         end if;
         return twists,
             sub<SymmetricGroup(12)|[1,3,2,4,6,5,10,12,11,7,9,8],
-            [9,8,7,12,11,10,6,5,4,3,2,1]>;
+            [9,8,7,12,11,10,6,5,4,3,2,1]>,
+            DihedralGroup(6);
     end if;
 
     /* y^2 = x^5-x */
@@ -1158,12 +1161,15 @@ function G2Models(JI : geometric := false, models := true, RationalModel := fals
                 213, 211, 212, 216, 214, 215, 207, 205, 206, 210, 208, 209, 194, 195, 193, 197, 198,
                 196, 200, 201, 199, 203, 204, 202, 236, 237, 235, 239, 240, 238, 230, 231, 229, 233,
                 234, 232, 219, 217, 218, 222, 220, 221, 225, 223, 224, 228, 226, 227 ]
-                >;/* SmallGroup(240,90) */
+                >,
+                PGL(2, GF(5));
         end if;
         if models then
             twists := G2ModelsInFF_G48(GI : geometric := geometric);
         end if;
-        return twists, sub<SymmetricGroup(8)|[2,1,3,4,7,8,5,6],[3,4,5,6,1,2,7,8]>;
+        return twists,
+            sub<SymmetricGroup(8)|[2,1,3,4,7,8,5,6],[3,4,5,6,1,2,7,8]>,
+            sub<Sym(6)|(2, 4, 3, 6), (1, 2, 5, 3)>;
     end if;
 
     /* y^2 = x^5-1, p <> 5 */
@@ -1171,7 +1177,7 @@ function G2Models(JI : geometric := false, models := true, RationalModel := fals
         if models then
             twists := G2ModelsInFF_C10(GI : geometric := geometric);
         end if;
-        return twists, CyclicGroup(10);
+        return twists, CyclicGroup(10), CyclicGroup(5);
     end if;
 
     if p eq 3 then
@@ -1180,7 +1186,7 @@ function G2Models(JI : geometric := false, models := true, RationalModel := fals
             if models then
                 twists := G2ModelsInChar3FF_D12(JI : geometric := geometric);
             end if;
-            return twists, DihedralGroup(6);
+            return twists, DihedralGroup(6), DihedralGroup(3);
         end if;
     elif p eq 5 then
         /* y^2 = x^6+x^3+t */
@@ -1190,7 +1196,7 @@ function G2Models(JI : geometric := false, models := true, RationalModel := fals
             if models then
                 twists := G2ModelsInFF_D12(JI : geometric := geometric);
             end if;
-            return twists, DihedralGroup(6);
+            return twists, DihedralGroup(6), DihedralGroup(3);
         end if;
     else
         /* y^2 = x^6+x^3+t */
@@ -1199,7 +1205,7 @@ function G2Models(JI : geometric := false, models := true, RationalModel := fals
             if models then
                 twists := G2ModelsInFF_D12(JI : geometric := geometric, minimize := minimize);
             end if;
-            return twists, DihedralGroup(6);
+            return twists, DihedralGroup(6), DihedralGroup(3);
         end if;
     end if;
 
@@ -1210,7 +1216,7 @@ function G2Models(JI : geometric := false, models := true, RationalModel := fals
             if models then
                 twists := G2ModelsInFF_D8(JI : geometric := geometric, minimize := minimize);
             end if;
-            return twists, DihedralGroup(4);
+            return twists, DihedralGroup(4),  DirectProduct(CyclicGroup(2), CyclicGroup(2));
         end if;
     else
         if [
@@ -1224,7 +1230,7 @@ function G2Models(JI : geometric := false, models := true, RationalModel := fals
             if models then
                 twists := G2ModelsInFF_D8(JI : geometric := geometric);
             end if;
-            return twists, DihedralGroup(4);
+            return twists, DihedralGroup(4), DirectProduct(CyclicGroup(2), CyclicGroup(2));
         end if;
     end if;
 
@@ -1242,13 +1248,13 @@ function G2Models(JI : geometric := false, models := true, RationalModel := fals
         if models then
             twists := G2ModelsInFF_V4(JI : geometric := geometric, minimize := minimize);
         end if;
-        return twists, DirectProduct(CyclicGroup(2),CyclicGroup(2));
+        return twists, DirectProduct(CyclicGroup(2),CyclicGroup(2)), CyclicGroup(2);
     end if;
 
     if models then
         twists := G2ModelsInFF_C2(JI : geometric := geometric, RationalModel := RationalModel, minimize := minimize);
     end if;
-    return twists, CyclicGroup(2);
+    return twists, CyclicGroup(2), CyclicGroup(1);
 
 end function;
 
@@ -1450,7 +1456,7 @@ intrinsic GeometricAutomorphismGroupGenus2Classification(FF::FldFin) -> SeqEnum,
             213, 211, 212, 216, 214, 215, 207, 205, 206, 210, 208, 209, 194, 195, 193, 197, 198,
             196, 200, 201, 199, 203, 204, 202, 236, 237, 235, 239, 240, 238, 230, 231, 229, 233,
             234, 232, 219, 217, 218, 222, 220, 221, 225, 223, 224, 228, 226, 227 ]
-            >]; Nmbs cat:= [nbth_G240];
+            > /* SmallGroup(240,90) */ ]; Nmbs cat:= [nbth_G240];
     end if;
 
     return Grps, Nmbs;

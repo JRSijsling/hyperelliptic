@@ -26,17 +26,31 @@
  /***
  * Exported intrinsics.
  *
+ *
  * intrinsic IsGL2EquivalentExtended(f1::RngUPolElt, f2::RngUPolElt, deg::RngIntElt :
  *     geometric := false, covariant := true, commonfield := false) -> BoolElt, List
+ * intrinsic HyperellipticReducedIsomorphisms(f1::RngUPolElt, f2::RngUPolElt :
+ *     geometric := false, covariant := true, commonfield := false) ->  List
  *
  * intrinsic IsIsomorphicHyperelliptic(X1::CrvHyp, X2::CrvHyp :
  *     geometric := false, covariant := true, commonfield := false) ->  BoolElt, List
+ * intrinsic HyperellipticIsomorphisms(X1::CrvHyp, X2::CrvHyp :
+ *     geometric := false, covariant := true, commonfield := false) ->  List
  *
- * intrinsic AutomorphismGroupHyperellipticPolynomial(f::RngUPolElt, deg::RngIntElt :
- *     geometric := false, covariant := true, commonfield := false) -> List
+ * intrinsic IsIsomorphicHyperelliptic(f1::RngMPolElt, f2::RngMPolElt :
+ *     geometric := false, covariant := true, commonfield := false) ->  BoolElt, List
+ * intrinsic HyperellipticIsomorphisms(f1::RngUPolElt, f2::RngUPolElt :
+ *     geometric := false, covariant := true, commonfield := false) ->  List
  *
- * intrinsic AutomorphismGroupHyperelliptic(X::CrvHyp :
- *     geometric := false, covariant := true, commonfield := false) -> List
+ * intrinsic HyperellipticAutomorphisms(X::CrvHyp :
+ *     geometric := false, commonfield := false, covariant := true) -> List
+ * intrinsic HyperellipticAutomorphisms(f::RngUPolElt :
+ *     geometric := false, commonfield := false, covariant := true) -> List
+ *
+ * intrinsic HyperellipticReducedAutomorphisms(X::CrvHyp :
+ *     geometric := false, commonfield := false, covariant := true) -> List
+ * intrinsic HyperellipticReducedAutomorphisms(f::RngUPolElt :
+ *     geometric := false, commonfield := false, covariant := true) -> List
  *
  ********************************************************************/
 
@@ -91,7 +105,6 @@
        ) - 24*m11^4*m22^4*b4;
 
 */
-
 function HomFromRoot(K, L, rt)
 
     if IsPrimeField(K) then
@@ -1054,16 +1067,36 @@ function Normalize22Column(T)
 
 end function;
 
+/**/
+intrinsic HyperellipticReducedIsomorphisms(f1::RngUPolElt, f2::RngUPolElt :
+    geometric := false, covariant := true, commonfield := false) ->  List
+    {Returns a boolean indicating whether a matrix T exist that induce an isomorphism f1(x) --> f2(x), as well as a full list of all such matrices.}
 
-intrinsic IsIsomorphicHyperelliptic(X1::CrvHyp, X2::CrvHyp :
-    geometric := false, covariant := true, commonfield := false) ->  BoolElt, List
-    {Returns a boolean indicating whether a matrix T and a scalar e exist that induce an isomorphism X1 --> X2, as well as a full list of all such pairs.}
+    K := CoefficientRing(f1);
+    require K eq CoefficientRing(f2) :
+        "The coefficient rings of f1 and f2 must be equal";
+    require IsUnit(K!2) :
+        "2 must be a unit in the coefficient ring of f1 and f2";
 
-    assert BaseRing(X1) eq BaseRing(X2);
-    K := BaseRing(X1); assert Characteristic(K) ne 2;
-    f1, h1 := HyperellipticPolynomials(X1);
-    f2, h2 := HyperellipticPolynomials(X2);
-    g1 := 4*f1 + h1^2; g2 := 4*f2 + h2^2;
+    g1 := f1; g2 := f2;
+    d1 := 2*((Degree(g1) + 1) div 2); d2 := 2*((Degree(g2) + 1) div 2);
+    if not d1 eq d2 then return false, [* *]; end if;
+    test, Ts := IsGL2EquivalentExtended(g2, g1, d1 : geometric := geometric, covariant := covariant, commonfield := commonfield);
+
+    return Ts;
+end intrinsic;
+
+intrinsic HyperellipticIsomorphisms(f1::RngUPolElt, f2::RngUPolElt :
+    geometric := false, covariant := true, commonfield := false) ->  List
+    {Returns a boolean indicating whether a matrix T and a scalar e exist that induce an isomorphism y^2 = f1(x) --> y^2 = f2(x), as well as a full list of all such pairs.}
+
+    K := CoefficientRing(f1);
+    require K eq CoefficientRing(f2) :
+        "The coefficient rings of f1 and f2 must be equal";
+    require IsUnit(K!2) :
+        "2 must be a unit in the coefficient ring of f1 and f2";
+
+    g1 := f1; g2 := f2;
     d1 := 2*((Degree(g1) + 1) div 2); d2 := 2*((Degree(g2) + 1) div 2);
     if not d1 eq d2 then return false, [* *]; end if;
     test, Ts := IsGL2EquivalentExtended(g2, g1, d1 : geometric := geometric, covariant := covariant, commonfield := commonfield);
@@ -1148,30 +1181,96 @@ intrinsic IsIsomorphicHyperelliptic(X1::CrvHyp, X2::CrvHyp :
             Append(~pairs, [* U, e *]);
         end if;
     until i eq #Ts;
+    return pairs;
+
+end intrinsic;
+
+
+intrinsic HyperellipticIsomorphisms(X1::CrvHyp, X2::CrvHyp :
+    geometric := false, covariant := true, commonfield := false) ->  List
+    {Returns a boolean indicating whether a matrix T and a scalar e exist that induce an isomorphism X1 --> X2, as well as a full list of all such pairs.}
+
+    K := BaseRing(X1);
+    require K eq BaseRing(X2) :
+        "The base rings of X1 and X2 must be equal";
+    require (not IsUnit(K!2)) :
+        "2 must be a unit in the base ring of X1 and X2";
+
+    f1, h1 := HyperellipticPolynomials(X1);
+    f2, h2 := HyperellipticPolynomials(X2);
+    g1 := 4*f1 + h1^2; g2 := 4*f2 + h2^2;
+
+    return HyperellipticIsomorphisms(g1, g2  :
+        geometric := geometric, covariant := covariant, commonfield := commonfield);
+
+end intrinsic;
+
+/**/
+intrinsic IsIsomorphicHyperelliptic(f1::RngMPolElt, f2::RngMPolElt :
+    geometric := false, covariant := true, commonfield := false) ->  BoolElt, List
+    {Returns a boolean indicating whether a matrix T and a scalar e exist that induce an isomorphism y^2 = f1(x) --> y^2 = f2(x), as well as a full list of all such pairs.}
+
+    pairs := HyperellipticIsomorphisms(f1, f2 :
+        geometric := geometric, covariant := covariant, commonfield := commonfield);
     return #pairs ne 0, pairs;
 
 end intrinsic;
 
+intrinsic IsIsomorphicHyperelliptic(X1::CrvHyp, X2::CrvHyp :
+    geometric := false, covariant := true, commonfield := false) ->  BoolElt, List
+    {Returns a boolean indicating whether a matrix T and a scalar e exist that induce an isomorphism X1 --> X2, as well as a full list of all such pairs.}
 
-intrinsic AutomorphismGroupHyperellipticPolynomial(f::RngUPolElt, deg::RngIntElt :
-    geometric := false, covariant := true, commonfield := false) -> List
-    {Return the automorphism group a the polynomial f, as a full list of matrices T.}
+    pairs := HyperellipticIsomorphisms(X1, X2 :
+        geometric := geometric, covariant := covariant, commonfield := commonfield);
+    return #pairs ne 0, pairs;
 
-    test, pairs := IsGL2EquivalentExtended(f, f, deg :
+end intrinsic;
+
+/**/
+intrinsic HyperellipticAutomorphisms(f::RngUPolElt :
+    geometric := false, commonfield := false, covariant := true) -> List
+    {Return the automorphisms a the polynomial f, as a full list of matrices T.}
+
+    pairs := HyperellipticIsomorphisms(f, f :
         geometric := geometric, covariant := covariant, commonfield := commonfield);
 
     return pairs;
 
 end intrinsic;
 
-
-intrinsic AutomorphismGroupHyperelliptic(X::CrvHyp :
-    geometric := false, covariant := true, commonfield := false) -> List
+intrinsic HyperellipticAutomorphisms(X::CrvHyp :
+    geometric := false, commonfield := false, covariant := true) -> List
     {Return the automorphism group a the curve X, as a full list of pairs (T, e) where T is e matrix and e a scalar.}
 
-    test, pairs := IsIsomorphicHyperelliptic(X, X :
+    pairs := HyperellipticIsomorphisms(X, X :
         geometric := geometric, covariant := covariant, commonfield := commonfield);
 
     return pairs;
+
+end intrinsic;
+
+/**/
+intrinsic HyperellipticReducedAutomorphisms(f::RngUPolElt :
+    geometric := false, commonfield := false, covariant := true) -> List
+    {Return the automorphisms a the polynomial f, as a full list of matrices T.}
+
+    _, Autos := IsGL2EquivalentExtended(f, f, Degree(f) :
+        geometric := geometric, covariant := covariant, commonfield := commonfield);
+
+    return Autos;
+
+end intrinsic;
+
+intrinsic HyperellipticReducedAutomorphisms(X::CrvHyp :
+    geometric := false, commonfield := false, covariant := true) -> List
+    {Return the automorphism group a the defining polynomial of X, as a full list of matrices T.}
+
+    f, h := HyperellipticPolynomials(X);
+    g := 4*f + h^2; d := 2*((Degree(g) + 1) div 2);
+
+    _, Autos := IsGL2EquivalentExtended(g, g, d :
+        geometric := geometric, covariant := covariant, commonfield := commonfield);
+
+    return Autos;
 
 end intrinsic;
