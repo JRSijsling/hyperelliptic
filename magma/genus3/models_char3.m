@@ -346,8 +346,8 @@ function G3Char3Models(JI: geometric:= true, models:= true, descent:= true)
      if J2 eq 0 and J3 eq 0 and J4 eq 0 and J5 eq 0 and J6 eq 0
 	and J8 eq 0 and J9 eq 0 and J10 eq 0 and J12 eq 0 then
 	 vprintf Hyperelliptic, 1 : "Automorphism group C14, curve y^2 = x^7 - 1\n";
-	 aut := DirectProduct(CyclicGroup(2), CyclicGroup(14));
-	 autred := CyclicGroup(14);
+	 aut := CyclicGroup(14);
+	 autred := CyclicGroup(7);
 	 if models then twists:= G3Char3Models_C14(JI : geometric:= geometric); end if;
 	 return twists, aut, autred;
      end if;

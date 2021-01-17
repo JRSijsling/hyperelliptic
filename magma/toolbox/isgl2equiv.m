@@ -1254,7 +1254,8 @@ intrinsic HyperellipticReducedAutomorphisms(f::RngUPolElt :
     geometric := false, commonfield := false, covariant := true) -> List
     {Return the automorphisms a the polynomial f, as a full list of matrices T.}
 
-    _, Autos := IsGL2EquivalentExtended(f, f, Degree(f) :
+    d := 2*((Degree(f) + 1) div 2);
+    _, Autos := IsGL2EquivalentExtended(f, f, d :
         geometric := geometric, covariant := covariant, commonfield := commonfield);
 
     return Autos;
