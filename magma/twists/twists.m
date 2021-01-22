@@ -26,27 +26,36 @@
 /***
  * Exported intrinsics.
  *
- * intrinsic ReducedAutomorphismGroupHyperellptic(f::RngUPolElt, Autos::SeqEnum :
- *     explicit := false) -> List
- * intrinsic ReducedAutomorphismGroupHyperellptic(X::CrvHyp, Autos::SeqEnum :
- *     explicit := false) -> List
+ * intrinsic ReducedAutomorphismGroupHyperellptic(f::RngUPolElt, Autos::List :
+ *     explicit := false) -> GrpPerm, Map
+ * intrinsic ReducedAutomorphismGroupHyperellptic(X::CrvHyp, Autos::List :
+ *     explicit := false) -> GrpPerm, Map
+ *
  * intrinsic ReducedAutomorphismGroupHyperellptic(f::RngUPolElt :
- *     geometric := false, explicit := false) -> List
+ *     geometric := false, explicit := false) -> GrpPerm, Map
  * intrinsic ReducedAutomorphismGroupHyperellptic(H::CrvHyp :
- *     geometric := false, explicit := false) -> List
+ *     geometric := false, explicit := false) -> GrpPerm, Map
+ *
  * intrinsic GeometricAutomorphismGroup(Ec::CrvEll) -> GrpPerm
  *     {Compute the geometric automorphism group of an elliptic curve.}
  * intrinsic GeometricAutomorphismGroup(H::CrvHyp) -> GrpPerm
  *     {Compute the geometric automorphism group of an hyperelliptic curve.}
+ *
  * intrinsic Twists(H::CrvHyp :
  *     AutomorphismGroup := false) -> SeqEnum[CrvHyp], GrpPerm
+ *     {Compute twisted hyperelliptic curves and their geometric reduced automorphism groups}
+ *
  * intrinsic TwistsOfHyperellipticPolynomials(f::RngUPolElt :
- *     AutomorphismGroup := false) -> SeqEnum, GrpPerm
+ *     AutomorphismGroup := false) -> SeqEnum[RngUPolElt], GrpPerm
+ *     {Compute twisted  hyperelliptic polynomials from
+ *     a polynomial that defines the curve y^2 = f(x).}
  * intrinsic TwistsOfHyperellipticPolynomials(fh::SeqEnum[RngUPolElt] :
  *     AutomorphismGroup := false) -> SeqEnum, GrpPerm
- *
+ *     {Compute twisted hyperelliptic polynomials and their automorphism groups from
+ *     a list [f, h] of two polynomials that defines the curve y^2 + h(x) * y = f(x).}
  * intrinsic Twists(C::Crv, Autos::SeqEnum  :
  *     AutomorphismGroup := false) -> SeqEnum[Crv], GrpPerm
+ *
  ********************************************************************/
 
  /***
@@ -308,22 +317,14 @@ end function;
 
 
 
+/***
+ * Reduced automorphism group routines
+ *************************************/
 
-/**/
-intrinsic ReducedAutomorphismGroupHyperellptic(f::RngUPolElt, Autos::SeqEnum :
-    explicit := false) -> List
-    {Return the automorphisms a the polynomial f, as a full list of matrices T.}
-
-    aut, phi := ProjectiveMatrixGroup(Autos);
-
-    if explicit then return aut, phi; end if;
-    return aut;
-
-end intrinsic;
-
-intrinsic ReducedAutomorphismGroupHyperellptic(X::CrvHyp, Autos::SeqEnum :
-    explicit := false) -> List
-    {Return the automorphisms a the polynomial f, as a full list of matrices T.}
+ /* Automorphism group with given automorphisms */
+intrinsic ReducedAutomorphismGroupHyperellptic(f::RngUPolElt, Autos::List :
+    explicit := false) -> GrpPerm, Map
+    {Return the automorphisms group defined by the sequence Autos, as a permutation group (and its representation if explicit is set to true)}
 
     aut, phi := ProjectiveMatrixGroup(Autos);
 
@@ -332,16 +333,22 @@ intrinsic ReducedAutomorphismGroupHyperellptic(X::CrvHyp, Autos::SeqEnum :
 
 end intrinsic;
 
+intrinsic ReducedAutomorphismGroupHyperellptic(X::CrvHyp, Autos::List :
+    explicit := false) -> GrpPerm, Map
+    {Return the automorphisms group defined by the sequence Autos, as a permutation group (and its representation if explicit is set to true)}
+
+    aut, phi := ProjectiveMatrixGroup(Autos);
+
+    if explicit then return aut, phi; end if;
+    return aut;
+
+end intrinsic;
 
 
-
-
-
-/**/
+ /* Automorphism group */
 intrinsic ReducedAutomorphismGroupHyperellptic(f::RngUPolElt :
-    geometric := false, explicit := false) -> List
-    {Return the automorphisms a the polynomial f, as a full list of matrices T.}
-
+    geometric := false, explicit := false) -> GrpPerm, Map
+    {Return the automorphisms group of the curve y^2 = f(x), as a permutation group (and its representation if explicit is set to true)}
 
     F := CoefficientRing(f);
     p := Characteristic(F);
@@ -376,18 +383,22 @@ intrinsic ReducedAutomorphismGroupHyperellptic(f::RngUPolElt :
 end intrinsic;
 
 intrinsic ReducedAutomorphismGroupHyperellptic(H::CrvHyp :
-    geometric := false, explicit := false) -> List
-    {Return the automorphisms a the polynomial f, as a full list of matrices T.}
+    geometric := false, explicit := false) -> GrpPerm, Map
+    {Return the automorphisms group of the polynomial f(x) (assumed to be of even degree), as a permutation group (and its representation if explicit is set to true)}
 
     f, h := HyperellipticPolynomials(H);
-    g := 4*f + h^2;
+    g := h eq 0 select f else 4*f + h^2;
 
     return ReducedAutomorphismGroupHyperellptic(g :
         geometric := geometric, explicit := explicit);
 
 end intrinsic;
 
-/**/
+
+/***
+ * Geometric automorphism group routines
+ ***************************************/
+
 intrinsic GeometricAutomorphismGroup(Ec::CrvEll) -> GrpPerm
     {Compute the geometric automorphism group of an elliptic curve.}
 
@@ -439,10 +450,12 @@ intrinsic GeometricAutomorphismGroup(H::CrvHyp) -> GrpPerm
 
 end intrinsic;
 
-/*  */
+/***
+ * Twists
+ *********/
 intrinsic Twists(H::CrvHyp :
     AutomorphismGroup := false) -> SeqEnum[CrvHyp], GrpPerm
-    {Compute twisted  hyperelliptic curves and their geometric reduced automorphism groups}
+    {Compute twisted hyperelliptic curves and their geometric reduced automorphism groups}
 
     F := CoefficientRing(H);
     p := Characteristic(F);
@@ -476,7 +489,7 @@ intrinsic Twists(H::CrvHyp :
         "2 must be invertible in the base ring.";
 
     f, h := HyperellipticPolynomials(H);
-    g := 4*f + h^2;
+    g := h eq 0 select f else 4*f + h^2;
     d := 2*((Degree(g) + 1) div 2);
 
     _, Aut := IsGL2EquivalentExtended(f, f, d : geometric := true, commonfield := true);
@@ -529,9 +542,9 @@ function TwistsOfHyperellipticPolynomialsMain(f :
 end function;
 
 intrinsic TwistsOfHyperellipticPolynomials(f::RngUPolElt :
-    AutomorphismGroup := false) -> SeqEnum, GrpPerm
+    AutomorphismGroup := false) -> SeqEnum[RngUPolElt], GrpPerm
     {Compute twisted  hyperelliptic polynomials from
-    a polynomial that defines the curve y^2 = f(x).}
+    a polynomial that defines the curve y^2 = f(x), and their geometric reduced automorphism groups.}
 
     F := CoefficientRing(f);
     p := Characteristic(F);
@@ -601,13 +614,11 @@ intrinsic TwistsOfHyperellipticPolynomials(fh::SeqEnum[RngUPolElt] :
 
         return fh;
     end if;
-
-    if h eq 0 then g := f; else g := 4*f+h^2; end if;
+    g := h eq 0 select f else 4*f + h^2;
 
     return TwistsOfHyperellipticPolynomials(g : AutomorphismGroup := AutomorphismGroup);
 
 end intrinsic;
-
 
 intrinsic Twists(C::Crv, Autos::SeqEnum  :
     AutomorphismGroup := false) -> SeqEnum[Crv], GrpPerm

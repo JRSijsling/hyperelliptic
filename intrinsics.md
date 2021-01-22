@@ -100,33 +100,15 @@ intrinsic GeometricAutomorphismGroupGenus3Classification(FF::FldFin) -> SeqEnum,
 #### Any genus
 
 ```
-intrinsic IsGL2EquivalentExtended(f1::RngUPolElt, f2::RngUPolElt, deg::RngIntElt :
-    geometric := false, covariant := true, commonfield := false) -> BoolElt, List
-intrinsic HyperellipticReducedIsomorphisms(f1::RngUPolElt, f2::RngUPolElt :
-    geometric := false, covariant := true, commonfield := false) ->  List
-
 intrinsic IsIsomorphicHyperelliptic(X1::CrvHyp, X2::CrvHyp :
     geometric := false, covariant := true, commonfield := false) ->  BoolElt, List
+intrinsic IsIsomorphicHyperelliptic(f1::RngUPolElt, f2::RngUPolElt :
+    geometric := false, covariant := true, commonfield := false) ->  BoolElt, List
+
 intrinsic HyperellipticIsomorphisms(X1::CrvHyp, X2::CrvHyp :
     geometric := false, covariant := true, commonfield := false) ->  List
-intrinsic IsIsomorphicHyperelliptic(f1::RngMPolElt, f2::RngMPolElt :
-    geometric := false, covariant := true, commonfield := false) ->  BoolElt, List
 intrinsic HyperellipticIsomorphisms(f1::RngUPolElt, f2::RngUPolElt :
-    geometric := false, covariant := true, commonfield := false) ->  List
-
-intrinsic HyperellipticReducedAutomorphisms(X::CrvHyp :
-    geometric := false, commonfield := false, covariant := true) -> List
-intrinsic ReducedAutomorphismGroupHyperellptic(X::CrvHyp :
-    geometric := false, explicit := false) -> List
-intrinsic ReducedAutomorphismGroupHyperellptic(X::CrvHyp, Autos::SeqEnum :
-    explicit := false) -> List
-
-intrinsic HyperellipticReducedAutomorphisms(f::RngUPolElt :
-    geometric := false, commonfield := false, covariant := true) -> List
-intrinsic ReducedAutomorphismGroupHyperellptic(f::RngUPolElt :
-    geometric := false, explicit := false) -> List
-intrinsic ReducedAutomorphismGroupHyperellptic(f::RngUPolElt, Autos::SeqEnum :
-    explicit := false) -> List
+    geometric := false, covariant := true, commonfield := false) -> List
 
 intrinsic HyperellipticAutomorphisms(X::CrvHyp :
     geometric := false, commonfield := false, covariant := true) -> List
@@ -134,8 +116,41 @@ intrinsic HyperellipticAutomorphisms(f::RngUPolElt :
     geometric := false, commonfield := false, covariant := true) -> List
 
 intrinsic GeometricAutomorphismGroup(Ec::CrvEll) -> GrpPerm
+    {Compute the geometric automorphism group of an elliptic curve.}
 intrinsic GeometricAutomorphismGroup(X::CrvHyp) -> GrpPerm
+    {Compute the geometric automorphism group of an hyperelliptic curve.}
+```
 
+### Reduced isomorphisms
+
+```
+intrinsic IsGL2EquivalentExtended(f1::RngUPolElt, f2::RngUPolElt, deg::RngIntElt :
+    geometric := false, covariant := true, commonfield := false) -> BoolElt, List
+
+intrinsic IsReducedIsomorphicHyperelliptic(X1::CrvHyp, X2::CrvHyp :
+    geometric := false, covariant := true, commonfield := false) ->  BoolElt, List
+intrinsic IsReducedIsomorphicHyperelliptic(f1::RngUPolElt, f2::RngUPolElt :
+    geometric := false, covariant := true, commonfield := false) ->  BoolElt, List
+
+intrinsic HyperellipticReducedIsomorphisms(X1::CrvHyp, X2::CrvHyp :
+    geometric := false, covariant := true, commonfield := false) ->  List
+intrinsic HyperellipticReducedIsomorphisms(f1::RngUPolElt, f2::RngUPolElt :
+    geometric := false, covariant := true, commonfield := false) ->  List
+
+intrinsic HyperellipticReducedAutomorphisms(X::CrvHyp :
+    geometric := false, commonfield := false, covariant := true) -> List
+intrinsic HyperellipticReducedAutomorphisms(f::RngUPolElt :
+    geometric := false, commonfield := false, covariant := true) -> List
+
+intrinsic ReducedAutomorphismGroupHyperellptic(X::CrvHyp, Autos::List :
+    explicit := false) -> GrpPerm, Map
+intrinsic ReducedAutomorphismGroupHyperellptic(f::RngUPolElt, Autos::List :
+    explicit := false) -> GrpPerm, Map
+
+intrinsic ReducedAutomorphismGroupHyperellptic(X::CrvHyp :
+    geometric := false, explicit := false) -> GrpPerm, Map
+intrinsic ReducedAutomorphismGroupHyperellptic(f::RngUPolElt :
+    geometric := false, explicit := false) -> GrpPerm, Map
 ```
 
 ### Twists
@@ -158,10 +173,10 @@ intrinsic TwistedHyperellipticPolynomialsFromShiodaInvariants(JI::SeqEnum[FldFin
 #### Any genus
 
 ```
-intrinsic Twists(H::CrvHyp :
+intrinsic Twists(X::CrvHyp :
     AutomorphismGroup := false) -> SeqEnum[CrvHyp], GrpPerm
 intrinsic TwistsOfHyperellipticPolynomials(f::RngUPolElt :
-    AutomorphismGroup := false) -> SeqEnum, GrpPerm
+    AutomorphismGroup := false) -> SeqEnum[RngUPolElt], GrpPerm
 intrinsic TwistsOfHyperellipticPolynomials(fh::SeqEnum[RngUPolElt] :
     AutomorphismGroup := false) -> SeqEnum, GrpPerm
 ```
