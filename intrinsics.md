@@ -152,14 +152,14 @@ intrinsic HyperellipticReducedAutomorphisms(X::CrvHyp :
 intrinsic HyperellipticReducedAutomorphisms(f::RngUPolElt :
     geometric := false, commonfield := false, covariant := true) -> List
 
-intrinsic ReducedAutomorphismGroupHyperellptic(X::CrvHyp, Autos::List :
+intrinsic ReducedAutomorphismGroupHyperelliptic(X::CrvHyp, Autos::List :
     explicit := false) -> GrpPerm, Map
-intrinsic ReducedAutomorphismGroupHyperellptic(f::RngUPolElt, Autos::List :
+intrinsic ReducedAutomorphismGroupHyperelliptic(f::RngUPolElt, Autos::List :
     explicit := false) -> GrpPerm, Map
 
-intrinsic ReducedAutomorphismGroupHyperellptic(X::CrvHyp :
+intrinsic ReducedAutomorphismGroupHyperelliptic(X::CrvHyp :
     geometric := false, explicit := false) -> GrpPerm, Map
-intrinsic ReducedAutomorphismGroupHyperellptic(f::RngUPolElt :
+intrinsic ReducedAutomorphismGroupHyperelliptic(f::RngUPolElt :
     geometric := false, explicit := false) -> GrpPerm, Map
 ```
 
