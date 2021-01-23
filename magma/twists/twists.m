@@ -33,15 +33,24 @@
  *
  * intrinsic ReducedAutomorphismGroupHyperellptic(f::RngUPolElt :
  *     geometric := false, explicit := false) -> GrpPerm, Map
- * intrinsic ReducedAutomorphismGroupHyperellptic(H::CrvHyp :
+ * intrinsic ReducedAutomorphismGroupHyperellptic(X::CrvHyp :
+ *     geometric := false, explicit := false) -> GrpPerm, Map
+ *
+ * intrinsic AutomorphismGroupHyperelliptic(f::RngUPolElt, Autos::List :
+ *     explicit := false) -> GrpPerm, Map
+ * intrinsic AutomorphismGroupHyperelliptic(X::CrvHyp, Autos::List :
+ *     explicit := false) -> GrpPerm, Map
+ * intrinsic AutomorphismGroupHyperelliptic(f::RngUPolElt :
+ *     geometric := false, explicit := false) -> GrpPerm, Map
+ * intrinsic AutomorphismGroupHyperelliptic(X::CrvHyp :
  *     geometric := false, explicit := false) -> GrpPerm, Map
  *
  * intrinsic GeometricAutomorphismGroup(Ec::CrvEll) -> GrpPerm
  *     {Compute the geometric automorphism group of an elliptic curve.}
- * intrinsic GeometricAutomorphismGroup(H::CrvHyp) -> GrpPerm
+ * intrinsic GeometricAutomorphismGroup(X::CrvHyp) -> GrpPerm
  *     {Compute the geometric automorphism group of an hyperelliptic curve.}
  *
- * intrinsic Twists(H::CrvHyp :
+ * intrinsic Twists(X::CrvHyp :
  *     AutomorphismGroup := false) -> SeqEnum[CrvHyp], GrpPerm
  *     {Compute twisted hyperelliptic curves and their geometric reduced automorphism groups}
  *
@@ -394,6 +403,114 @@ intrinsic ReducedAutomorphismGroupHyperellptic(H::CrvHyp :
 
 end intrinsic;
 
+/***
+ * Full automorphism group routines
+ ***********************************/
+function Normalize22Column(T)
+    col := Eltseq(Rows(Transpose(T))[1]);
+    i0 := Minimum([ i : i in [1..#col] | col[i] ne 0 ]);
+    return (1/col[i0]) * T, col[i0];
+end function;
+
+
+function ProjectiveAutomorphismGroup(L, d)
+
+    function AutoMultiply(A1, A2)
+        M, c := Normalize22Column(A1[1]*A2[1]);
+        return < M, A1[2] * A2[2] / c^(d div 2) >;
+    end function;
+
+    _L := [<a[1],a[2]> : a in L];
+    GG, psi := GenericGroup(_L : Mult := AutoMultiply);
+
+    for i := NumberOfGenerators(GG) to 1 by -1 do
+        pmp, GPrm := CosetAction(GG, sub< GG | [ GG | GG.j : j in [1..i-1] ] >);
+        if #GPrm eq #GG then break; end if;
+    end for;
+    ReduceGenerators(~GPrm);
+
+    return GPrm, Inverse(pmp)*psi;
+
+end function;
+
+
+ /* Automorphism group with given automorphisms */
+intrinsic AutomorphismGroupHyperelliptic(f::RngUPolElt, Autos::List :
+    explicit := false) -> GrpPerm, Map
+    {Return the automorphisms group defined by the sequence Autos, as a permutation group (and its representation if explicit is set to true)}
+
+    d := 2*((Degree(f) + 1) div 2);
+
+    aut, phi := ProjectiveAutomorphismGroup(Autos, d);
+
+    if explicit then return aut, phi; end if;
+    return aut;
+
+end intrinsic;
+
+intrinsic AutomorphismGroupHyperelliptic(X::CrvHyp, Autos::List :
+    explicit := false) -> GrpPerm, Map
+    {Return the automorphisms group defined by the sequence Autos, as a permutation group (and its representation if explicit is set to true)}
+
+    d := 2*((Degree(X) + 1) div 2);
+
+    aut, phi := ProjectiveAutomorphismGroup(Autos, d);
+
+    if explicit then return aut, phi; end if;
+    return aut;
+
+end intrinsic;
+
+
+ /* Automorphism group */
+intrinsic AutomorphismGroupHyperelliptic(f::RngUPolElt :
+    geometric := false, explicit := false) -> GrpPerm, Map
+    {Return the automorphisms group of the curve y^2 = f(x), as a permutation group (and its representation if explicit is set to true)}
+
+    F := CoefficientRing(f);
+    p := Characteristic(F);
+
+    d := 2*((Degree(f) + 1) div 2);
+
+    require Discriminant(f) ne 0 :
+        "The argument must be non singular";
+
+    g := (d - 1) div 2;
+
+    require g gt 1 :
+        "The argument must define an hyperelliptic curve of genus >= 2";
+
+    if geometric and not explicit and g eq 2 then
+        _, aut, _ := G2Models(IgusaInvariants(f) : models := false);
+        return aut;
+    end if;
+
+    if geometric and not explicit and g eq 3 and p ne 5 then
+        _, aut, _ := G3Models(ShiodaInvariants(f) : models := false);
+        return aut;
+    end if;
+
+    Autos := HyperellipticAutomorphisms(f : geometric := geometric, commonfield := true);
+
+    aut, phi := ProjectiveAutomorphismGroup(Autos, d);
+
+    if explicit then return aut, phi; end if;
+    return aut;
+
+end intrinsic;
+
+intrinsic AutomorphismGroupHyperelliptic(H::CrvHyp :
+    geometric := false, explicit := false) -> GrpPerm, Map
+    {Return the automorphisms group of the polynomial f(x) (assumed to be of even degree), as a permutation group (and its representation if explicit is set to true)}
+
+    f, h := HyperellipticPolynomials(H);
+    g := h eq 0 select f else 4*f + h^2;
+
+    return AutomorphismGroupHyperellptic(g :
+        geometric := geometric, explicit := explicit);
+
+end intrinsic;
+
 
 /***
  * Geometric automorphism group routines
@@ -428,25 +545,11 @@ end intrinsic;
 intrinsic GeometricAutomorphismGroup(H::CrvHyp) -> GrpPerm
     {Compute the geometric automorphism group of an hyperelliptic curve.}
 
-    F := CoefficientRing(H);
-    p := Characteristic(F);
-
     g := Genus(H);
 
-    require g in {2, 3}:
-        "The argument must define an hyperelliptic curve of genus 2 or 3";
+    if g eq 1 then return GeometricAutomorphismGroup(EllipticCurve(H)); end if;
 
-    if g eq 2 then
-        _, aut := G2Models(IgusaInvariants(H) : models := false);
-        return aut;
-    end if;
-
-    require IsUnit(F!5) :
-        "5 must be invertible in the base ring.";
-
-    /* g eq 3 and p ne 5 */
-    _, aut := G3Models(ShiodaInvariants(H) : models := false);
-    return aut;
+    return AutomorphismGroupHyperellptic(H);
 
 end intrinsic;
 

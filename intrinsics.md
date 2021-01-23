@@ -115,6 +115,16 @@ intrinsic HyperellipticAutomorphisms(X::CrvHyp :
 intrinsic HyperellipticAutomorphisms(f::RngUPolElt :
     geometric := false, commonfield := false, covariant := true) -> List
 
+intrinsic AutomorphismGroupHyperelliptic(X::CrvHyp, Autos::List :
+    explicit := false) -> GrpPerm, Map
+intrinsic AutomorphismGroupHyperelliptic(f::RngUPolElt, Autos::List :
+    explicit := false) -> GrpPerm, Map
+
+intrinsic AutomorphismGroupHyperelliptic(X::CrvHyp :
+    geometric := false, explicit := false) -> GrpPerm, Map
+intrinsic AutomorphismGroupHyperelliptic(f::RngUPolElt :
+    geometric := false, explicit := false) -> GrpPerm, Map
+
 intrinsic GeometricAutomorphismGroup(Ec::CrvEll) -> GrpPerm
     {Compute the geometric automorphism group of an elliptic curve.}
 intrinsic GeometricAutomorphismGroup(X::CrvHyp) -> GrpPerm

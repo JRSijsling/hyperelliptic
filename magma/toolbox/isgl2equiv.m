@@ -1187,12 +1187,12 @@ intrinsic IsIsomorphicHyperelliptic(f1::RngUPolElt, f2::RngUPolElt :
 
     g1 := f1; g2 := f2;
     d1 := 2*((Degree(g1) + 1) div 2); d2 := 2*((Degree(g2) + 1) div 2);
-    if d1 ne d2 then return false, [* *]; end if;
+    if d1 ne d2 then return false, []; end if;
     test, Ts := IsGL2EquivalentExtended(g2, g1, d1 : geometric := geometric, covariant := covariant, commonfield := commonfield);
-    if not test then return false, [* *]; end if;
+    if not test then return false, []; end if;
 
     if not geometric then
-        pairs := [* *];
+        pairs := [];
         for T in Ts do
             U := Normalize22Column(T);
             K := BaseRing(U);
@@ -1202,8 +1202,8 @@ intrinsic IsIsomorphicHyperelliptic(f1::RngUPolElt, f2::RngUPolElt :
             scal := K ! (TransformPolynomial(h2, d2, Eltseq(U))/h1);
             test, e := IsSquare(scal);
             if test then
-                Append(~pairs, [* U, e *]);
-                Append(~pairs, [* U, -e *]);
+                Append(~pairs, < U,  e >);
+                Append(~pairs, < U, -e >);
             end if;
         end for;
         return #pairs ne 0, pairs;
@@ -1211,7 +1211,7 @@ intrinsic IsIsomorphicHyperelliptic(f1::RngUPolElt, f2::RngUPolElt :
 
     /* Either elementwise */
     if not commonfield then
-        pairs := [* *];
+        pairs := [];
         for T in Ts do
             U := Normalize22Column(T);
             K := BaseRing(U);
@@ -1221,20 +1221,20 @@ intrinsic IsIsomorphicHyperelliptic(f1::RngUPolElt, f2::RngUPolElt :
             scal := K ! (TransformPolynomial(h2, d2, Eltseq(U))/h1);
             test, e := IsSquare(scal);
             if test then
-                Append(~pairs, [* U, e *]);
-                Append(~pairs, [* U, -e *]);
+                Append(~pairs, < U,  e >);
+                Append(~pairs, < U, -e >);
             else
                 L := ext< BaseRing(U) | R.1^2 - scal >;
                 e := L.1; assert e^2 eq scal;
-                Append(~pairs, [* ChangeRing(U, L), e *]);
-                Append(~pairs, [* ChangeRing(U, L), -e *]);
+                Append(~pairs, < ChangeRing(U, L),  e >);
+                Append(~pairs, < ChangeRing(U, L), -e >);
             end if;
         end for;
         return #pairs ne 0, pairs;
     end if;
 
     /* Or keep extending */
-    pairs := [* *]; i := 0;
+    pairs := []; i := 0;
     Us := [* Normalize22Column(T) : T in Ts *];
     repeat
         i +:= 1;
@@ -1246,15 +1246,15 @@ intrinsic IsIsomorphicHyperelliptic(f1::RngUPolElt, f2::RngUPolElt :
         scal := K ! (TransformPolynomial(h2, d2, Eltseq(U))/h1);
         test, e := IsSquare(scal);
         if test then
-            Append(~pairs, [* U, e *]);
-            Append(~pairs, [* U, -e *]);
+            Append(~pairs, < U,  e >);
+            Append(~pairs, < U, -e >);
         else
             L := SplittingField(R.1^2 - scal);
             RL := PolynomialRing(L);
             e := Roots(RL.1^2 - (L ! scal))[1][1]; assert e^2 eq (L ! scal);
             hom1 := HomFromRoot(K, L, L ! K.1);
             Us := [* ConjugateMatrix(hom1, U) : U in Us *];
-            pairs := [* [* ConjugateMatrix(hom1, pair[1]), hom1(pair[2]) *] : pair in pairs *];
+            pairs := [ < ConjugateMatrix(hom1, pair[1]), hom1(pair[2]) > : pair in pairs ];
             U := ConjugateMatrix(hom1, U);
 
             if Type(K) eq FldNum then
@@ -1262,12 +1262,12 @@ intrinsic IsIsomorphicHyperelliptic(f1::RngUPolElt, f2::RngUPolElt :
                 rt := hom1(K ! F.1);
                 hom2 := MakeRelativeFromRoot(F, L, rt);
                 Us := [* ConjugateMatrix(hom2, U) : U in Us *];
-                pairs := [* [* ConjugateMatrix(hom2, pair[1]), hom2(pair[2]) *] : pair in pairs *];
+                pairs := [ < ConjugateMatrix(hom2, pair[1]), hom2(pair[2]) > : pair in pairs ];
                 U := ConjugateMatrix(hom2, U);
                 e := hom2(e);
             end if;
-            Append(~pairs, [* U, -e *]);
-            Append(~pairs, [* U, e *]);
+            Append(~pairs, < U, -e >);
+            Append(~pairs, < U,  e >);
         end if;
     until i eq #Ts;
     return #pairs ne 0, pairs;
