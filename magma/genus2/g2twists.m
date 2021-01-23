@@ -1166,7 +1166,7 @@ function G2Models(JI : geometric := false, models := true, RationalModel := fals
             twists := G2ModelsInFF_G48(GI : geometric := geometric);
         end if;
         return twists,
-            sub<Sym(8)|[2,1,3,4,7,8,5,6],[3,4,5,6,1,2,7,8]>,
+            sub<Sym(8)|[2,1,3,4,7,8,5,6],[3,4,5,6,1,2,7,8]>, /* GL(2, GF(3)) */
             sub<Sym(4)|(3, 4), (2, 3, 4), (1, 4)(2, 3)>;
     end if;
 

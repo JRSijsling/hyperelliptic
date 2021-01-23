@@ -31,35 +31,35 @@
  *
  *
  * intrinsic IsReducedIsomorphicHyperelliptic(f1::RngUPolElt, f2::RngUPolElt :
- *     geometric := false, covariant := true, commonfield := false) ->  BoolElt, List
+ *     geometric := false, covariant := true, commonfield := true) ->  BoolElt, List
  * intrinsic IsReducedIsomorphicHyperelliptic(X1::CrvHyp, X2::CrvHyp :
- *     geometric := false, covariant := true, commonfield := false) ->  BoolElt, List
+ *     geometric := false, covariant := true, commonfield := true) ->  BoolElt, List
  *
  * intrinsic HyperellipticReducedIsomorphisms(f1::RngUPolElt, f2::RngUPolElt :
- *     geometric := false, covariant := true, commonfield := false) ->  List
+ *     geometric := false, covariant := true, commonfield := true) ->  List
  * intrinsic HyperellipticReducedIsomorphisms(X1::CrvHyp, X2::CrvHyp :
- *     geometric := false, covariant := true, commonfield := false) ->  List
+ *     geometric := false, covariant := true, commonfield := true) ->  List
  *
  * intrinsic HyperellipticReducedAutomorphisms(f::RngUPolElt :
- *     geometric := false, commonfield := false, covariant := true) -> List
+ *     geometric := false, commonfield := true, covariant := true) -> List
  * intrinsic HyperellipticReducedAutomorphisms(X::CrvHyp :
- *     geometric := false, commonfield := false, covariant := true) -> List
+ *     geometric := false, commonfield := true, covariant := true) -> List
  *
  *
  * intrinsic IsIsomorphicHyperelliptic(f1::RngUPolElt, f2::RngUPolElt :
- *     geometric := false, covariant := true, commonfield := false) ->  BoolElt, List
+ *     geometric := false, covariant := true, commonfield := true) ->  BoolElt, List
  * intrinsic IsIsomorphicHyperelliptic(X1::CrvHyp, X2::CrvHyp :
- *     geometric := false, covariant := true, commonfield := false) ->  BoolElt, List
+ *     geometric := false, covariant := true, commonfield := true) ->  BoolElt, List
  *
  * intrinsic HyperellipticIsomorphisms(f1::RngUPolElt, f2::RngUPolElt :
- *     geometric := false, covariant := true, commonfield := false) -> List
+ *     geometric := false, covariant := true, commonfield := true) -> List
  *   intrinsic HyperellipticIsomorphisms(X1::CrvHyp, X2::CrvHyp :
- *     geometric := false, covariant := true, commonfield := false) ->  List
+ *     geometric := false, covariant := true, commonfield := true) ->  List
  *
  * intrinsic HyperellipticAutomorphisms(f::RngUPolElt :
- *     geometric := false, commonfield := false, covariant := true) -> List
+ *     geometric := false, commonfield := true, covariant := true) -> List
  * intrinsic HyperellipticAutomorphisms(X::CrvHyp :
- *     geometric := false, commonfield := false, covariant := true) -> List
+ *     geometric := false, commonfield := true, covariant := true) -> List
  *
  *
  ********************************************************************/
@@ -1075,7 +1075,7 @@ end intrinsic;
 
 /* Isomorphism test */
 intrinsic IsReducedIsomorphicHyperelliptic(f1::RngUPolElt, f2::RngUPolElt :
-    geometric := false, covariant := true, commonfield := false) ->  BoolElt, List
+    geometric := false, covariant := true, commonfield := true) ->  BoolElt, List
     {Returns a boolean indicating whether a matrix T exists that induces an isomorphism f1(x) --> f2(x) (f1 and f2 are assumed to be of even degree), as well as a full list of all such matrices.}
 
     K := CoefficientRing(f1);
@@ -1094,7 +1094,7 @@ intrinsic IsReducedIsomorphicHyperelliptic(f1::RngUPolElt, f2::RngUPolElt :
 end intrinsic;
 
 intrinsic IsReducedIsomorphicHyperelliptic(X1::CrvHyp, X2::CrvHyp :
-    geometric := false, covariant := true, commonfield := false) ->  BoolElt, List
+    geometric := false, covariant := true, commonfield := true) ->  BoolElt, List
     {Returns a boolean indicating whether a matrix T exists that induces an isomorphism f1(x) --> f2(x) (f1 and f2 resp. define X1 and X2), as well as a full list of all such matrices.}
 
     K := BaseRing(X1);
@@ -1116,7 +1116,7 @@ end intrinsic;
 
 /* Isomorphism list */
 intrinsic HyperellipticReducedIsomorphisms(f1::RngUPolElt, f2::RngUPolElt :
-    geometric := false, covariant := true, commonfield := false) ->  List
+    geometric := false, covariant := true, commonfield := true) ->  List
     {Returns a full list of matrices T that induce an isomorphism f1(x) --> f2(x) (f1 and f2 are assumed to be of even degree).}
 
     _, Ts := IsReducedIsomorphicHyperelliptic(f1, f2 :
@@ -1126,7 +1126,7 @@ intrinsic HyperellipticReducedIsomorphisms(f1::RngUPolElt, f2::RngUPolElt :
 end intrinsic;
 
 intrinsic HyperellipticReducedIsomorphisms(X1::CrvHyp, X2::CrvHyp :
-    geometric := false, covariant := true, commonfield := false) ->  List
+    geometric := false, covariant := true, commonfield := true) ->  List
     {Returns a full list of matrices T that induce an isomorphism f1(x) --> f2(x) (f1 and f2 resp. define X1 and X2).}
 
     _, Ts := IsReducedIsomorphicHyperelliptic(X1, X2 :
@@ -1138,7 +1138,7 @@ end intrinsic;
 
 /* Automorphism list */
 intrinsic HyperellipticReducedAutomorphisms(f::RngUPolElt :
-    geometric := false, commonfield := false, covariant := true) -> List
+    geometric := false, commonfield := true, covariant := true) -> List
     {Return the automorphisms of the polynomial f(x) (assumed to be of even degree), as a full list of matrices T.}
 
     K := CoefficientRing(f);
@@ -1151,7 +1151,7 @@ intrinsic HyperellipticReducedAutomorphisms(f::RngUPolElt :
 end intrinsic;
 
 intrinsic HyperellipticReducedAutomorphisms(X::CrvHyp :
-    geometric := false, commonfield := false, covariant := true) -> List
+    geometric := false, commonfield := true, covariant := true) -> List
     {Return the automorphism group of the defining polynomial of X, as a full list of matrices T.}
 
     K := BaseRing(X);
@@ -1170,7 +1170,7 @@ end intrinsic;
 
 /* Isomorphism test */
 intrinsic IsIsomorphicHyperelliptic(f1::RngUPolElt, f2::RngUPolElt :
-    geometric := false, covariant := true, commonfield := false) ->  BoolElt, List
+    geometric := false, covariant := true, commonfield := true) ->  BoolElt, List
     {Returns a boolean indicating whether a matrix T and a scalar e exist that induce an isomorphism y^2 = f1(x) --> y^2 = f2(x), as well as a full list of all such pairs.}
 
     function Normalize22Column(T)
@@ -1192,7 +1192,7 @@ intrinsic IsIsomorphicHyperelliptic(f1::RngUPolElt, f2::RngUPolElt :
     if not test then return false, []; end if;
 
     if not geometric then
-        pairs := [];
+        pairs := [* *];
         for T in Ts do
             U := Normalize22Column(T);
             K := BaseRing(U);
@@ -1211,7 +1211,7 @@ intrinsic IsIsomorphicHyperelliptic(f1::RngUPolElt, f2::RngUPolElt :
 
     /* Either elementwise */
     if not commonfield then
-        pairs := [];
+        pairs := [* *];
         for T in Ts do
             U := Normalize22Column(T);
             K := BaseRing(U);
@@ -1234,7 +1234,7 @@ intrinsic IsIsomorphicHyperelliptic(f1::RngUPolElt, f2::RngUPolElt :
     end if;
 
     /* Or keep extending */
-    pairs := []; i := 0;
+    pairs := [* *]; i := 0;
     Us := [* Normalize22Column(T) : T in Ts *];
     repeat
         i +:= 1;
@@ -1254,7 +1254,7 @@ intrinsic IsIsomorphicHyperelliptic(f1::RngUPolElt, f2::RngUPolElt :
             e := Roots(RL.1^2 - (L ! scal))[1][1]; assert e^2 eq (L ! scal);
             hom1 := HomFromRoot(K, L, L ! K.1);
             Us := [* ConjugateMatrix(hom1, U) : U in Us *];
-            pairs := [ < ConjugateMatrix(hom1, pair[1]), hom1(pair[2]) > : pair in pairs ];
+            pairs := [* < ConjugateMatrix(hom1, pair[1]), hom1(pair[2]) > : pair in pairs *];
             U := ConjugateMatrix(hom1, U);
 
             if Type(K) eq FldNum then
@@ -1262,7 +1262,7 @@ intrinsic IsIsomorphicHyperelliptic(f1::RngUPolElt, f2::RngUPolElt :
                 rt := hom1(K ! F.1);
                 hom2 := MakeRelativeFromRoot(F, L, rt);
                 Us := [* ConjugateMatrix(hom2, U) : U in Us *];
-                pairs := [ < ConjugateMatrix(hom2, pair[1]), hom2(pair[2]) > : pair in pairs ];
+                pairs := [* < ConjugateMatrix(hom2, pair[1]), hom2(pair[2]) > : pair in pairs *];
                 U := ConjugateMatrix(hom2, U);
                 e := hom2(e);
             end if;
@@ -1275,7 +1275,7 @@ intrinsic IsIsomorphicHyperelliptic(f1::RngUPolElt, f2::RngUPolElt :
 end intrinsic;
 
 intrinsic IsIsomorphicHyperelliptic(X1::CrvHyp, X2::CrvHyp :
-    geometric := false, covariant := true, commonfield := false) ->  BoolElt, List
+    geometric := false, covariant := true, commonfield := true) ->  BoolElt, List
     {Returns a boolean indicating whether a matrix T and a scalar e exist that induce an isomorphism X1 --> X2, as well as a full list of all such pairs.}
 
     K := BaseRing(X1);
@@ -1296,7 +1296,7 @@ end intrinsic;
 
 /* Isomorphisms */
 intrinsic HyperellipticIsomorphisms(f1::RngUPolElt, f2::RngUPolElt :
-    geometric := false, covariant := true, commonfield := false) -> List
+    geometric := false, covariant := true, commonfield := true) -> List
     {Returns a full list of pairs of matrices T and scalars e that induce an isomorphism y^2 = f1(x) --> y^2 = f2(x).}
 
     _, pairs := IsIsomorphicHyperelliptic(f1, f2 :
@@ -1306,7 +1306,7 @@ intrinsic HyperellipticIsomorphisms(f1::RngUPolElt, f2::RngUPolElt :
 end intrinsic;
 
 intrinsic HyperellipticIsomorphisms(X1::CrvHyp, X2::CrvHyp :
-    geometric := false, covariant := true, commonfield := false) ->  List
+    geometric := false, covariant := true, commonfield := true) ->  List
     {Returns a full list of pairs of matrices T and scalars e that induce an isomorphism X1 --> X2.}
 
     _, pairs := IsIsomorphicHyperelliptic(X1, X2 :
@@ -1317,7 +1317,7 @@ end intrinsic;
 
 /* Automorphisms */
 intrinsic HyperellipticAutomorphisms(f::RngUPolElt :
-    geometric := false, commonfield := false, covariant := true) -> List
+    geometric := false, commonfield := true, covariant := true) -> List
     {Returns a full list of pairs of matrices T and scalars e that induce an automorphism of the curve y^2 = f(x).}
 
     return HyperellipticIsomorphisms(f, f :
@@ -1326,7 +1326,7 @@ intrinsic HyperellipticAutomorphisms(f::RngUPolElt :
 end intrinsic;
 
 intrinsic HyperellipticAutomorphisms(X::CrvHyp :
-    geometric := false, commonfield := false, covariant := true) -> List
+    geometric := false, commonfield := true, covariant := true) -> List
     {Returns a full list of pairs of matrices T and scalars e that induce an automorphism of the curve X.}
 
     return HyperellipticIsomorphisms(X, X :

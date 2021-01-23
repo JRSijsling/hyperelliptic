@@ -101,19 +101,19 @@ intrinsic GeometricAutomorphismGroupGenus3Classification(FF::FldFin) -> SeqEnum,
 
 ```
 intrinsic IsIsomorphicHyperelliptic(X1::CrvHyp, X2::CrvHyp :
-    geometric := false, covariant := true, commonfield := false) ->  BoolElt, List
+    geometric := false, covariant := true, commonfield := true) ->  BoolElt, List
 intrinsic IsIsomorphicHyperelliptic(f1::RngUPolElt, f2::RngUPolElt :
-    geometric := false, covariant := true, commonfield := false) ->  BoolElt, List
+    geometric := false, covariant := true, commonfield := true) ->  BoolElt, List
 
 intrinsic HyperellipticIsomorphisms(X1::CrvHyp, X2::CrvHyp :
-    geometric := false, covariant := true, commonfield := false) ->  List
+    geometric := false, covariant := true, commonfield := true) ->  List
 intrinsic HyperellipticIsomorphisms(f1::RngUPolElt, f2::RngUPolElt :
-    geometric := false, covariant := true, commonfield := false) -> List
+    geometric := false, covariant := true, commonfield := true) -> List
 
 intrinsic HyperellipticAutomorphisms(X::CrvHyp :
-    geometric := false, commonfield := false, covariant := true) -> List
+    geometric := false, commonfield := true, covariant := true) -> List
 intrinsic HyperellipticAutomorphisms(f::RngUPolElt :
-    geometric := false, commonfield := false, covariant := true) -> List
+    geometric := false, commonfield := true, covariant := true) -> List
 
 intrinsic AutomorphismGroupHyperelliptic(X::CrvHyp, Autos::List :
     explicit := false) -> GrpPerm, Map
@@ -138,19 +138,19 @@ intrinsic IsGL2EquivalentExtended(f1::RngUPolElt, f2::RngUPolElt, deg::RngIntElt
     geometric := false, covariant := true, commonfield := false) -> BoolElt, List
 
 intrinsic IsReducedIsomorphicHyperelliptic(X1::CrvHyp, X2::CrvHyp :
-    geometric := false, covariant := true, commonfield := false) ->  BoolElt, List
+    geometric := false, covariant := true, commonfield := true) ->  BoolElt, List
 intrinsic IsReducedIsomorphicHyperelliptic(f1::RngUPolElt, f2::RngUPolElt :
-    geometric := false, covariant := true, commonfield := false) ->  BoolElt, List
+    geometric := false, covariant := true, commonfield := true) ->  BoolElt, List
 
 intrinsic HyperellipticReducedIsomorphisms(X1::CrvHyp, X2::CrvHyp :
-    geometric := false, covariant := true, commonfield := false) ->  List
+    geometric := false, covariant := true, commonfield := true) ->  List
 intrinsic HyperellipticReducedIsomorphisms(f1::RngUPolElt, f2::RngUPolElt :
-    geometric := false, covariant := true, commonfield := false) ->  List
+    geometric := false, covariant := true, commonfield := true) ->  List
 
 intrinsic HyperellipticReducedAutomorphisms(X::CrvHyp :
-    geometric := false, commonfield := false, covariant := true) -> List
+    geometric := false, commonfield := true, covariant := true) -> List
 intrinsic HyperellipticReducedAutomorphisms(f::RngUPolElt :
-    geometric := false, commonfield := false, covariant := true) -> List
+    geometric := false, commonfield := true, covariant := true) -> List
 
 intrinsic ReducedAutomorphismGroupHyperelliptic(X::CrvHyp, Autos::List :
     explicit := false) -> GrpPerm, Map

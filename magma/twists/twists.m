@@ -372,22 +372,33 @@ intrinsic ReducedAutomorphismGroupHyperelliptic(f::RngUPolElt :
     require g gt 1 :
         "The argument must define an hyperelliptic curve of genus >= 2";
 
-    if geometric and not explicit and g eq 2 then
+    if geometric and g eq 2 then
         _, _, autred := G2Models(IgusaInvariants(f) : models := false);
-        return autred;
+        if not explicit then return autred; end if;
     end if;
 
-    if geometric and not explicit and g eq 3 and p ne 5 then
+    if geometric and g eq 3 and p ne 5 then
         _, _, autred := G3Models(ShiodaInvariants(f) : models := false);
-        return autred;
+        if not explicit then return autred; end if;
     end if;
 
     Autos := HyperellipticReducedAutomorphisms(f : geometric := geometric, commonfield := true);
-
     aut, phi := ProjectiveMatrixGroup(Autos);
 
-    if explicit then return aut, phi; end if;
+    if explicit then
+        if geometric and ((g eq 2) or (g eq 3 and p ne 5)) then
+            ret, iso := IsIsomorphic(autred, aut);
+            assert ret eq true;
+            return autred, iso*phi;
+        end if;
+        return aut, phi;
+    end if;
     return aut;
+
+    /*
+    ret, iso := IsIsomorphic(autred, aut);
+    (iso*p)(aut.1);
+     */
 
 end intrinsic;
 
@@ -480,22 +491,29 @@ intrinsic AutomorphismGroupHyperelliptic(f::RngUPolElt :
     require g gt 1 :
         "The argument must define an hyperelliptic curve of genus >= 2";
 
-    if geometric and not explicit and g eq 2 then
+    if geometric and g eq 2 then
         _, aut, _ := G2Models(IgusaInvariants(f) : models := false);
-        return aut;
+        if not explicit then return aut; end if;
     end if;
 
-    if geometric and not explicit and g eq 3 and p ne 5 then
+    if geometric and g eq 3 and p ne 5 then
         _, aut, _ := G3Models(ShiodaInvariants(f) : models := false);
-        return aut;
+        if not explicit then return aut; end if;
     end if;
 
     Autos := HyperellipticAutomorphisms(f : geometric := geometric, commonfield := true);
 
-    aut, phi := ProjectiveAutomorphismGroup(Autos, d);
+    Aut, phi := ProjectiveAutomorphismGroup(Autos, d);
 
-    if explicit then return aut, phi; end if;
-    return aut;
+    if explicit then
+        if geometric and ((g eq 2) or (g eq 3 and p ne 5)) then
+            ret, iso := IsIsomorphic(aut, Aut);
+            assert ret eq true;
+            return aut, iso*phi;
+        end if;
+        return Aut, phi;
+    end if;
+    return Aut;
 
 end intrinsic;
 
