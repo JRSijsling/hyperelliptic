@@ -187,9 +187,13 @@ function CombineSplittingFields(K, L1, L2);
     if IsPrimeField(K) then
         h1 := hom< K -> K1 | >;
         h2 := hom< K -> K2 | >;
+        i1 := hom< K -> L1 | >;
+        i2 := hom< K -> L2 | >;
     else
         h1 := hom< K -> K1 | r1 >;
         h2 := hom< K -> K2 | r2 >;
+        i1 := hom< K -> L1 | r1 >;
+        i2 := hom< K -> L2 | r2 >;
     end if;
 
     /* Create common splitting field */
@@ -197,7 +201,7 @@ function CombineSplittingFields(K, L1, L2);
     f2 := MinimalPolynomial(L2.1, K2);
     f1 := PullbackPolynomial(h1, f1);
     f2 := PullbackPolynomial(h2, f2);
-    f2 := ConjugatePolynomial(h1, f2);
+    f2 := ConjugatePolynomial(i1, f2);
     if Type(K) eq FldFin then
         L := CommonOverfield(L1, L2);
     else
@@ -874,7 +878,7 @@ function CheckNormalizeToCommonBase(ret, MFL, Q1L, _f, _F, deg : geometric := tr
             MF := MFL[1];
         else
             L1 := Parent(MFL[1][1][1]); Q1 := Q1L[1]; assert Q1 in L1;
-            L2 := Parent(MFL[2][1][1]); Q2 := Q1L[1]; assert Q2 in L2;
+            L2 := Parent(MFL[2][1][1]);
             L, h1, h2, h := CombineSplittingFields(Q, L1, L2);
             Q1L := [ h(Q.1) ];
             MF1 := [* [ h1(c) : c in M ] : M in MFL[1] *];
