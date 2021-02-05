@@ -100,29 +100,29 @@ intrinsic GeometricAutomorphismGroupGenus3Classification(FF::FldFin) -> SeqEnum,
 #### Any genus
 
 ```
-intrinsic IsIsomorphicHyperelliptic(X1::CrvHyp, X2::CrvHyp :
+intrinsic IsIsomorphicHyperellipticCurves(X1::CrvHyp, X2::CrvHyp :
     geometric := false, covariant := true, commonfield := true) ->  BoolElt, List
-intrinsic IsIsomorphicHyperelliptic(f1::RngUPolElt, f2::RngUPolElt :
+intrinsic IsIsomorphicHyperellipticCurves(f1::RngUPolElt, f2::RngUPolElt :
     geometric := false, covariant := true, commonfield := true) ->  BoolElt, List
 
-intrinsic HyperellipticIsomorphisms(X1::CrvHyp, X2::CrvHyp :
+intrinsic IsomorphismsOfHyperellipticCurves(X1::CrvHyp, X2::CrvHyp :
     geometric := false, covariant := true, commonfield := true) ->  List
-intrinsic HyperellipticIsomorphisms(f1::RngUPolElt, f2::RngUPolElt :
+intrinsic IsomorphismsOfHyperellipticCurves(f1::RngUPolElt, f2::RngUPolElt :
     geometric := false, covariant := true, commonfield := true) -> List
 
-intrinsic HyperellipticAutomorphisms(X::CrvHyp :
+intrinsic AutomorphismsOfHyperellipticCurve(X::CrvHyp :
     geometric := false, commonfield := true, covariant := true) -> List
-intrinsic HyperellipticAutomorphisms(f::RngUPolElt :
+intrinsic AutomorphismsOfHyperellipticCurve(f::RngUPolElt :
     geometric := false, commonfield := true, covariant := true) -> List
 
-intrinsic AutomorphismGroupHyperelliptic(X::CrvHyp, Autos::List :
+intrinsic AutomorphismGroupOfHyperellipticCurve(X::CrvHyp, Autos::List :
     explicit := false) -> GrpPerm, Map
-intrinsic AutomorphismGroupHyperelliptic(f::RngUPolElt, Autos::List :
+intrinsic AutomorphismGroupOfHyperellipticCurve(f::RngUPolElt, Autos::List :
     explicit := false) -> GrpPerm, Map
 
-intrinsic AutomorphismGroupHyperelliptic(X::CrvHyp :
+intrinsic AutomorphismGroupOfHyperellipticCurve(X::CrvHyp :
     geometric := false, explicit := false) -> GrpPerm, Map
-intrinsic AutomorphismGroupHyperelliptic(f::RngUPolElt :
+intrinsic AutomorphismGroupOfHyperellipticCurve(f::RngUPolElt :
     geometric := false, explicit := false) -> GrpPerm, Map
 
 intrinsic GeometricAutomorphismGroup(Ec::CrvEll) -> GrpPerm
@@ -137,29 +137,29 @@ intrinsic GeometricAutomorphismGroup(X::CrvHyp) -> GrpPerm
 intrinsic IsGL2EquivalentExtended(f1::RngUPolElt, f2::RngUPolElt, deg::RngIntElt :
     geometric := false, covariant := true, commonfield := false) -> BoolElt, List
 
-intrinsic IsReducedIsomorphicHyperelliptic(X1::CrvHyp, X2::CrvHyp :
+intrinsic IsReducedIsomorphicHyperellipticCurves(X1::CrvHyp, X2::CrvHyp :
     geometric := false, covariant := true, commonfield := true) ->  BoolElt, List
-intrinsic IsReducedIsomorphicHyperelliptic(f1::RngUPolElt, f2::RngUPolElt :
+intrinsic IsReducedIsomorphicHyperellipticCurves(f1::RngUPolElt, f2::RngUPolElt :
     geometric := false, covariant := true, commonfield := true) ->  BoolElt, List
 
-intrinsic HyperellipticReducedIsomorphisms(X1::CrvHyp, X2::CrvHyp :
+intrinsic ReducedIsomorphismsOfHyperellipticCurves(X1::CrvHyp, X2::CrvHyp :
     geometric := false, covariant := true, commonfield := true) ->  List
-intrinsic HyperellipticReducedIsomorphisms(f1::RngUPolElt, f2::RngUPolElt :
+intrinsic ReducedIsomorphismsOfHyperellipticCurves(f1::RngUPolElt, f2::RngUPolElt :
     geometric := false, covariant := true, commonfield := true) ->  List
 
-intrinsic HyperellipticReducedAutomorphisms(X::CrvHyp :
+intrinsic ReducedAutomorphismsOfHyperellipticCurve(X::CrvHyp :
     geometric := false, commonfield := true, covariant := true) -> List
-intrinsic HyperellipticReducedAutomorphisms(f::RngUPolElt :
+intrinsic ReducedAutomorphismsOfHyperellipticCurve(f::RngUPolElt :
     geometric := false, commonfield := true, covariant := true) -> List
 
-intrinsic ReducedAutomorphismGroupHyperelliptic(X::CrvHyp, Autos::List :
+intrinsic ReducedAutomorphismGroupOfHyperellipticCurve(X::CrvHyp, Autos::List :
     explicit := false) -> GrpPerm, Map
-intrinsic ReducedAutomorphismGroupHyperelliptic(f::RngUPolElt, Autos::List :
+intrinsic ReducedAutomorphismGroupOfHyperellipticCurve(f::RngUPolElt, Autos::List :
     explicit := false) -> GrpPerm, Map
 
-intrinsic ReducedAutomorphismGroupHyperelliptic(X::CrvHyp :
+intrinsic ReducedAutomorphismGroupOfHyperellipticCurve(X::CrvHyp :
     geometric := false, explicit := false) -> GrpPerm, Map
-intrinsic ReducedAutomorphismGroupHyperelliptic(f::RngUPolElt :
+intrinsic ReducedAutomorphismGroupOfHyperellipticCurve(f::RngUPolElt :
     geometric := false, explicit := false) -> GrpPerm, Map
 ```
 

@@ -35,9 +35,9 @@ while true do
     g := f^T;
     X := HyperellipticCurve(f); Y := HyperellipticCurve(g);
     print "Covariant:";
-    time _, IsoLst := IsIsomorphicHyperelliptic(X, Y : geometric := false, covariant := true);
+    time _, IsoLst := IsIsomorphicHyperellipticCurves(X, Y : geometric := false, covariant := true);
     print "Direct:";
-    time _, IsoLst := IsIsomorphicHyperelliptic(X, Y : geometric := false, covariant := false);
+    time _, IsoLst := IsIsomorphicHyperellipticCurves(X, Y : geometric := false, covariant := false);
     print T;
     print IsoLst[1];
 end while;

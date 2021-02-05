@@ -26,23 +26,23 @@
 /***
  * Exported intrinsics.
  *
- * intrinsic ReducedAutomorphismGroupHyperelliptic(f::RngUPolElt, Autos::List :
+ * intrinsic ReducedAutomorphismGroupOfHyperellipticCurve(f::RngUPolElt, Autos::List :
  *     explicit := false) -> GrpPerm, Map
- * intrinsic ReducedAutomorphismGroupHyperelliptic(X::CrvHyp, Autos::List :
+ * intrinsic ReducedAutomorphismGroupOfHyperellipticCurve(X::CrvHyp, Autos::List :
  *     explicit := false) -> GrpPerm, Map
  *
- * intrinsic ReducedAutomorphismGroupHyperelliptic(f::RngUPolElt :
+ * intrinsic ReducedAutomorphismGroupOfHyperellipticCurve(f::RngUPolElt :
  *     geometric := false, explicit := false) -> GrpPerm, Map
- * intrinsic ReducedAutomorphismGroupHyperelliptic(X::CrvHyp :
+ * intrinsic ReducedAutomorphismGroupOfHyperellipticCurve(X::CrvHyp :
  *     geometric := false, explicit := false) -> GrpPerm, Map
  *
- * intrinsic AutomorphismGroupHyperelliptic(f::RngUPolElt, Autos::List :
+ * intrinsic AutomorphismGroupOfHyperellipticCurve(f::RngUPolElt, Autos::List :
  *     explicit := false) -> GrpPerm, Map
- * intrinsic AutomorphismGroupHyperelliptic(X::CrvHyp, Autos::List :
+ * intrinsic AutomorphismGroupOfHyperellipticCurve(X::CrvHyp, Autos::List :
  *     explicit := false) -> GrpPerm, Map
- * intrinsic AutomorphismGroupHyperelliptic(f::RngUPolElt :
+ * intrinsic AutomorphismGroupOfHyperellipticCurve(f::RngUPolElt :
  *     geometric := false, explicit := false) -> GrpPerm, Map
- * intrinsic AutomorphismGroupHyperelliptic(X::CrvHyp :
+ * intrinsic AutomorphismGroupOfHyperellipticCurve(X::CrvHyp :
  *     geometric := false, explicit := false) -> GrpPerm, Map
  *
  * intrinsic GeometricAutomorphismGroup(Ec::CrvEll) -> GrpPerm
@@ -331,7 +331,7 @@ end function;
  *************************************/
 
  /* Automorphism group with given automorphisms */
-intrinsic ReducedAutomorphismGroupHyperelliptic(f::RngUPolElt, Autos::List :
+intrinsic ReducedAutomorphismGroupOfHyperellipticCurve(f::RngUPolElt, Autos::List :
     explicit := false) -> GrpPerm, Map
     {Return the automorphisms group defined by the sequence Autos, as a permutation group (and its representation if explicit is set to true)}
 
@@ -342,7 +342,7 @@ intrinsic ReducedAutomorphismGroupHyperelliptic(f::RngUPolElt, Autos::List :
 
 end intrinsic;
 
-intrinsic ReducedAutomorphismGroupHyperelliptic(X::CrvHyp, Autos::List :
+intrinsic ReducedAutomorphismGroupOfHyperellipticCurve(X::CrvHyp, Autos::List :
     explicit := false) -> GrpPerm, Map
     {Return the automorphisms group defined by the sequence Autos, as a permutation group (and its representation if explicit is set to true)}
 
@@ -355,7 +355,7 @@ end intrinsic;
 
 
  /* Automorphism group */
-intrinsic ReducedAutomorphismGroupHyperelliptic(f::RngUPolElt :
+intrinsic ReducedAutomorphismGroupOfHyperellipticCurve(f::RngUPolElt :
     geometric := false, explicit := false) -> GrpPerm, Map
     {Return the automorphisms group of the curve y^2 = f(x), as a permutation group (and its representation if explicit is set to true)}
 
@@ -382,7 +382,7 @@ intrinsic ReducedAutomorphismGroupHyperelliptic(f::RngUPolElt :
         if not explicit then return autred; end if;
     end if;
 
-    Autos := HyperellipticReducedAutomorphisms(f : geometric := geometric, commonfield := true);
+    Autos := ReducedAutomorphismsOfHyperellipticCurve(f : geometric := geometric, commonfield := true);
     aut, phi := ProjectiveMatrixGroup(Autos);
 
     if explicit then
@@ -402,14 +402,14 @@ intrinsic ReducedAutomorphismGroupHyperelliptic(f::RngUPolElt :
 
 end intrinsic;
 
-intrinsic ReducedAutomorphismGroupHyperelliptic(H::CrvHyp :
+intrinsic ReducedAutomorphismGroupOfHyperellipticCurve(H::CrvHyp :
     geometric := false, explicit := false) -> GrpPerm, Map
     {Return the automorphisms group of the polynomial f(x) (assumed to be of even degree), as a permutation group (and its representation if explicit is set to true)}
 
     f, h := HyperellipticPolynomials(H);
     g := h eq 0 select f else 4*f + h^2;
 
-    return ReducedAutomorphismGroupHyperelliptic(g :
+    return ReducedAutomorphismGroupOfHyperellipticCurve(g :
         geometric := geometric, explicit := explicit);
 
 end intrinsic;
@@ -446,7 +446,7 @@ end function;
 
 
  /* Automorphism group with given automorphisms */
-intrinsic AutomorphismGroupHyperelliptic(f::RngUPolElt, Autos::List :
+intrinsic AutomorphismGroupOfHyperellipticCurve(f::RngUPolElt, Autos::List :
     explicit := false) -> GrpPerm, Map
     {Return the automorphisms group defined by the sequence Autos, as a permutation group (and its representation if explicit is set to true)}
 
@@ -459,7 +459,7 @@ intrinsic AutomorphismGroupHyperelliptic(f::RngUPolElt, Autos::List :
 
 end intrinsic;
 
-intrinsic AutomorphismGroupHyperelliptic(X::CrvHyp, Autos::List :
+intrinsic AutomorphismGroupOfHyperellipticCurve(X::CrvHyp, Autos::List :
     explicit := false) -> GrpPerm, Map
     {Return the automorphisms group defined by the sequence Autos, as a permutation group (and its representation if explicit is set to true)}
 
@@ -474,7 +474,7 @@ end intrinsic;
 
 
  /* Automorphism group */
-intrinsic AutomorphismGroupHyperelliptic(f::RngUPolElt :
+intrinsic AutomorphismGroupOfHyperellipticCurve(f::RngUPolElt :
     geometric := false, explicit := false) -> GrpPerm, Map
     {Return the automorphisms group of the curve y^2 = f(x), as a permutation group (and its representation if explicit is set to true)}
 
@@ -501,7 +501,7 @@ intrinsic AutomorphismGroupHyperelliptic(f::RngUPolElt :
         if not explicit then return aut; end if;
     end if;
 
-    Autos := HyperellipticAutomorphisms(f : geometric := geometric, commonfield := true);
+    Autos := AutomorphismsOfHyperellipticCurve(f : geometric := geometric, commonfield := true);
 
     Aut, phi := ProjectiveAutomorphismGroup(Autos, d);
 
@@ -517,14 +517,14 @@ intrinsic AutomorphismGroupHyperelliptic(f::RngUPolElt :
 
 end intrinsic;
 
-intrinsic AutomorphismGroupHyperelliptic(H::CrvHyp :
+intrinsic AutomorphismGroupOfHyperellipticCurve(H::CrvHyp :
     geometric := false, explicit := false) -> GrpPerm, Map
     {Return the automorphisms group of the polynomial f(x) (assumed to be of even degree), as a permutation group (and its representation if explicit is set to true)}
 
     f, h := HyperellipticPolynomials(H);
     g := h eq 0 select f else 4*f + h^2;
 
-    return AutomorphismGroupHyperelliptic(g :
+    return AutomorphismGroupOfHyperellipticCurve(g :
         geometric := geometric, explicit := explicit);
 
 end intrinsic;
@@ -567,7 +567,7 @@ intrinsic GeometricAutomorphismGroup(H::CrvHyp) -> GrpPerm
 
     if g eq 1 then return GeometricAutomorphismGroup(EllipticCurve(H)); end if;
 
-    return AutomorphismGroupHyperelliptic(H);
+    return AutomorphismGroupOfHyperellipticCurve(H);
 
 end intrinsic;
 

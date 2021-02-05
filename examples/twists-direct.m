@@ -26,7 +26,7 @@ g:=Genus(C);
 T1:=Twists(C);
 
 #T1;
-[[[i,j] : j in [i+1..#T1], i in [1..#T1-1] | IsIsomorphicHyperelliptic(T1[i],T1[j])]];
+[[[i,j] : j in [i+1..#T1], i in [1..#T1-1] | IsIsomorphicHyperellipticCurves(T1[i],T1[j])]];
 
 // part to be integrated
 _,Aut:=IsGL2EquivalentExtended(f,f,2*g+2 : geometric := true, commonfield := true);
@@ -40,7 +40,7 @@ Aut:=[ChangeRing(M,GF(p^e)) : M in Aut];
 
 T1:=Twists(C,Aut) ;
 #T1;
-[[[i,j] : j in [i+1..#T1], i in [1..#T1-1] | IsIsomorphicHyperelliptic(T1[i],T1[j])]];
+[[[i,j] : j in [i+1..#T1], i in [1..#T1-1] | IsIsomorphicHyperellipticCurves(T1[i],T1[j])]];
 
 /* for g<4
 T2:=Twists(C);

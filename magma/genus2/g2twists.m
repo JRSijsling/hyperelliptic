@@ -359,7 +359,7 @@ end function;
 function G2NonIsomorphic(Ecs)
    crvs := [];
    for E1 in Ecs do
-       old := &or[ IsIsomorphicHyperelliptic(E1,E0) : E0 in crvs ];
+       old := &or[ IsIsomorphicHyperellipticCurves(E1,E0) : E0 in crvs ];
        if not old then Append(~crvs,E1); end if;
   end for;
   return crvs;

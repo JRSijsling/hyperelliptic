@@ -28,4 +28,4 @@ T1:=Twists(C);
 
 X1 := T1[1];
 X2 := T1[2];
-print IsIsomorphicHyperelliptic(X1, X2);
+print IsIsomorphicHyperellipticCurves(X1, X2);
