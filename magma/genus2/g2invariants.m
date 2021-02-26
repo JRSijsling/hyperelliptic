@@ -938,6 +938,10 @@ function QuickIgusaClebschInvariants(f)
     // the Igusa-Clebsch invariants A', B', C', D'
     // (as on p. 319 of Mestre).
 
+    if not (Degree(f) le 6) then
+	print "Polynomial must have degree at most 6.";
+    end if;
+
     A, B, C, D := Explode(ClebschInvariants(f));
     return [-120*A,
             -720*A^2 + 6750*B,

@@ -567,7 +567,7 @@ intrinsic GeometricAutomorphismGroup(H::CrvHyp) -> GrpPerm
 
     if g eq 1 then return GeometricAutomorphismGroup(EllipticCurve(H)); end if;
 
-    return AutomorphismGroupOfHyperellipticCurve(H);
+    return AutomorphismGroupOfHyperellipticCurve(H : geometric := true);
 
 end intrinsic;
 
