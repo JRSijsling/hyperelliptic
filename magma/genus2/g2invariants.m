@@ -1121,7 +1121,7 @@ end intrinsic;
 
 intrinsic DiscriminantFromIgusaInvariants(JI::SeqEnum) -> .
     {Compute the discriminant of a genus 2 hyperelliptic curve from the given
-    Igusa Invariants}
+    Igusa invariants.}
 
     K := Universe(JI);
 
@@ -1136,7 +1136,7 @@ intrinsic DiscriminantFromIgusaInvariants(JI::SeqEnum) -> .
 end intrinsic;
 
 intrinsic IgusaAlgebraicRelations(JI::SeqEnum) -> SeqEnum
-    {Return the relation ideal between the Igusa invariants}
+    {Return generators of the ideal of relations between the Igusa invariants.}
 
     K := Universe(JI);
 

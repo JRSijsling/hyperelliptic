@@ -86,11 +86,10 @@ intrinsic ShiodaInvariants(f::RngUPolElt, p::RngIntElt :
     IntegralNormalization := false,
     degmax := Infinity(), degmin := 1) -> SeqEnum, SeqEnum
 
-    {Compute the Shioda invariants  'J2', 'J3', 'J4', 'J5', 'J6', 'J7',
-    'J8', 'J9' and 'J10' of a polynomial of degree at most 8, considered as a
-    binary form of degre 8 (see 1967 Shioda's  paper), and other invariants in
-    characteristic 2, 3, 5 and 7. Weights of these
-    invariants are returned too.
+    {Compute the Shioda invariants  'J2', 'J3', 'J4', 'J5', 'J6', 'J7', 'J8',
+    'J9' and 'J10' of a polynomial of degree at most 8, considered as a binary
+    form of degre 8 (see 1967 Shioda's  paper), and other invariants in
+    characteristic 2, 3, 5 and 7. Weights of these invariants are returned too.
     }
 
     CR := CoefficientRing(Parent(f));
