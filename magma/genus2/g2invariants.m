@@ -1032,11 +1032,9 @@ end intrinsic;
 
 intrinsic IgusaInvariants(f::RngMPolElt : Quick  := false, extend := false, normalize := false) -> SeqEnum, SeqEnum
 
-    {Compute the Shioda invariants  'J2', 'J3', 'J4', 'J5', 'J6', 'J7',
-    'J8', 'J9' and 'J10' of a polynomial of degree at most 8, considered as a
-    binary form of degre 8 (see 1967 Shioda's  paper), and other invariants in
-    characteristic 2, 3, 5 and 7. Weights of these
-    invariants are returned too.
+    {Compute the Igusa J-invariants of a homogeneous polynomial of degree at most 6.
+    The integer 2 must be a unit of the coefficient ring, and if Quick,
+    the base field must not be of characteristic 2, 3, or 5.
     }
 
     P := Parent(f);
@@ -1061,11 +1059,9 @@ end intrinsic;
 
 intrinsic IgusaInvariants(f::RngMPolElt, p::RngIntElt : Quick  := false, extend := false, normalize := false) -> SeqEnum, SeqEnum
 
-    {Compute the Shioda invariants  'J2', 'J3', 'J4', 'J5', 'J6', 'J7',
-    'J8', 'J9' and 'J10' of a polynomial of degree at most 8, considered as a
-    binary form of degre 8 (see 1967 Shioda's  paper), and other invariants in
-    characteristic 2, 3, 5 and 7. Weights of these
-    invariants are returned too.
+    {Compute the Igusa J-invariants of a homogeneous polynomial of degree at most 6.
+    The integer 2 must be a unit of the coefficient ring, and if Quick,
+    the base field must not be of characteristic 2, 3, or 5.
     }
 
     P := Parent(f);
