@@ -535,7 +535,7 @@ end intrinsic;
  ***************************************/
 
 intrinsic GeometricAutomorphismGroup(Ec::CrvEll) -> GrpPerm
-    {Compute the geometric automorphism group of an elliptic curve.}
+    {Compute the geometric automorphism group of the elliptic curve Ec.}
 
     p := Characteristic(BaseRing(Ec));
     j := jInvariant(Ec);
@@ -561,7 +561,7 @@ intrinsic GeometricAutomorphismGroup(Ec::CrvEll) -> GrpPerm
 end intrinsic;
 
 intrinsic GeometricAutomorphismGroup(H::CrvHyp) -> GrpPerm
-    {Compute the geometric automorphism group of an hyperelliptic curve.}
+    {Compute the geometric automorphism group of the hyperelliptic curve H.}
 
     g := Genus(H);
 
