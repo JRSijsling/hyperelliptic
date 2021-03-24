@@ -1112,7 +1112,7 @@ function G2Models(JI : geometric := false, models := true, RationalModel := fals
             aut := DirectProduct( CyclicGroup(2),
                 sub<Sym(10)| (1, 9, 3, 7, 5)(2, 10, 4, 8, 6), (1, 2)(9, 10), (5, 6)(9, 10), (7, 8)(9, 10)> );
         end if;
-        return twists, aut;
+        return twists, aut, aut;
     end if;
 
     /* y^2 = x^6-1 */
