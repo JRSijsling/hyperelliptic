@@ -3,6 +3,8 @@ Description
 
 This repository contains Magma code for reconstruction and isomorphisms of hyperelliptic curves.
 
+This package is now included by default in Magma-v2.26.
+
 Prerequisites
 --
 
