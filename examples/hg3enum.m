@@ -584,7 +584,7 @@ repeat
 
 	    if singular and Characteristic(FF) in {2, 3, 7} then continue; end if;
 	    G := GeometricAutomorphismGroupFromShiodaInvariants(J);
-	    IG :=  IdentifyGroup(G);
+	    IG := Type(G) eq GrpPerm select IdentifyGroup(G) else <0,0>;
 	end if;
 
 	if not singular then idx := 1; else idx := 2; end if;
