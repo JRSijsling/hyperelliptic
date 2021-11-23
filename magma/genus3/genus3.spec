@@ -89,7 +89,6 @@
   g3twists_char5.m
   g3twists_char7.m
   g3twists_charp.m
-  genus3.spec
   models_I6_char7.m
   models_char2.m
   models_char3.m
