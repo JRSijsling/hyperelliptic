@@ -315,7 +315,8 @@ function TwistsOverFiniteField(C, Aut)
         if M ne Identity(Parent(M)) then
             A := ComputationCobord(M^(-1),F);
             C2 := ChangeRing(C, BaseRing(A));
-            X2 := Automorphism(AmbientSpace(C2), A^(-1));
+            X2 := Automorphism(AmbientSpace(C2), Transpose(A));
+            //X2 := Automorphism(AmbientSpace(C2), A^(-1));
             Append(~T, ChangeRing(X2(C2), F));
         end if;
     end for;
@@ -750,7 +751,8 @@ intrinsic Twists(C::Crv, Autos::SeqEnum  :
     require Type(F) eq FldFin :
         "Twist computations only available in finite fields";
 
-    Aut := [ NormalizedM(Transpose(A^(-1))) : A in Autos ];
+    //Aut := [ NormalizedM(Transpose(A^(-1))) : A in Autos ];
+    Aut := [ NormalizedM(A) : A in Autos ];
     twists := TwistsOverFiniteField(C, Aut);
     if AutomorphismGroup then
         aut, _ := ProjectiveMatrixGroup(Aut);
