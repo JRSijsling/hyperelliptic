@@ -368,7 +368,7 @@ end procedure;
 function CheckResult(MF, f, F, deg)
 
     RM := [* *];
-    d := Max(Degree(f), Degree(F));
+    d := Degree(f);
 
     for L in MF do
 
@@ -381,7 +381,8 @@ function CheckResult(MF, f, F, deg)
         _F := TransformPolynomial(fp, deg, L);
 
         /* Check equality up to leading coefficients */
-        if _F * Coefficient(Fp, d) eq Fp * Coefficient(_F, d) then
+        if Degree(_F) eq d and
+		   _F * Coefficient(Fp, d) eq Fp * Coefficient(_F, d) then
             Append(~RM, L);
         end if;
 
