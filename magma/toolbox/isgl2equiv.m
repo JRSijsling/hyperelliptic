@@ -311,6 +311,14 @@ function TransformPolynomial(f,n,mat)
 end function;
 
 
+function TransformPolynomialAlt(f,n,mat)
+    a,b,c,d := Explode(mat);
+    x1 := a*Parent(f).1 + b; z1 := c*Parent(f).1 + d;
+    nnew := 2*((n + 1) div 2);
+    return &+[Coefficient(f,i)*x1^i*z1^(nnew-i) : i in [0..nnew]];
+end function;
+
+
 function MyRandom(FF : BD := 7)
     if Characteristic(FF) eq 0 then
         return Random(-BD, BD);
@@ -378,7 +386,7 @@ function CheckResult(MF, f, F, deg)
         fp := PolynomialRing(FF)!f;
         Fp := PolynomialRing(FF)!F;
 
-        _F := TransformPolynomial(fp, deg, L);
+        _F := TransformPolynomialAlt(fp, deg, L);
 
         /* Check equality up to leading coefficients */
         if Degree(_F) eq d and
@@ -1241,6 +1249,7 @@ intrinsic IsIsomorphicHyperellipticCurves(f1::RngUPolElt, f2::RngUPolElt :
     /* Or keep extending */
     pairs := [* *]; i := 0;
     Us := [* Normalize22Column(T) : T in Ts *];
+
     repeat
         i +:= 1;
         U := Us[i];
@@ -1248,6 +1257,7 @@ intrinsic IsIsomorphicHyperellipticCurves(f1::RngUPolElt, f2::RngUPolElt :
         R := PolynomialRing(K);
         h1 := &+[ (K ! Coefficient(g1, j))*R.1^j : j in [0..Degree(g1)] ];
         h2 := &+[ (K ! Coefficient(g2, j))*R.1^j : j in [0..Degree(g2)] ];
+
         scal := K ! (TransformPolynomial(h2, d2, Eltseq(U))/h1);
         test, e := IsSquare(scal);
         if test then
