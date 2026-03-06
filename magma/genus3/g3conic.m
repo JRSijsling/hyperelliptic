@@ -79,27 +79,30 @@ function Genus3ConicAndQuartic(JI : models := true, RationalModel := true, Deter
 	    vprintf Hyperelliptic, 2 :  "So that :";
 	    vprintf Hyperelliptic, 2 :  "  R = %o\n", R;
 
-	    /* Let us first remove the content of C and Q */
-	    ct := LCM([Denominator(c) : c in Coefficients(C)]) /
-		  GCD([Numerator(c) : c in Coefficients(C)]);
-	    C *:= ct;
-	    ct := LCM([Denominator(c) : c in Coefficients(Q)]) /
-		GCD([Numerator(c) : c in Coefficients(Q)]);
-	    Q *:= ct;
+		if models then
+
+			/* Let us first remove the content of C and Q */
+			ct := LCM([Denominator(c) : c in Coefficients(C)]) /
+				  GCD([Numerator(c) : c in Coefficients(C)]);
+			C *:= ct;
+			ct := LCM([Denominator(c) : c in Coefficients(Q)]) /
+				  GCD([Numerator(c) : c in Coefficients(Q)]);
+			Q *:= ct;
 
             //vprintf Hyperelliptic, 2 :
             //    "Factorization of conic discriminant before reduction: %o\n",
             //    Factorization(Integers() ! Discriminant(Conic(ProjectiveSpace(Parent(C)), C)));
 
             vprintf Hyperelliptic, 2 : "Minimal model step...\n";
-	    Cphi, phi := MinimalModel(Conic(ProjectiveSpace(Parent(C)), C));
-	    C := DefiningPolynomial(Cphi);
-	    Q := Evaluate(Q, DefiningPolynomials(phi));
-	    ct := GCD([Denominator(c) : c in Coefficients(Q)]) /
-		  GCD([Numerator(c) : c in Coefficients(Q)]);
-	    Q *:= ct;
-	    vprintf Hyperelliptic, 2 :  "Conic %o\n", C;
-	    vprintf Hyperelliptic, 2 :  "Quartic %o\n", Q;
+			Cphi, phi := MinimalModel(Conic(ProjectiveSpace(Parent(C)), C));
+			C := DefiningPolynomial(Cphi);
+			Q := Evaluate(Q, DefiningPolynomials(phi));
+			ct := GCD([Denominator(c) : c in Coefficients(Q)]) /
+				  GCD([Numerator(c) : c in Coefficients(Q)]);
+			Q *:= ct;
+			vprintf Hyperelliptic, 2 :  "Conic %o\n", C;
+			vprintf Hyperelliptic, 2 :  "Quartic %o\n", Q;
+		end if;
 
 	else
 	    R := FF!0;
