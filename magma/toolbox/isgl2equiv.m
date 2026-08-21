@@ -115,6 +115,8 @@
        ) - 24*m11^4*m22^4*b4;
 
 */
+
+
 function HomFromRoot(K, L, rt)
 
     if IsPrimeField(K) then
@@ -1065,20 +1067,30 @@ function IsGL2GeometricEquivalentCandidates(_f, _F, deg :
 
 end function;
 
+import "gl2equivfast.m": IsGL2EquivalentFastCov;
 
 intrinsic IsGL2EquivalentExtended(f1::RngUPolElt, f2::RngUPolElt, deg::RngIntElt :
     geometric := false, covariant := true, commonfield := false) -> BoolElt, List
-    {Returns a boolean indicating whether a matrix T exists such that the change of variable induced on f1 by T, f1*T, is a multiple of f2, as well as a full list of all such matrices.}
+    {AAReturns a boolean indicating whether a matrix T exists such that the change of variable induced on f1 by T, f1*T, is a multiple of f2, as well as a full list of all such matrices.}
 
     /* Refer and normalize back */
     if not geometric then commonfield := false; end if;
 
-    ret, MFL, Q1L := IsGL2GeometricEquivalentCandidates(f1, f2, deg : geometric := geometric, covariant := covariant, commonfield := commonfield);
+    if geometric then
+        try 
+            test, res := IsGL2EquivalentFastCov(f1, f2);
+            return test, res;
+        catch e
+            ;
+        end try;
+    end if;
 
+    ret, MFL, Q1L := IsGL2GeometricEquivalentCandidates(f1, f2, deg : geometric := geometric, covariant := covariant, commonfield := commonfield);
+    
     test, seqs := CheckNormalizeToCommonBase(ret, MFL, Q1L, f1, f2, deg : commonfield := commonfield);
 
     return test, [* Matrix(2, 2, seq) : seq in seqs *];
-
+            
 end intrinsic;
 
 
@@ -1099,6 +1111,7 @@ intrinsic IsReducedIsomorphicHyperellipticCurves(f1::RngUPolElt, f2::RngUPolElt 
 
     d1 := 2*((Degree(f1) + 1) div 2); d2 := 2*((Degree(f2) + 1) div 2);
     if d1 ne d2 then return false, [* *]; end if;
+
     ret, Ts := IsGL2EquivalentExtended(f2, f1, d1 :
         geometric := geometric, covariant := covariant, commonfield := commonfield);
 
